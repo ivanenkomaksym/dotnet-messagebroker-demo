@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderapi-pod
+  labels:
+    app: s2
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: orderapi-app
+  template:
+    metadata: 
+      labels:
+        app: orderapi-app
+    spec:
+      containers:
+        - name: orderapi-container
+          image: orderapi
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80

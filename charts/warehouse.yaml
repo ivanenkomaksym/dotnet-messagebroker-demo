@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: warehouse-pod
+  labels:
+    app: s4
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: warehouse-app
+  template:
+    metadata: 
+      labels:
+        app: warehouse-app
+    spec:
+      containers:
+        - name: warehouse-container
+          image: warehouse
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80

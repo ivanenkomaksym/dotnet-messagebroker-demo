@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notifications-pod
+  labels:
+    app: s1
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: notifications-app
+  template:
+    metadata: 
+      labels:
+        app: notifications-app
+    spec:
+      containers:
+        - name: notifications-container
+          image: notifications
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderprocessor-pod
+  labels:
+    app: s3
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: orderprocessor-app
+  template:
+    metadata: 
+      labels:
+        app: orderprocessor-app
+    spec:
+      containers:
+        - name: orderprocessor-container
+          image: orderprocessor
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
