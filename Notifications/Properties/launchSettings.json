@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Notifications": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
