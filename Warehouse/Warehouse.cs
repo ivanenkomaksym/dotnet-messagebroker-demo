@@ -1,30 +1,29 @@
 ﻿using System.Text;
 using Common;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
+using Common.Configuration;
+using Common.Persistence;
+using Microsoft.Extensions.Configuration;
 
-var factory = new ConnectionFactory { HostName = "localhost" };
-using var connection = factory.CreateConnection();
-using var channel = connection.CreateModel();
+var builder = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false);
 
-channel.QueueDeclare(queue: Consts.OrderPaidQueue,
-                     durable: false,
-                     exclusive: false,
-                     autoDelete: false,
-                     arguments: null);
+var configuration = builder.Build();
 
-Console.WriteLine(" [*] Waiting for messages.");
+var apiSettings = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>();
 
-var consumer = new EventingBasicConsumer(channel);
-consumer.Received += (model, ea) =>
+IRabbitMQChannelRegistry rabbitMQChannelRegistry;
+if (apiSettings.UseStub)
+    rabbitMQChannelRegistry = new StubRabbitMQChannelRegistry();
+else
+    rabbitMQChannelRegistry = new RabbitMQChannelRegistry();
+
+rabbitMQChannelRegistry.GetOrCreate(apiSettings.HostName, Consts.OrderPaidQueue, (model, ea) =>
 {
     var body = ea.Body.ToArray();
     var message = Encoding.UTF8.GetString(body);
     Console.WriteLine($" [x] Received {message}");
-};
-channel.BasicConsume(queue: Consts.OrderPaidQueue,
-                     autoAck: true,
-                     consumer: consumer);
+});
 
 Console.WriteLine(" Press [enter] to exit.");
 Console.ReadLine();

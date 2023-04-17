@@ -1,33 +1,29 @@
 ﻿using System.Text;
 using System.Text.Json;
 using Common;
+using Common.Configuration;
+using Common.Persistence;
 using RabbitMQ.Client;
 
 namespace OrderAPI
 {
     public class OrderService : IOrderService
     {
-        public OrderService(ILogger<OrderService> logger)
+        public OrderService(IRabbitMQChannelRegistry rabbitMQChannelRegistry, IConfiguration configuration, ILogger<OrderService> logger)
         {
+            RabbitMQChannelRegistry = rabbitMQChannelRegistry;
+            HostName = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>().HostName;
             Logger = logger;
-
-            var factory = new ConnectionFactory { HostName = "localhost" };
-            Connection = factory.CreateConnection();
-            Channel = Connection.CreateModel();
-
-            Channel.QueueDeclare(queue: Consts.NewOrderQueue,
-                                 durable: false,
-                                 exclusive: false,
-                                 autoDelete: false,
-                                 arguments: null);
         }
 
         public Task CreateOrder(Order order)
         {
+            var channel = RabbitMQChannelRegistry.GetOrCreate("localhost", Consts.NewOrderQueue, null);
+
             var message = $"Order \'{JsonSerializer.Serialize(order)}\' requested";
             var body = Encoding.UTF8.GetBytes(message);
 
-            Channel.BasicPublish(exchange: string.Empty,
+            channel.BasicPublish(exchange: string.Empty,
                                  routingKey: Consts.NewOrderQueue,
                                  basicProperties: null,
                                  body: body);
@@ -37,8 +33,8 @@ namespace OrderAPI
             return Task.CompletedTask;
         }
 
+        IRabbitMQChannelRegistry RabbitMQChannelRegistry;
         private readonly ILogger<OrderService> Logger;
-        private readonly IConnection Connection;
-        private readonly IModel Channel; 
+        private readonly string HostName;
     }
 }
