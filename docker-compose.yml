@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  notifications:
+    image: ${DOCKER_REGISTRY-}notifications
+    build:
+      context: .
+      dockerfile: Notifications/Dockerfile
+
+  orderapi:
+    image: ${DOCKER_REGISTRY-}orderapi
+    build:
+      context: .
+      dockerfile: OrderAPI/Dockerfile
+
+  orderprocessor:
+    image: ${DOCKER_REGISTRY-}orderprocessor
+    build:
+      context: .
+      dockerfile: OrderProcessor/Dockerfile
+
+  warehouse:
+    image: ${DOCKER_REGISTRY-}warehouse
+    build:
+      context: .
+      dockerfile: Warehouse/Dockerfile
+
