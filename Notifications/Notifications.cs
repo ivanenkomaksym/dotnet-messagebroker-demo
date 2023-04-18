@@ -18,7 +18,7 @@ if (apiSettings.UseStub)
 else
     rabbitMQChannelRegistry = new RabbitMQChannelRegistry();
 
-rabbitMQChannelRegistry.GetOrCreate(apiSettings.HostName, Consts.OrderPaidQueue, (model, ea) =>
+rabbitMQChannelRegistry.GetOrCreate(apiSettings.HostName, apiSettings.Port, Consts.OrderPaidQueue, (model, ea) =>
 {
     var body = ea.Body.ToArray();
     var message = Encoding.UTF8.GetString(body);

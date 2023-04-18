@@ -8,12 +8,13 @@ namespace OrderProcessor
 {
     public sealed class OrderProcessor
     {
-        public OrderProcessor(IRabbitMQChannelRegistry rabbitMQChannelRegistry, string hostName)
+        public OrderProcessor(IRabbitMQChannelRegistry rabbitMQChannelRegistry, string hostName, ushort port)
         {
             RabbitMQChannelRegistry = rabbitMQChannelRegistry;
             HostName = hostName;
+            Port = port;
 
-            NewOrderChannel = RabbitMQChannelRegistry.GetOrCreate(HostName, Consts.NewOrderQueue, (model, ea) => { NewOrderRequested(ea); });
+            NewOrderChannel = RabbitMQChannelRegistry.GetOrCreate(HostName, Port, Consts.NewOrderQueue, (model, ea) => { NewOrderRequested(ea); });
         }
 
         void NewOrderRequested(BasicDeliverEventArgs ea)
@@ -29,7 +30,7 @@ namespace OrderProcessor
 
         void NotifyConsumersAboutOrderPaid()
         {
-            var orderPaidChannel = RabbitMQChannelRegistry.GetOrCreate(HostName, Consts.NewOrderQueue, null);
+            var orderPaidChannel = RabbitMQChannelRegistry.GetOrCreate(HostName, Port, Consts.NewOrderQueue, null);
 
             const string message = "Order paid";
             var body = Encoding.UTF8.GetBytes(message);
@@ -45,5 +46,6 @@ namespace OrderProcessor
         IRabbitMQChannelRegistry RabbitMQChannelRegistry;
         private readonly IModel NewOrderChannel;
         private readonly string HostName;
+        private readonly ushort Port;
     }
 }

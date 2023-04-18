@@ -16,7 +16,7 @@ if (apiSettings.UseStub)
 else
     rabbitMQChannelRegistry = new RabbitMQChannelRegistry();
 
-new OrderProcessor.OrderProcessor(rabbitMQChannelRegistry, apiSettings.HostName);
+new OrderProcessor.OrderProcessor(rabbitMQChannelRegistry, apiSettings.HostName, apiSettings.Port);
 
 Console.WriteLine(" Press [enter] to exit.");
 Console.ReadLine();

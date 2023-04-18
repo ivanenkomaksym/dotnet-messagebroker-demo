@@ -5,12 +5,12 @@ namespace Common.Persistence
 {
     public class RabbitMQChannelRegistry : IRabbitMQChannelRegistry
     {
-        public IModel GetOrCreate(string hostname, string queue, EventHandler<BasicDeliverEventArgs> handler)
+        public IModel GetOrCreate(string hostname, ushort port, string queue, EventHandler<BasicDeliverEventArgs> handler)
         {
             var foundConnection = Connections.TryGetValue(hostname, out var connection);
             if (!foundConnection)
             {
-                var factory = new ConnectionFactory { HostName = hostname };
+                var factory = new ConnectionFactory { HostName = hostname, Port = port };
                 connection = factory.CreateConnection();
 
                 Connections.Add(hostname, connection);

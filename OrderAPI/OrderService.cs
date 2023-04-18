@@ -12,13 +12,16 @@ namespace OrderAPI
         public OrderService(IRabbitMQChannelRegistry rabbitMQChannelRegistry, IConfiguration configuration, ILogger<OrderService> logger)
         {
             RabbitMQChannelRegistry = rabbitMQChannelRegistry;
-            HostName = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>().HostName;
+
+            var rabbitMQOptions = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>();
+            HostName = rabbitMQOptions.HostName;
+            Port = rabbitMQOptions.Port;
             Logger = logger;
         }
 
         public Task CreateOrder(Order order)
         {
-            var channel = RabbitMQChannelRegistry.GetOrCreate("localhost", Consts.NewOrderQueue, null);
+            var channel = RabbitMQChannelRegistry.GetOrCreate(HostName, Port, Consts.NewOrderQueue, null);
 
             var message = $"Order \'{JsonSerializer.Serialize(order)}\' requested";
             var body = Encoding.UTF8.GetBytes(message);
@@ -36,5 +39,6 @@ namespace OrderAPI
         IRabbitMQChannelRegistry RabbitMQChannelRegistry;
         private readonly ILogger<OrderService> Logger;
         private readonly string HostName;
+        private readonly ushort Port;
     }
 }

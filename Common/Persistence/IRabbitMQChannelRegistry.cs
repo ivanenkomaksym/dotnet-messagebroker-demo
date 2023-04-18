@@ -5,6 +5,6 @@ namespace Common.Persistence
 {
     public interface IRabbitMQChannelRegistry
     {
-        IModel GetOrCreate(string hostname, string queue, EventHandler<BasicDeliverEventArgs> handler);
+        IModel GetOrCreate(string hostname, ushort port, string queue, EventHandler<BasicDeliverEventArgs> handler);
     }
 }
