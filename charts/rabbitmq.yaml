@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-pod
+  labels:
+    app: s5
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: rabbitmq-app
+  template:
+    metadata: 
+      labels:
+        app: rabbitmq-app
+    spec:
+      containers:
+        - name: rabbitmq-container
+          image: rabbitmq:management
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5672
+            - containerPort: 15672
