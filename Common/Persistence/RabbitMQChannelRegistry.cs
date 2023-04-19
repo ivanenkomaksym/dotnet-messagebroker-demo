@@ -33,7 +33,7 @@ namespace Common.Persistence
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += handler;
 
-                    channel.BasicConsume(queue: Consts.NewOrderQueue,
+                    channel.BasicConsume(queue: queue,
                                          autoAck: true,
                                          consumer: consumer);
                 }
