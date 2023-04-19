@@ -14,9 +14,17 @@ spec:
       labels:
         app: orderprocessor-app
     spec:
+      volumes:
+        - name: appsettings-volume
+          configMap:
+            name: orderprocessor-cfg
       containers:
         - name: orderprocessor-container
           image: orderprocessor
           imagePullPolicy: Never
+          volumeMounts:
+            - name: appsettings-volume
+              mountPath: /app/appsettings.k8s.json
+              subPath: appsettings.k8s.json
           ports:
             - containerPort: 80

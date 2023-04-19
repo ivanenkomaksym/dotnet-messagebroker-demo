@@ -14,9 +14,17 @@ spec:
       labels:
         app: orderapi-app
     spec:
+      volumes:
+        - name: appsettings-volume
+          configMap:
+            name: orderapi-cfg
       containers:
         - name: orderapi-container
           image: orderapi
           imagePullPolicy: Never
+          volumeMounts:
+            - name: appsettings-volume
+              mountPath: /app/appsettings.k8s.json
+              subPath: appsettings.k8s.json
           ports:
             - containerPort: 80

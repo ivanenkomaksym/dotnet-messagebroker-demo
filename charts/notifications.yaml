@@ -14,9 +14,17 @@ spec:
       labels:
         app: notifications-app
     spec:
+      volumes:
+        - name: appsettings-volume
+          configMap:
+            name: notifications-cfg
       containers:
         - name: notifications-container
           image: notifications
           imagePullPolicy: Never
+          volumeMounts:
+            - name: appsettings-volume
+              mountPath: /app/appsettings.k8s.json
+              subPath: appsettings.k8s.json
           ports:
             - containerPort: 80
