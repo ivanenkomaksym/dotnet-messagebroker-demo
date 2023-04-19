@@ -1,9 +1,9 @@
-﻿using OrderProcessor;
+﻿using Notifications;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.AddHostedService<OrderProcessorWorker>();
+        services.AddHostedService<NotificationsWorker>();
     })
     .Build();
 

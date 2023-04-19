@@ -1,9 +1,9 @@
-﻿using OrderProcessor;
+﻿using Warehouse;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.AddHostedService<OrderProcessorWorker>();
+        services.AddHostedService<WarehouseWorker>();
     })
     .Build();
 

@@ -9,9 +9,9 @@ builder.Services.AddSingleton<IOrderService, OrderService>();
 builder.Services.AddSingleton<IRabbitMQChannelRegistry>(serviceProvider =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    var apiSettings = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>();
+    var rabbitMQOptions = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>();
 
-    if (apiSettings.UseStub)
+    if (rabbitMQOptions.UseStub)
         return new StubRabbitMQChannelRegistry();
     else
         return new RabbitMQChannelRegistry();
