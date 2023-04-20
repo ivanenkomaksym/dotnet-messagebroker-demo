@@ -21,11 +21,12 @@ namespace Warehouse
             else
                 rabbitMQChannelRegistry = new RabbitMQChannelRegistry();
 
-            rabbitMQChannelRegistry.GetOrCreateQueue(rabbitMQOptions.HostName, rabbitMQOptions.Port, Consts.OrderPaidQueue, (model, ea) =>
+            rabbitMQChannelRegistry.GetOrCreateExchange(rabbitMQOptions.HostName, rabbitMQOptions.Port, Consts.OrderStatusExchange, Consts.OrderStatusBindingKey, (model, ea) =>
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                _logger.LogInformation($" [x] Received {message}");
+                var routingKey = ea.RoutingKey;
+                _logger.LogInformation($" [x] Received '{routingKey}':'{message}'");
             });
         }
 

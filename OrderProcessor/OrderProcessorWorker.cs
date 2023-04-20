@@ -46,15 +46,15 @@ namespace OrderProcessor
 
         private void NotifyConsumersAboutOrderPaid()
         {
-            var orderPaidChannel = RabbitMQChannelRegistry.GetOrCreateQueue(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.OrderPaidQueue, null);
+            var orderPaidExchange = RabbitMQChannelRegistry.GetOrCreateExchange(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.OrderStatusExchange, string.Empty, null);
 
             const string message = "Order paid";
             var body = Encoding.UTF8.GetBytes(message);
 
-            orderPaidChannel.BasicPublish(exchange: string.Empty,
-                                          routingKey: Consts.OrderPaidQueue,
-                                          basicProperties: null,
-                                          body: body);
+            orderPaidExchange.BasicPublish(exchange: Consts.OrderStatusExchange,
+                                           routingKey: Consts.OrderStatusPaid,
+                                           basicProperties: null,
+                                           body: body);
 
             _logger.LogInformation($" [x] Sent {message}");
         }
