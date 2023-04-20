@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orderapi-cfg
+data:
+  # TODO: Replace with {{ include "rabbitmq.fullname" . }}
+  appsettings.k8s.json: |-
+    {
+        "Logging": {
+            "LogLevel": {
+                "Default": "Information",
+                "Microsoft.Hosting.Lifetime": "Information"
+            }
+        },
+        "RabbitMQ": {
+            "HostName": "helmapp-rabbitmq",
+            "Port": 8080,
+            "UseStub": false
+        }
+    }

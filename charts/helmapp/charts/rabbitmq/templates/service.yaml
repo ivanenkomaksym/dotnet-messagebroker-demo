@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "rabbitmq.fullname" . }}
+  labels:
+    {{- include "rabbitmq.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: connect
+      port: {{ .Values.spec.ports.connect.port}}
+      targetPort: {{ .Values.spec.ports.connect.targetPort}}
+    - name: management
+      port: {{ .Values.spec.ports.management.port}}
+      targetPort: {{ .Values.spec.ports.management.targetPort}}
+  selector:
+    {{- include "rabbitmq.selectorLabels" . | nindent 4 }}
