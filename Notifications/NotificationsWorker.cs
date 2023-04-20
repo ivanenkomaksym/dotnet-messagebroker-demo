@@ -21,7 +21,7 @@ namespace Notifications
             else
                 rabbitMQChannelRegistry = new RabbitMQChannelRegistry();
 
-            rabbitMQChannelRegistry.GetOrCreate(rabbitMQOptions.HostName, rabbitMQOptions.Port, Consts.OrderPaidQueue, (model, ea) =>
+            rabbitMQChannelRegistry.GetOrCreateQueue(rabbitMQOptions.HostName, rabbitMQOptions.Port, Consts.OrderPaidQueue, (model, ea) =>
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);

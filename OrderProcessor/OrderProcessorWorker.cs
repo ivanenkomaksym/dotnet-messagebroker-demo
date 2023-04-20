@@ -22,7 +22,7 @@ namespace OrderProcessor
             else
                 RabbitMQChannelRegistry = new RabbitMQChannelRegistry();
 
-            NewOrderChannel = RabbitMQChannelRegistry.GetOrCreate(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.NewOrderQueue, (model, ea) => { NewOrderRequested(ea); });
+            NewOrderChannel = RabbitMQChannelRegistry.GetOrCreateQueue(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.NewOrderQueue, (model, ea) => { NewOrderRequested(ea); });
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -46,7 +46,7 @@ namespace OrderProcessor
 
         private void NotifyConsumersAboutOrderPaid()
         {
-            var orderPaidChannel = RabbitMQChannelRegistry.GetOrCreate(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.OrderPaidQueue, null);
+            var orderPaidChannel = RabbitMQChannelRegistry.GetOrCreateQueue(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.OrderPaidQueue, null);
 
             const string message = "Order paid";
             var body = Encoding.UTF8.GetBytes(message);

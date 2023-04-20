@@ -21,7 +21,7 @@ namespace OrderAPI
 
         public Task CreateOrder(Order order)
         {
-            var channel = RabbitMQChannelRegistry.GetOrCreate(HostName, Port, Consts.NewOrderQueue, null);
+            var channel = RabbitMQChannelRegistry.GetOrCreateQueue(HostName, Port, Consts.NewOrderQueue, null);
 
             var message = $"Order \'{JsonSerializer.Serialize(order)}\' requested";
             var body = Encoding.UTF8.GetBytes(message);
