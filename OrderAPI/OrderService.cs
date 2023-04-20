@@ -2,6 +2,7 @@
 using System.Text.Json;
 using Common;
 using Common.Configuration;
+using Common.Models;
 using Common.Persistence;
 using RabbitMQ.Client;
 
@@ -21,17 +22,17 @@ namespace OrderAPI
 
         public Task CreateOrder(Order order)
         {
-            var channel = RabbitMQChannelRegistry.GetOrCreateQueue(HostName, Port, Consts.NewOrderQueue, null);
+            var channel = RabbitMQChannelRegistry.GetOrCreateQueue(HostName, Port, Consts.OrderQueue, null);
 
-            var message = $"Order \'{JsonSerializer.Serialize(order)}\' requested";
+            var message = JsonSerializer.Serialize(order);
             var body = Encoding.UTF8.GetBytes(message);
 
             channel.BasicPublish(exchange: string.Empty,
-                                 routingKey: Consts.NewOrderQueue,
+                                 routingKey: Consts.OrderQueue,
                                  basicProperties: null,
                                  body: body);
 
-            Logger.LogInformation($"[x] Sent {message}");
+            Logger.LogInformation($"['{Consts.OrderQueue}' queue] Sent '{message}'");
 
             return Task.CompletedTask;
         }

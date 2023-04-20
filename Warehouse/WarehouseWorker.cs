@@ -26,7 +26,7 @@ namespace Warehouse
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 var routingKey = ea.RoutingKey;
-                _logger.LogInformation($" [x] Received '{routingKey}':'{message}'");
+                _logger.LogInformation($"['{Consts.OrderStatusExchange}' exchange] Received '{message}' with routingKey '{routingKey}'");
             });
         }
 

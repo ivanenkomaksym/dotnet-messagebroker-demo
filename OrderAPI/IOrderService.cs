@@ -1,4 +1,6 @@
-﻿namespace OrderAPI
+﻿using Common.Models;
+
+namespace OrderAPI
 {
     public interface IOrderService
     {

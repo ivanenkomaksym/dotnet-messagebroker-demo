@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace OrderAPI
+namespace Common.Models
 {
     [Serializable]
     public class Order

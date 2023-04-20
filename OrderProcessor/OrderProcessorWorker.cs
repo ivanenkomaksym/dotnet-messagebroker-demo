@@ -1,9 +1,12 @@
 ﻿using System.Text;
+using System.Text.Json;
 using Common;
 using Common.Configuration;
+using Common.Models;
 using Common.Persistence;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
+using Microsoft.Extensions.Logging;
 
 namespace OrderProcessor
 {
@@ -22,7 +25,7 @@ namespace OrderProcessor
             else
                 RabbitMQChannelRegistry = new RabbitMQChannelRegistry();
 
-            NewOrderChannel = RabbitMQChannelRegistry.GetOrCreateQueue(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.NewOrderQueue, (model, ea) => { NewOrderRequested(ea); });
+            NewOrderChannel = RabbitMQChannelRegistry.GetOrCreateQueue(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.OrderQueue, (model, ea) => { NewOrderRequested(ea); });
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,18 +40,19 @@ namespace OrderProcessor
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            _logger.LogInformation($" [x] Received {message}");
+            var order = JsonSerializer.Deserialize<Order>(message);
+            _logger.LogInformation($"['{Consts.OrderQueue}' queue] Received '{message}'");
 
             // TODO: OrderProcessor redirects client to pay for the order and after that notifies consumers
 
-            NotifyConsumersAboutOrderPaid();
+            NotifyConsumersAboutOrderPaid(order);
         }
 
-        private void NotifyConsumersAboutOrderPaid()
+        private void NotifyConsumersAboutOrderPaid(Order order)
         {
             var orderPaidExchange = RabbitMQChannelRegistry.GetOrCreateExchange(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.OrderStatusExchange, string.Empty, null);
 
-            const string message = "Order paid";
+            var message = JsonSerializer.Serialize(order);
             var body = Encoding.UTF8.GetBytes(message);
 
             orderPaidExchange.BasicPublish(exchange: Consts.OrderStatusExchange,
@@ -56,7 +60,7 @@ namespace OrderProcessor
                                            basicProperties: null,
                                            body: body);
 
-            _logger.LogInformation($" [x] Sent {message}");
+            _logger.LogInformation($"['{Consts.OrderStatusExchange}' exchange] Sent '{message}' with routingKey '{Consts.OrderStatusPaid}'");
         }
 
         private readonly IRabbitMQChannelRegistry RabbitMQChannelRegistry;
