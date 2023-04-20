@@ -2,31 +2,31 @@ version: '3.4'
 
 services:
   notifications:
-    image: ${DOCKER_REGISTRY-}notifications
+    image: ${DOCKER_REGISTRY-}notifications:1.16.0
     build:
       context: .
       dockerfile: Notifications/Dockerfile
 
   orderapi:
-    image: ${DOCKER_REGISTRY-}orderapi
+    image: ${DOCKER_REGISTRY-}orderapi:1.16.0
     build:
       context: .
       dockerfile: OrderAPI/Dockerfile
 
   orderprocessor:
-    image: ${DOCKER_REGISTRY-}orderprocessor
+    image: ${DOCKER_REGISTRY-}orderprocessor:1.16.0
     build:
       context: .
       dockerfile: OrderProcessor/Dockerfile
 
   warehouse:
-    image: ${DOCKER_REGISTRY-}warehouse
+    image: ${DOCKER_REGISTRY-}warehouse:1.16.0
     build:
       context: .
       dockerfile: Warehouse/Dockerfile
       
   rabbitmq:
-    image: rabbitmq:management
+    image: rabbitmq:management:1.16.0
     container_name: rabbitmq
     ports:
       - 5672:5672

@@ -20,7 +20,7 @@ spec:
             name: orderapi-cfg
       containers:
         - name: orderapi-container
-          image: orderapi
+          image: orderapi:1.16.0
           imagePullPolicy: Never
           volumeMounts:
             - name: appsettings-volume

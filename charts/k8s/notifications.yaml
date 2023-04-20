@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: warehouse-pod
+  name: notifications-pod
   labels:
-    app: s4
+    app: s1
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      app: warehouse-app
+      app: notifications-app
   template:
     metadata: 
       labels:
-        app: warehouse-app
+        app: notifications-app
     spec:
       volumes:
         - name: appsettings-volume
           configMap:
-            name: warehouse-cfg
+            name: notifications-cfg
       containers:
-        - name: warehouse-container
-          image: warehouse
+        - name: notifications-container
+          image: notifications:1.16.0
           imagePullPolicy: Never
           volumeMounts:
             - name: appsettings-volume

@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orderprocessor-pod
+  name: warehouse-pod
   labels:
-    app: s3
+    app: s4
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      app: orderprocessor-app
+      app: warehouse-app
   template:
     metadata: 
       labels:
-        app: orderprocessor-app
+        app: warehouse-app
     spec:
       volumes:
         - name: appsettings-volume
           configMap:
-            name: orderprocessor-cfg
+            name: warehouse-cfg
       containers:
-        - name: orderprocessor-container
-          image: orderprocessor
+        - name: warehouse-container
+          image: warehouse:1.16.0
           imagePullPolicy: Never
           volumeMounts:
             - name: appsettings-volume

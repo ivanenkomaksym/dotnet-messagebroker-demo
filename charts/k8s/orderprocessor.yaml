@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: notifications-pod
+  name: orderprocessor-pod
   labels:
-    app: s1
+    app: s3
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      app: notifications-app
+      app: orderprocessor-app
   template:
     metadata: 
       labels:
-        app: notifications-app
+        app: orderprocessor-app
     spec:
       volumes:
         - name: appsettings-volume
           configMap:
-            name: notifications-cfg
+            name: orderprocessor-cfg
       containers:
-        - name: notifications-container
-          image: notifications
+        - name: orderprocessor-container
+          image: orderprocessor:1.16.0
           imagePullPolicy: Never
           volumeMounts:
             - name: appsettings-volume
