@@ -5,7 +5,7 @@ metadata:
   labels:
     app: s4
 spec:
-  replicas: 1
+  replicas: 2
   selector: 
     matchLabels:
       app: warehouse-app
@@ -17,7 +17,7 @@ spec:
       volumes:
         - name: appsettings-volume
           configMap:
-            name: warehouse-cfg
+            name: app-configmap
       containers:
         - name: warehouse-container
           image: warehouse:1.16.0

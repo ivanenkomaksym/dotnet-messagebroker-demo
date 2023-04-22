@@ -17,7 +17,7 @@ spec:
       volumes:
         - name: appsettings-volume
           configMap:
-            name: orderapi-cfg
+            name: app-configmap
       containers:
         - name: orderapi-container
           image: orderapi:1.16.0

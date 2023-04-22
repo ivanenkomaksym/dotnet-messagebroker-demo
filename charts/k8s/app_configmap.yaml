@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: orderapi-cfg
+  name: app-configmap
 data:
   appsettings.k8s.json: |-
     {
