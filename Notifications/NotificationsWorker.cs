@@ -2,6 +2,7 @@
 using Common;
 using Common.Configuration;
 using Common.Persistence;
+using RabbitMQ.Client;
 
 namespace Notifications
 {
@@ -21,13 +22,21 @@ namespace Notifications
             else
                 rabbitMQChannelRegistry = new RabbitMQChannelRegistry();
 
-            rabbitMQChannelRegistry.GetOrCreateExchange(rabbitMQOptions.HostName, rabbitMQOptions.Port, Consts.OrderStatusExchange, Consts.OrderStatusBindingKey, (model, ea) =>
-            {
-                var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                var routingKey = ea.RoutingKey;
-                _logger.LogInformation($"['{Consts.OrderStatusExchange}' exchange] Received '{message}' with routingKey '{routingKey}'");
-            });
+            var notificationsOrderStatusQueue = Consts.GetOrderStatusQueueName("notifications");
+
+            var channel = rabbitMQChannelRegistry.GetOrCreateQueue(rabbitMQOptions.HostName, rabbitMQOptions.Port, notificationsOrderStatusQueue, (model, ea) =>
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+                    var routingKey = ea.RoutingKey;
+                    _logger.LogInformation($"['{notificationsOrderStatusQueue}' queue] Received '{message}' with routingKey '{routingKey}'");
+                });
+
+            // Bind new worker queue to "exchange.order.status" exchange
+            // so that only one instance of this service will receive a message and process it
+            channel.QueueBind(queue: notificationsOrderStatusQueue,
+                              exchange: Consts.OrderStatusExchange,
+                              routingKey: Consts.OrderStatusBindingKey);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

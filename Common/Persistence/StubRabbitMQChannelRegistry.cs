@@ -6,7 +6,7 @@ namespace Common.Persistence
     public class StubRabbitMQChannelRegistry : IRabbitMQChannelRegistry
     {
 
-        public IModel GetOrCreateExchange(string hostname, ushort port, string exchange, string routingKey, EventHandler<BasicDeliverEventArgs> handler)
+        public IModel GetOrCreateExchange(string hostname, ushort port, string exchange, string exchangeType, string routingKey, EventHandler<BasicDeliverEventArgs> handler)
         {
             return new StubModel();
         }

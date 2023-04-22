@@ -50,10 +50,10 @@ namespace Common.Persistence
             return channel;
         }
 
-        public IModel GetOrCreateExchange(string hostname, ushort port, string exchange, string bindingKey, EventHandler<BasicDeliverEventArgs> handler)
+        public IModel GetOrCreateExchange(string hostname, ushort port, string exchange, string exchangeType, string bindingKey, EventHandler<BasicDeliverEventArgs> handler)
         {
             var channel = GetOrCreateChannel(hostname, port);
-            channel.ExchangeDeclare(exchange: exchange, type: ExchangeType.Topic);
+            channel.ExchangeDeclare(exchange: exchange, type: exchangeType);
 
             if (handler != null)
             {

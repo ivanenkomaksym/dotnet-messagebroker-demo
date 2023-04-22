@@ -6,7 +6,6 @@ using Common.Models;
 using Common.Persistence;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
-using Microsoft.Extensions.Logging;
 
 namespace OrderProcessor
 {
@@ -26,6 +25,8 @@ namespace OrderProcessor
                 RabbitMQChannelRegistry = new RabbitMQChannelRegistry();
 
             NewOrderChannel = RabbitMQChannelRegistry.GetOrCreateQueue(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.OrderQueue, (model, ea) => { NewOrderRequested(ea); });
+
+            OrderPaidExchange = RabbitMQChannelRegistry.GetOrCreateExchange(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.OrderStatusExchange, ExchangeType.Fanout, string.Empty, null);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -50,12 +51,10 @@ namespace OrderProcessor
 
         private void NotifyConsumersAboutOrderPaid(Order order)
         {
-            var orderPaidExchange = RabbitMQChannelRegistry.GetOrCreateExchange(RabbitMQOptions.HostName, RabbitMQOptions.Port, Consts.OrderStatusExchange, string.Empty, null);
-
             var message = JsonSerializer.Serialize(order);
             var body = Encoding.UTF8.GetBytes(message);
 
-            orderPaidExchange.BasicPublish(exchange: Consts.OrderStatusExchange,
+            OrderPaidExchange.BasicPublish(exchange: Consts.OrderStatusExchange,
                                            routingKey: Consts.OrderStatusPaid,
                                            basicProperties: null,
                                            body: body);
@@ -66,5 +65,6 @@ namespace OrderProcessor
         private readonly IRabbitMQChannelRegistry RabbitMQChannelRegistry;
         private readonly RabbitMQOptions RabbitMQOptions;
         private readonly IModel NewOrderChannel;
+        private readonly IModel OrderPaidExchange;
     }
 }

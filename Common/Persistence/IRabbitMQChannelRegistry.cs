@@ -7,6 +7,6 @@ namespace Common.Persistence
     {
         IModel GetOrCreateQueue(string hostname, ushort port, string queue, EventHandler<BasicDeliverEventArgs> handler);
 
-        IModel GetOrCreateExchange(string hostname, ushort port, string exchange, string routingKey, EventHandler<BasicDeliverEventArgs> handler);
+        IModel GetOrCreateExchange(string hostname, ushort port, string exchange, string exchangeType, string routingKey, EventHandler<BasicDeliverEventArgs> handler);
     }
 }
