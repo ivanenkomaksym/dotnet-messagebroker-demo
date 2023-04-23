@@ -1,6 +1,4 @@
-docker-compose build
-.\start_minikube.ps1
-cd .\charts\helmapp
-helm upgrade --install helmapp .
+helm upgrade --install helmapp .\charts\helmapp
 minikube dashboard
-minikube service helmapp-orderapi
+Start-Process -FilePath "cmd" -ArgumentList "/c minikube service helmapp-orderapi" -WorkingDirectory ".\"
+Start-Process -FilePath "cmd" -ArgumentList "/c minikube service helmapp-rabbitmq" -WorkingDirectory ".\"
