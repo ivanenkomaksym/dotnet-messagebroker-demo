@@ -102,6 +102,8 @@ You can run this sample in 3 different ways:
 ## References
 [RabbitMQ .NET Tutorial](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html)
 
+[Building Microservices, 2nd Edition. Sam Newman. Message Brokers](https://learning.oreilly.com/library/view/building-microservices-2nd/9781492034018/ch05.html#:-:text=Message%20Brokers)
+
 [Kubernetes: Host Multi-Container ASP.NET Core app to Multiple Pods](https://www.yogihosting.com/aspnet-core-kubernetes-multi-pods/)
 
 [How to use Helm for ASP.NET Core with Kubernetes](https://www.yogihosting.com/helm-charts-aspnet-core-kubernetes/)
