@@ -8,35 +8,58 @@ namespace Notifications
 {
     public sealed class NotificationsWorker : BackgroundService
     {
-        private readonly ILogger<NotificationsWorker> _logger;
-
         public NotificationsWorker(IConfiguration configuration, ILogger<NotificationsWorker> logger)
         {
-            _logger = logger;
+            Logger = logger;
 
-            var rabbitMQOptions = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>();
+            RabbitMQOptions = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>();
 
-            IRabbitMQChannelRegistry rabbitMQChannelRegistry;
-            if (rabbitMQOptions.UseStub)
-                rabbitMQChannelRegistry = new StubRabbitMQChannelRegistry();
+            if (RabbitMQOptions.UseStub)
+                RabbitMQChannelRegistry = new StubRabbitMQChannelRegistry();
             else
-                rabbitMQChannelRegistry = new RabbitMQChannelRegistry();
+                RabbitMQChannelRegistry = new RabbitMQChannelRegistry();
 
+            bindToOrderStatusQueue();
+
+            bindToCustomerStatusQueue();
+        }
+
+        private void bindToOrderStatusQueue()
+        {
             var notificationsOrderStatusQueue = Consts.GetOrderStatusQueueName("notifications");
 
-            var channel = rabbitMQChannelRegistry.GetOrCreateQueue(rabbitMQOptions.HostName, rabbitMQOptions.Port, notificationsOrderStatusQueue, (model, ea) =>
-                {
-                    var body = ea.Body.ToArray();
-                    var message = Encoding.UTF8.GetString(body);
-                    var routingKey = ea.RoutingKey;
-                    _logger.LogInformation($"['{notificationsOrderStatusQueue}' queue] Received '{message}' with routingKey '{routingKey}'");
-                });
+            var orderStatusChannel = RabbitMQChannelRegistry.GetOrCreateQueue(RabbitMQOptions.HostName, RabbitMQOptions.Port, notificationsOrderStatusQueue, (model, ea) =>
+            {
+                var body = ea.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+                var routingKey = ea.RoutingKey;
+                Logger.LogInformation($"['{notificationsOrderStatusQueue}' queue] Received '{message}' with routingKey '{routingKey}'");
+            });
 
             // Bind new worker queue to "exchange.order.status" exchange
             // so that only one instance of this service will receive a message and process it
-            channel.QueueBind(queue: notificationsOrderStatusQueue,
-                              exchange: Consts.OrderStatusExchange,
-                              routingKey: Consts.OrderStatusBindingKey);
+            orderStatusChannel.QueueBind(queue: notificationsOrderStatusQueue,
+                                         exchange: Consts.OrderStatusExchange,
+                                         routingKey: Consts.OrderStatusBindingKey);
+        }
+
+        private void bindToCustomerStatusQueue()
+        {
+            var notificationsCustomerStatusQueue = Consts.GetCustomerStatusQueueName("notifications");
+
+            var customerStatusChannel = RabbitMQChannelRegistry.GetOrCreateQueue(RabbitMQOptions.HostName, RabbitMQOptions.Port, notificationsCustomerStatusQueue, (model, ea) =>
+            {
+                var body = ea.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+                var routingKey = ea.RoutingKey;
+                Logger.LogInformation($"['{notificationsCustomerStatusQueue}' queue] Received '{message}' with routingKey '{routingKey}'");
+            });
+
+            // Bind new worker queue to "exchange.customer.status" exchange
+            // so that only one instance of this service will receive a message and process it
+            customerStatusChannel.QueueBind(queue: notificationsCustomerStatusQueue,
+                                            exchange: Consts.CustomerStatusExchange,
+                                            routingKey: Consts.CustomerStatusBindingKey);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -46,5 +69,9 @@ namespace Notifications
                 await Task.Delay(1000, stoppingToken);
             }
         }
+
+        private readonly IRabbitMQChannelRegistry RabbitMQChannelRegistry;
+        private readonly RabbitMQOptions RabbitMQOptions;
+        private readonly ILogger<NotificationsWorker> Logger;
     }
 }
