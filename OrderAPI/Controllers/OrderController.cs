@@ -1,5 +1,7 @@
+using Common.Examples;
 using Common.Models;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace OrderAPI.Controllers
 {
@@ -21,6 +23,7 @@ namespace OrderAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [SwaggerRequestExample(typeof(OrderExample), typeof(OrderExample))]
         public async Task<IActionResult> CreateOrder([FromBody] Order order)
         {
             await OrderService.CreateOrder(order);

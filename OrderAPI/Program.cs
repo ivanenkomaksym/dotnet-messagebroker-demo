@@ -1,6 +1,10 @@
+using System.Reflection;
+using Microsoft.OpenApi.Models;
 using Common.Configuration;
+using Common.Examples;
 using Common.Persistence;
 using OrderAPI;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +28,24 @@ builder.Services.AddSingleton<IRabbitMQChannelRegistry>(serviceProvider =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Order API",
+        Version = "v1",
+        Description = "An API to perform Order operations"
+    });
+
+    c.ExampleFilters();
+
+    // Set the comments path for the Swagger JSON and UI.
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
+
+builder.Services.AddSwaggerExamplesFromAssemblyOf<OrderExample>();
 
 var app = builder.Build();
 

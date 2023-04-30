@@ -1,5 +1,7 @@
-﻿using Common.Models;
+﻿using Common.Examples;
+using Common.Models;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace CustomerAPI.Controllers
 {
@@ -21,6 +23,7 @@ namespace CustomerAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [SwaggerRequestExample(typeof(CustomerExample), typeof(CustomerExample))]
         public async Task<IActionResult> CreateCustomer([FromBody] Customer customer)
         {
             await CustomerService.CreateCustomer(customer);

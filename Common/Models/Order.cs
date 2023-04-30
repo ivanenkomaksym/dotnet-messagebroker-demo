@@ -6,7 +6,7 @@ namespace Common.Models
     [Serializable]
     public class Order
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string ProductId { get; set; }
