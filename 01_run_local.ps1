@@ -5,3 +5,4 @@ Start-Process -FilePath "cmd" -ArgumentList "/c dotnet run" -WorkingDirectory ".
 Start-Process -FilePath "cmd" -ArgumentList "/c dotnet run" -WorkingDirectory ".\OrderProcessor"
 Start-Process -FilePath "cmd" -ArgumentList "/c dotnet run" -WorkingDirectory ".\Warehouse"
 Start-Process -FilePath "cmd" -ArgumentList "/c dotnet run" -WorkingDirectory ".\CustomerAPI"
+Start-Process -FilePath "cmd" -ArgumentList "/c dotnet run" -WorkingDirectory ".\OcelotAPIGateway"

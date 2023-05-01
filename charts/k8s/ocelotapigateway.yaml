@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ocelotapigateway-pod
+  labels:
+    app: s3
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: ocelotapigateway-app
+  template:
+    metadata: 
+      labels:
+        app: ocelotapigateway-app
+    spec:
+      volumes:
+        - name: ocelot-volume
+          configMap:
+            name: ocelot-configmap
+      containers:
+        - name: ocelotapigateway-container
+          image: ocelotapigateway:1.16.0
+          imagePullPolicy: Never
+          volumeMounts:
+            - name: ocelot-volume
+              mountPath: /app/ocelot.k8s.json
+              subPath: ocelot.k8s.json
+          ports:
+            - containerPort: 80

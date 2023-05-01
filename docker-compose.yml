@@ -30,6 +30,12 @@ services:
     build:
       context: .
       dockerfile: CustomerAPI/Dockerfile
+
+  ocelotapigateway:
+    image: ${DOCKER_REGISTRY-}ocelotapigateway:1.16.0
+    build:
+      context: .
+      dockerfile: OcelotAPIGateway/Dockerfile
       
   rabbitmq:
     image: rabbitmq:management:1.16.0
