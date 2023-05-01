@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customerapi-pod
+  labels:
+    app: s2
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: customerapi-app
+  template:
+    metadata: 
+      labels:
+        app: customerapi-app
+    spec:
+      volumes:
+        - name: appsettings-volume
+          configMap:
+            name: app-configmap
+      containers:
+        - name: customerapi-container
+          image: customerapi:1.16.0
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: appsettings-volume
+              mountPath: /app/appsettings.k8s.json
+              subPath: appsettings.k8s.json
+          ports:
+            - containerPort: 80

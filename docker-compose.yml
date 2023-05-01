@@ -24,6 +24,12 @@ services:
     build:
       context: .
       dockerfile: Warehouse/Dockerfile
+
+  customerapi:
+    image: ${DOCKER_REGISTRY-}customerapi:1.16.0
+    build:
+      context: .
+      dockerfile: CustomerAPI/Dockerfile
       
   rabbitmq:
     image: rabbitmq:management:1.16.0
