@@ -1,0 +1,35 @@
+﻿{
+    "Routes": [
+        // Order API
+        {
+            "UpstreamPathTemplate": "/gateway/Order",
+            "UpstreamHttpMethod": [ "GET", "POST" ],
+            "DownstreamPathTemplate": "/api/Order",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7137
+                }
+            ],
+            "FileCacheOptions": { "TtlSeconds": 30 }
+        },
+        // Customer API
+        {
+            "UpstreamPathTemplate": "/gateway/Customer",
+            "UpstreamHttpMethod": [ "GET", "POST" ],
+            "DownstreamPathTemplate": "/api/Customer",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7055
+                }
+            ],
+            "FileCacheOptions": { "TtlSeconds": 30 }
+        }
+    ],
+    "GlobalConfiguration": {
+        "BaseUrl": "http://localhost:5010"
+    }
+}
