@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "warehouse.fullname" . }}
+  name: {{ include "ocelotapigateway.fullname" . }}
   labels:
-    {{- include "warehouse.labels" . | nindent 4 }}
+    {{- include "ocelotapigateway.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "warehouse.selectorLabels" . | nindent 6 }}
+      {{- include "ocelotapigateway.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,18 +18,18 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "warehouse.selectorLabels" . | nindent 8 }}
+        {{- include "ocelotapigateway.selectorLabels" . | nindent 8 }}
     spec:
-      # Define appsettings-volume
+      # Define ocelotapigateway-volume
       volumes:
-        - name: appsettings-volume
+        - name: ocelotapigateway-volume
           configMap:
-            name: orderapi-cfg
+            name: ocelotapigateway-cfg
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "warehouse.serviceAccountName" . }}
+      serviceAccountName: {{ include "ocelotapigateway.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -38,11 +38,11 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # Mount appsettings-volume with appsettings.k8s.json
+          # Mount ocelotapigateway-volume with ocelot.k8s.json
           volumeMounts:
-            - name: appsettings-volume
-              mountPath: /app/appsettings.k8s.json
-              subPath: appsettings.k8s.json
+            - name: ocelotapigateway-volume
+              mountPath: /app/ocelot.k8s.json
+              subPath: ocelot.k8s.json
           ports:
             - name: http
               containerPort: {{ .Values.service.containerPort }}

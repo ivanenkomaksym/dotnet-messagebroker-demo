@@ -45,7 +45,7 @@ spec:
               subPath: appsettings.k8s.json
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.service.containerPort }}
               protocol: TCP
           # TODO: Enable health probes
           #livenessProbe:
