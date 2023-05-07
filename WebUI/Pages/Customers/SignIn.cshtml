@@ -1,0 +1,77 @@
+﻿@page
+@model WebUI.Pages.Customers.SingInModel
+
+@{
+    ViewData["Title"] = "SignIn";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Sign In</h1>
+
+<h4>Customer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Customer.Name" class="control-label"></label>
+                <input asp-for="Customer.Name" class="form-control" />
+                <span asp-validation-for="Customer.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.Email" class="control-label"></label>
+                <input asp-for="Customer.Email" class="form-control" />
+                <span asp-validation-for="Customer.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sign In" class="btnSavePurpose" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //$(function () {
+
+    //    $(".btnSavePurpose").click(function (e) {
+    //        e.preventDefault();
+    //        $.post("@Url.Action("OnPostAsync")",
+    //            item.closest("form").serialize(), function (data) {
+    //                if (data.Status == "Success") {
+    //                    //Let's replace the form with messsage
+    //                    //item.closest("form-group").html("Updated Successfully");
+    //                    const welcomeDiv = document.getElementById("welcomeDiv");
+    //                    welcomeDiv.innerHTML = `Welcome ${data.Status}`;
+    //                }
+    //                else {
+    //                    //alert(data.ErrorMessage);
+    //                }
+
+    //            });
+    //    });
+
+    //});
+
+    $(document).on('click', 'componentElement', function () {
+        var parameterResult = "test";
+        $.ajax({
+            url: '/Customers/SignIn/', //assuming controller would be Home
+            type: 'POST', //if you are sending data, it's a POST
+            dataType: "Json", //specify the datatype you are sending
+            data: {
+                parameter: parameterResult
+            },
+            success: function (obj) { //notice I'm expecting an object back here
+                $("#welcomeDiv").empty(); //this will clear all the children inside the mainDiv
+                $("#welcomeDiv").append("<h5<" + obj + " selected</h5>"); //this will add back the string you get your OnGet
+            }
+        });
+    });
+
+</script>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
