@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerAPI", "CustomerAPI\CustomerAPI.csproj", "{89D7159A-F7B3-4DA6-87F9-0F3BC01553FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcelotAPIGateway", "OcelotAPIGateway\OcelotAPIGateway.csproj", "{1ECC3073-1083-47B4-B461-14E2A3ED4E86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcelotAPIGateway", "OcelotAPIGateway\OcelotAPIGateway.csproj", "{1ECC3073-1083-47B4-B461-14E2A3ED4E86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "WebUI\WebUI.csproj", "{F6FEDF26-D6D1-4A8A-B501-F1A9E4F5DC9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{1ECC3073-1083-47B4-B461-14E2A3ED4E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ECC3073-1083-47B4-B461-14E2A3ED4E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ECC3073-1083-47B4-B461-14E2A3ED4E86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6FEDF26-D6D1-4A8A-B501-F1A9E4F5DC9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6FEDF26-D6D1-4A8A-B501-F1A9E4F5DC9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6FEDF26-D6D1-4A8A-B501-F1A9E4F5DC9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6FEDF26-D6D1-4A8A-B501-F1A9E4F5DC9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
