@@ -26,8 +26,6 @@ app.UseEndpoints(endpoints =>
 
 await app.UseOcelot();
 
-app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
