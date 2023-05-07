@@ -1,7 +1,13 @@
+using WebUI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddHttpClient<ICustomerService, CustomerService>(options =>
+{
+    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+});
 
 var app = builder.Build();
 
