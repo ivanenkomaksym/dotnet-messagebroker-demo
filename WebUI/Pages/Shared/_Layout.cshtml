@@ -26,14 +26,22 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Customers/Create">Register</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Register">Register</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Customers/SignIn">Sign in</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/SignIn">Sign in</a>
                         </li>
                     </ul>
                 </div>
-                <div id="welcomeDiv">Welcome, User</div>
+                @{
+                    var displayedUserName = "User";
+                    var username = TempData.Peek("username");
+                    if (username != null)
+                    {
+                        displayedUserName = username as string;
+                    }
+                }
+                <div id="welcomeDiv">Welcome, @displayedUserName</div>
             </div>
         </nav>
     </header>
@@ -48,10 +56,6 @@
             &copy; 2023 - WebUI - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Common.Models;
 using WebUI.Services;
 
-namespace WebUI.Pages.Customers
+namespace WebUI.Pages
 {
     public class SingInModel : PageModel
     {
