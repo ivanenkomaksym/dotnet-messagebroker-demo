@@ -2,6 +2,8 @@
 
 This sample demonstrates how to integrate .NET microservices with RabbitMQ. Worker queues and exchanges are used for asynchronous communication. It also includes deploying apps to Kubernetes and using Helm charts.
 
+![Alt text](docs/architecture.png?raw=true "Application architecture")
+
 ## Dependencies
 [.NET 7](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
 
@@ -23,6 +25,16 @@ Application consists of several .NET microservices all communicating with Rabbit
 
 **OrderAPI** pushes messages to a worker queue so they are distribued in round-robin way to all registered consumers in sequence. If **OrderProcessor** is scaled out, only one instance will process the message.
 Messages pushed to **exchange.order.status** exchange will be distributed to all bind worker queues. Both Warehouse and Notifications microservices create additional worker queues and bind them to that single **exchange.order.status** exchange. This is done so that if microservice is scaled out, only one instance will process the message.
+
+## Data model
+
+![Alt text](docs/datamodel.png?raw=true "Data model")
+
+## Sagas
+
+### Create order
+
+![Alt text](docs/saga_create_order.png?raw=true "Create order saga")
 
 ## How to run this sample
 
