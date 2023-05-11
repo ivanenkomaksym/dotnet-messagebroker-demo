@@ -9,6 +9,11 @@ builder.Services.AddHttpClient<ICustomerService, CustomerService>(options =>
     options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
 });
 
+builder.Services.AddHttpClient<ICatalogService, CatalogService>(options =>
+{
+    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
