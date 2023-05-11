@@ -3,8 +3,34 @@
         // Catalog API
         {
             "UpstreamPathTemplate": "/gateway/Catalog",
-            "UpstreamHttpMethod": [ "GET", "POST" ],
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
             "DownstreamPathTemplate": "/api/Catalog",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7138
+                }
+            ],
+            "FileCacheOptions": { "TtlSeconds": 30 }
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Catalog/{id}",
+            "UpstreamHttpMethod": [ "GET", "DELETE" ],
+            "DownstreamPathTemplate": "/api/Catalog/{id}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7138
+                }
+            ],
+            "FileCacheOptions": { "TtlSeconds": 30 }
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Catalog/GetProductByCategory/{category}",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/Catalog/GetProductByCategory/{category}",
             "DownstreamScheme": "https",
             "DownstreamHostAndPorts": [
                 {
