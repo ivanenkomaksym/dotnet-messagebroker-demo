@@ -1,10 +1,13 @@
 ﻿using Catalog.API.Repositories.Interfaces;
 using CatalogAPI.Data;
 using CatalogAPI.Entities;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MongoDB.Bson.Serialization;
 
 namespace Catalog.API.Repositories
 {
@@ -25,7 +28,7 @@ namespace Catalog.API.Repositories
                             .ToListAsync();
         }
 
-        public async Task<Product> GetProduct(string id)
+        public async Task<Product> GetProduct(Guid id)
         {
             return await _context
                            .Products
@@ -69,7 +72,7 @@ namespace Catalog.API.Repositories
                     && updateResult.ModifiedCount > 0;
         }
 
-        public async Task<bool> DeleteProduct(string id)
+        public async Task<bool> DeleteProduct(Guid id)
         {
             FilterDefinition<Product> filter = Builders<Product>.Filter.Eq(p => p.Id, id);
 
