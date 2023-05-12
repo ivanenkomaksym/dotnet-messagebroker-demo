@@ -18,9 +18,9 @@ namespace WebUI.Services
             return await response.ReadContentAs<List<CatalogModel>>();
         }
 
-        public async Task<CatalogModel> GetCatalog(string id)
+        public async Task<CatalogModel> GetCatalog(Guid productId)
         {
-            var response = await _client.GetAsync($"/gateway/Catalog/{id}");
+            var response = await _client.GetAsync($"/gateway/Catalog/{productId}");
             return await response.ReadContentAs<CatalogModel>();
         }
 

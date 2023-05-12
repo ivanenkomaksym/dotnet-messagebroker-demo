@@ -6,7 +6,7 @@ namespace WebUI.Services
     {
         Task<IEnumerable<CatalogModel>> GetCatalog();
         Task<IEnumerable<CatalogModel>> GetCatalogByCategory(string category);
-        Task<CatalogModel> GetCatalog(string id);
+        Task<CatalogModel> GetCatalog(Guid productId);
         Task<CatalogModel> CreateCatalog(CatalogModel model);
     }
 }
