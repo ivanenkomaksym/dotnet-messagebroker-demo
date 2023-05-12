@@ -24,7 +24,10 @@ namespace WebUI.Pages
 
         [TempData]
         public string Username { get; set; }
-        
+
+        [TempData]
+        public Guid CustomerId { get; set; }
+
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -33,6 +36,7 @@ namespace WebUI.Pages
 
             ViewData["username"] = Customer.Name;
             Username = Customer.Name;
+            CustomerId = Customer.Id;
 
             return RedirectToPage("./Index");
         }

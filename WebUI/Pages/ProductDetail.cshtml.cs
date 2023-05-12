@@ -8,10 +8,12 @@ namespace WebUI.Pages
     public class ProductDetailModel : PageModel
     {
         private readonly ICatalogService _catalogService;
+        private readonly IShoppingCartService _shoppingCartService;
 
-        public ProductDetailModel(ICatalogService catalogService)
+        public ProductDetailModel(ICatalogService catalogService, IShoppingCartService shoppingCartService)
         {
             _catalogService = catalogService ?? throw new ArgumentNullException(nameof(catalogService));
+            _shoppingCartService = shoppingCartService; 
         }
 
         public CatalogModel Product { get; set; }
@@ -20,9 +22,12 @@ namespace WebUI.Pages
         public string Color { get; set; }
 
         [BindProperty]
-        public int Quantity { get; set; }
+        public ushort Quantity { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string productId)
+        [TempData]
+        public Guid CustomerId { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(Guid productId)
         {
             if (productId == null)
             {
@@ -35,6 +40,26 @@ namespace WebUI.Pages
                 return NotFound();
             }
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAddToCartAsync(Guid productId)
+        {
+            var product = await _catalogService.GetCatalog(productId);
+
+            var cart = await _shoppingCartService.GetShoppingCart(CustomerId);
+
+            cart.Items.Add(new ShoppingCartItemModel
+            {
+                Id = Guid.NewGuid(),
+                ProductId = productId,
+                ProductName = product.Name,
+                ProductPrice = product.Price,
+                Quantity = Quantity
+            });
+
+            var basketUpdated = await _shoppingCartService.UpdateShoppingCart(cart);
+
+            return RedirectToPage("Cart");
         }
     }
 }
