@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NuGet.ContentModel;
 using WebUI.Models;
 using WebUI.Services;
+using WebUI.Users;
 
 namespace WebUI.Pages
 {
@@ -9,11 +11,13 @@ namespace WebUI.Pages
     {
         private readonly ICatalogService _catalogService;
         private readonly IShoppingCartService _shoppingCartService;
+        private readonly IUserProvider _userProvider;
 
-        public ProductDetailModel(ICatalogService catalogService, IShoppingCartService shoppingCartService)
+        public ProductDetailModel(ICatalogService catalogService, IShoppingCartService shoppingCartService, IUserProvider userProvider)
         {
             _catalogService = catalogService ?? throw new ArgumentNullException(nameof(catalogService));
-            _shoppingCartService = shoppingCartService; 
+            _shoppingCartService = shoppingCartService ?? throw new ArgumentNullException(nameof(shoppingCartService));
+            _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));
         }
 
         public CatalogModel Product { get; set; }
@@ -46,16 +50,26 @@ namespace WebUI.Pages
         {
             var product = await _catalogService.GetCatalog(productId);
 
-            var cart = await _shoppingCartService.GetShoppingCart(CustomerId);
+            var customerId = _userProvider.GetCustomerId(HttpContext);
 
-            cart.Items.Add(new ShoppingCartItemModel
+            var cart = await _shoppingCartService.GetShoppingCart(customerId);
+
+            var items = cart.Items.Where(x => x.ProductId == productId);
+            if (items.Any())
             {
-                Id = Guid.NewGuid(),
-                ProductId = productId,
-                ProductName = product.Name,
-                ProductPrice = product.Price,
-                Quantity = Quantity
-            });
+                items.First().Quantity++;
+            }
+            else
+            {
+                cart.Items.Add(new ShoppingCartItemModel
+                {
+                    Id = Guid.NewGuid(),
+                    ProductId = productId,
+                    ProductName = product.Name,
+                    ProductPrice = product.Price,
+                    Quantity = Quantity
+                });
+            }
 
             var basketUpdated = await _shoppingCartService.UpdateShoppingCart(cart);
 

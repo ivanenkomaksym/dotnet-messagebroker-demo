@@ -1,4 +1,5 @@
 using WebUI.Services;
+using WebUI.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,11 @@ builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>(option
     options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
 });
 
+builder.Services.AddSingleton<IUserProvider, DefaultUserProvider>();
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,6 +37,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseSession();
 
 app.UseRouting();
 

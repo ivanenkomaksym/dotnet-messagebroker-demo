@@ -43,15 +43,15 @@
                         <div class="form-group">
                             <label>Quantity :</label>
                             <div class="input-group mb-3">
+                                <input asp-for="Quantity" type="text" class="form-control" id="quantity" name="quantity" min="1" max="100" value="1">
                                 <div class="input-group-prepend">
-                                    <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="">
-                                        <i class="fa fa-minus"></i>
+                                    <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="Quantity">
+                                        <i class="fa fa-minus">-</i>
                                     </button>
                                 </div>
-                                <input asp-for="Quantity" type="text" class="form-control" id="quantity" name="quantity" min="1" max="100" value="1">
                                 <div class="input-group-append">
-                                    <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
-                                        <i class="fa fa-plus"></i>
+                                    <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="Quantity">
+                                        <i class="fa fa-plus">+</i>
                                     </button>
                                 </div>
                             </div>
