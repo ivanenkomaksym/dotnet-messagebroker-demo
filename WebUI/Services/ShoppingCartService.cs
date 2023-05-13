@@ -45,7 +45,7 @@ namespace WebUI.Services
 
         public async Task<bool> UpdateShoppingCart(ShoppingCartModel shoppingCart)
         {
-            var response = await _client.PutAsJson($"/gateway/ShoppingCart", shoppingCart);
+            var response = await _client.PutAsJsonAsync($"/gateway/ShoppingCart", shoppingCart);
             return response.IsSuccessStatusCode;
         }
     }

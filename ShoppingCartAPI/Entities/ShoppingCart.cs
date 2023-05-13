@@ -12,7 +12,7 @@ namespace ShoppingCartAPI.Entities
         [BsonGuidRepresentation(GuidRepresentation.Standard)]
         public Guid CustomerId { get; init; }
         public string? CustomerName { get; init; }
-        public IEnumerable<ShoppingCartItem> Items { get; init; }
+        public IEnumerable<ShoppingCartItem> Items { get; init; } = new List<ShoppingCartItem>();
         public double TotalPrice { get; init; }
     }
 }

@@ -27,11 +27,11 @@ namespace ShoppingCartAPI.Controllers
 
             if (shoppingCart == null)
             {
-                _logger.LogError($"Shopping cart with customerId: {customerId}, not found.");
-                return NotFound();
+                shoppingCart = new ShoppingCart { CustomerId = customerId };
+                await _shoppingCartRepository.CreateShoppingCart(shoppingCart);
             }
 
-            return Ok(shoppingCart);
+            return shoppingCart;
         }
 
         [HttpPost]
