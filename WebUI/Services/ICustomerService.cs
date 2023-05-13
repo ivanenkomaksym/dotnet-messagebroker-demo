@@ -4,6 +4,10 @@ namespace WebUI.Services
 {
     public interface ICustomerService
     {
-        public Task CreateCustomer(Customer customer);
+        Task<IEnumerable<Customer>> GetCustomers();
+        Task<Customer> GetCustomerByEmail(string email);
+
+        Task<Customer> CreateCustomer(Customer customer);
+        Task<bool> DeleteCustomer(Guid customerId);
     }
 }

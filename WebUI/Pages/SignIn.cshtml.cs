@@ -33,9 +33,12 @@ namespace WebUI.Pages
 
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public IActionResult OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
-            _userProvider.SetCustomer(HttpContext, Customer);
+            var customer = await _customerService.GetCustomerByEmail(Customer.Email);
+
+            _userProvider.SetCustomer(HttpContext, customer);
+            Username = Customer.Name;
 
             return RedirectToPage("./Index");
         }

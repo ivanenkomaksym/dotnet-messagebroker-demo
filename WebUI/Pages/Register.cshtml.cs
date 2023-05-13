@@ -2,16 +2,19 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Common.Models;
 using WebUI.Services;
+using WebUI.Users;
 
 namespace WebUI.Pages
 {
     public class RegisterModel : PageModel
     {
         private readonly ICustomerService _customerService;
+        private readonly IUserProvider _userProvider;
 
-        public RegisterModel(ICustomerService customerService)
+        public RegisterModel(ICustomerService customerService, IUserProvider userProvider)
         {
             _customerService = customerService;
+            _userProvider = userProvider;
         }
 
         public IActionResult OnGet()
@@ -34,9 +37,8 @@ namespace WebUI.Pages
         {
             await _customerService.CreateCustomer(Customer);
 
-            ViewData["username"] = Customer.Name;
+            _userProvider.SetCustomer(HttpContext, Customer);
             Username = Customer.Name;
-            CustomerId = Customer.Id;
 
             return RedirectToPage("./Index");
         }
