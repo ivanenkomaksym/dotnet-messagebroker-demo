@@ -25,7 +25,6 @@
                     "Port": 7138
                 }
             ],
-            "FileCacheOptions": { "TtlSeconds": 30 }
         },
         {
             "UpstreamPathTemplate": "/gateway/Catalog/GetProductByCategory/{category}",
@@ -38,7 +37,6 @@
                     "Port": 7138
                 }
             ],
-            "FileCacheOptions": { "TtlSeconds": 30 }
         },
         // ShoppingCart API
         {
@@ -52,7 +50,6 @@
                     "Port": 7272
                 }
             ],
-            "FileCacheOptions": { "TtlSeconds": 30 }
         },
         {
             "UpstreamPathTemplate": "/gateway/ShoppingCart/{customerId}",
@@ -65,7 +62,6 @@
                     "Port": 7272
                 }
             ],
-            "FileCacheOptions": { "TtlSeconds": 30 }
         },
         {
             "UpstreamPathTemplate": "/gateway/ShoppingCart/Checkout",
@@ -78,7 +74,6 @@
                     "Port": 7272
                 }
             ],
-            "FileCacheOptions": { "TtlSeconds": 30 }
         },
         // Order API
         {
@@ -92,7 +87,6 @@
                     "Port": 7137
                 }
             ],
-            "FileCacheOptions": { "TtlSeconds": 30 }
         },
         // Customer API
         {
@@ -106,7 +100,6 @@
                     "Port": 7055
                 }
             ],
-            "FileCacheOptions": { "TtlSeconds": 30 }
         }
     ],
     "GlobalConfiguration": {
