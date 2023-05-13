@@ -24,7 +24,7 @@
                     "Host": "localhost",
                     "Port": 7138
                 }
-            ],
+            ]
         },
         {
             "UpstreamPathTemplate": "/gateway/Catalog/GetProductByCategory/{category}",
@@ -36,7 +36,7 @@
                     "Host": "localhost",
                     "Port": 7138
                 }
-            ],
+            ]
         },
         // ShoppingCart API
         {
@@ -49,7 +49,7 @@
                     "Host": "localhost",
                     "Port": 7272
                 }
-            ],
+            ]
         },
         {
             "UpstreamPathTemplate": "/gateway/ShoppingCart/{customerId}",
@@ -61,7 +61,7 @@
                     "Host": "localhost",
                     "Port": 7272
                 }
-            ],
+            ]
         },
         {
             "UpstreamPathTemplate": "/gateway/ShoppingCart/Checkout",
@@ -73,7 +73,7 @@
                     "Host": "localhost",
                     "Port": 7272
                 }
-            ],
+            ]
         },
         // Order API
         {
@@ -86,7 +86,7 @@
                     "Host": "localhost",
                     "Port": 7137
                 }
-            ],
+            ]
         },
         // Customer API
         {
@@ -99,7 +99,31 @@
                     "Host": "localhost",
                     "Port": 7055
                 }
-            ],
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Customer/{email}",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/Customer/{email}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7055
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Customer/{id}",
+            "UpstreamHttpMethod": [ "DELETE" ],
+            "DownstreamPathTemplate": "/api/Customer/{id}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7055
+                }
+            ]
         }
     ],
     "GlobalConfiguration": {

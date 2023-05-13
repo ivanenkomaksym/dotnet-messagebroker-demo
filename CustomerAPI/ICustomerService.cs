@@ -1,4 +1,4 @@
-﻿using Common.Models;
+﻿using CustomerAPI.Entities;
 
 namespace CustomerAPI
 {

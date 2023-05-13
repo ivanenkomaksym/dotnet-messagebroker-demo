@@ -4,7 +4,11 @@ using Common.Configuration;
 using Common.Examples;
 using Common.Persistence;
 using CustomerAPI;
+using CustomerAPI.Data;
+using CustomerAPI.Repositories;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +17,9 @@ builder.Configuration.AddJsonFile("appsettings.Development.json", optional: true
 builder.Configuration.AddJsonFile("appsettings.k8s.json", optional: true, reloadOnChange: false);
 
 // Add services to the container.
+builder.Services.AddScoped<ICustomerContext, CustomerContext>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
 builder.Services.AddSingleton<ICustomerService, CustomerService>();
 builder.Services.AddSingleton<IRabbitMQChannelRegistry>(serviceProvider =>
 {
@@ -46,6 +53,11 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddSwaggerExamplesFromAssemblyOf<CustomerExample>();
+
+builder.Services.AddHealthChecks()
+                .AddMongoDb(builder.Configuration["DatabaseSettings:ConnectionString"], "MongoDb Health", HealthStatus.Degraded);
+
+BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
 
 var app = builder.Build();
 

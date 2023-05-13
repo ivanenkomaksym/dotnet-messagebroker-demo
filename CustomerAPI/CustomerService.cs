@@ -2,8 +2,8 @@
 using System.Text.Json;
 using Common;
 using Common.Configuration;
-using Common.Models;
 using Common.Persistence;
+using CustomerAPI.Entities;
 using RabbitMQ.Client;
 
 namespace CustomerAPI
