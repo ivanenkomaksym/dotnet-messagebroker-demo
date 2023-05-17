@@ -31,7 +31,6 @@ namespace WebUI.Pages
         [TempData]
         public Guid CustomerId { get; set; }
 
-
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {

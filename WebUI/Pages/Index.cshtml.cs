@@ -29,6 +29,10 @@ namespace WebUI.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             ProductList = await _catalogService.GetCatalog();
+
+            var customerId = _userProvider.GetCustomerId(HttpContext);
+            var cart = await _shoppingCartService.GetShoppingCart(customerId);
+
             return Page();
         }
 
@@ -38,26 +42,7 @@ namespace WebUI.Pages
 
             var customerId = _userProvider.GetCustomerId(HttpContext);
 
-            var cart = await _shoppingCartService.GetShoppingCart(customerId);
-
-            var items = cart.Items.Where(x => x.ProductId == productId);
-            if (items.Any())
-            {
-                items.First().Quantity++;
-            }
-            else
-            {
-                cart.Items.Add(new ShoppingCartItemModel
-                {
-                    Id = Guid.NewGuid(),
-                    ProductId = productId,
-                    ProductName = product.Name,
-                    ProductPrice = product.Price,
-                    Quantity = 1
-                });
-            }
-
-            var basketUpdated = await _shoppingCartService.UpdateShoppingCart(cart);
+            var cart = await _shoppingCartService.AddProductToCart(customerId, product);
 
             return RedirectToPage("Cart");
         }

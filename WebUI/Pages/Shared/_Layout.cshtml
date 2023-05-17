@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@using WebUI.Services;
+@using WebUI.Users;
+@inject IUserProvider _userProvider
+@inject IShoppingCartService _shoppingCartService
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -23,7 +29,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Product">Product</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Cart">Cart</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Register">Register</a>
@@ -32,13 +41,35 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/SignIn">Sign in</a>
                         </li>
                     </ul>
+
+                    <form class="form-inline my-2 my-lg-0">
+                        @{
+                            var nofItemsInCartToDisplay = 0;
+
+                            var customerId = _userProvider.GetCustomerId(Context);
+                            var cart = await _shoppingCartService.GetShoppingCart(customerId);
+
+                            var nofItemsInCart = cart.Items.Count;
+
+                            if (nofItemsInCart != null)
+                            {
+                                var nofItemsInCartStr = nofItemsInCart.ToString();
+                                if (!string.IsNullOrEmpty(nofItemsInCartStr))
+                                    nofItemsInCartToDisplay = int.Parse(nofItemsInCartStr);
+                            }
+                        }
+                        <a class="btn btn-success btn-sm ml-3" asp-area="" asp-page="/Cart">
+                            <i class="fa fa-shopping-cart"></i> Cart
+                            <span class="badge badge-light">@nofItemsInCartToDisplay</span>
+                        </a>
+                    </form>
                 </div>
                 @{
                     var displayedUserName = "User";
-                    var username = TempData.Peek("username");
-                    if (username != null)
+                    var userName = Context.Session.GetString("CustomerName");
+                    if (!string.IsNullOrEmpty(userName))
                     {
-                        displayedUserName = username as string;
+                        displayedUserName = userName;                    
                     }
                 }
                 <div id="welcomeDiv">Welcome, @displayedUserName</div>

@@ -32,12 +32,12 @@ namespace WebUI.Pages
         {
             var customerId = _userProvider.GetCustomerId(HttpContext);
 
-            var basket = await _shoppingCartService.GetShoppingCart(customerId);
+            var cart = await _shoppingCartService.GetShoppingCart(customerId);
 
-            var item = basket.Items.Single(x => x.ProductId == productId);
-            basket.Items.Remove(item);
+            var item = cart.Items.Single(x => x.ProductId == productId);
+            cart.Items.Remove(item);
 
-            var basketUpdated = await _shoppingCartService.UpdateShoppingCart(basket);
+            var basketUpdated = await _shoppingCartService.UpdateShoppingCart(cart);
 
             return RedirectToPage();
         }
