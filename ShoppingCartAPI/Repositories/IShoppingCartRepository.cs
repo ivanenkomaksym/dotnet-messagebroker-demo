@@ -7,7 +7,7 @@ namespace ShoppingCartAPI.Repositories
         Task<ShoppingCart> GetShoppingCart(Guid customerId);
 
         Task CreateShoppingCart(ShoppingCart shoppingCart);
-        Task<bool> UpdateShoppingCart(ShoppingCart shoppingCart);
+        Task<ShoppingCart> UpdateShoppingCart(ShoppingCart shoppingCart);
         Task<bool> DeleteShoppingCart(Guid customerId);
 
         Task<bool> Checkout(Guid customerId);

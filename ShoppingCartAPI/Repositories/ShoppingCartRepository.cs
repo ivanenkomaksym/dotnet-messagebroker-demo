@@ -26,13 +26,17 @@ namespace ShoppingCartAPI.Repositories
             await _context.ShoppingCarts.InsertOneAsync(shoppingCart);
         }
 
-        public async Task<bool> UpdateShoppingCart(ShoppingCart shoppingCart)
+        public async Task<ShoppingCart> UpdateShoppingCart(ShoppingCart shoppingCart)
         {
             var updateResult = await _context
                                         .ShoppingCarts
                                         .ReplaceOneAsync(filter: c => c.Id == shoppingCart.Id, replacement: shoppingCart);
 
-            return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
+            var updated = updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
+            if (!updated)
+                return null;
+
+            return await GetShoppingCart(shoppingCart.CustomerId);
         }
 
         public async Task<bool> DeleteShoppingCart(Guid customerId)

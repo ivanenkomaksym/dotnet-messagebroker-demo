@@ -13,6 +13,21 @@ namespace ShoppingCartAPI.Entities
         public Guid CustomerId { get; init; }
         public string? CustomerName { get; init; }
         public IEnumerable<ShoppingCartItem> Items { get; init; } = new List<ShoppingCartItem>();
-        public double TotalPrice { get; init; }
+        public decimal TotalPrice
+        {
+            get
+            {
+                decimal totalPrice = 0;
+                foreach (var item in Items)
+                {
+                    totalPrice += item.ProductPrice * item.Quantity;
+                }
+                return totalPrice;
+            }
+            init
+            {
+
+            }
+        }
     }
 }

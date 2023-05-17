@@ -43,10 +43,34 @@ namespace WebUI.Services
             return await response.ReadContentAs<ShoppingCartModel>();
         }
 
-        public async Task<bool> UpdateShoppingCart(ShoppingCartModel shoppingCart)
+        public async Task<ShoppingCartModel> UpdateShoppingCart(ShoppingCartModel shoppingCart)
         {
             var response = await _client.PutAsJsonAsync($"/gateway/ShoppingCart", shoppingCart);
-            return response.IsSuccessStatusCode;
+            return await response.ReadContentAs<ShoppingCartModel>();
+        }
+
+        public async Task<ShoppingCartModel> AddProductToCart(Guid customerId, CatalogModel product)
+        {
+            var cart = await GetShoppingCart(customerId);
+
+            var items = cart.Items.Where(x => x.ProductId == product.Id);
+            if (items.Any())
+            {
+                items.First().Quantity++;
+            }
+            else
+            {
+                cart.Items.Add(new ShoppingCartItemModel
+                {
+                    Id = Guid.NewGuid(),
+                    ProductId = product.Id,
+                    ProductName = product.Name,
+                    ProductPrice = product.Price,
+                    Quantity = 1
+                });
+            }
+
+            return await UpdateShoppingCart(cart);
         }
     }
 }
