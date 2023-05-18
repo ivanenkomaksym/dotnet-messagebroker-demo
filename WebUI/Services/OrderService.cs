@@ -1,5 +1,5 @@
-﻿using WebUI.Extensions;
-using WebUI.Models;
+﻿using Common.Models;
+using WebUI.Extensions;
 
 namespace WebUI.Services
 {
@@ -12,7 +12,7 @@ namespace WebUI.Services
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<bool> CreateOrder(OrderModel order)
+        public async Task<bool> CreateOrder(Order order)
         {
             var response = await _client.PostAsJson($"/gateway/Order", order);
             return await response.ReadContentAs<bool>();

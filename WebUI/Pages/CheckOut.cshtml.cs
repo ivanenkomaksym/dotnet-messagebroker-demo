@@ -23,7 +23,7 @@ namespace WebUI.Pages
         }
 
         [BindProperty]
-        public OrderModel Order { get; set; }
+        public Order Order { get; set; }
 
         public Customer Customer { get; set; } = new Customer();
 
@@ -57,7 +57,7 @@ namespace WebUI.Pages
 
             foreach (var item in ShoppingCart.Items)
             {
-                Order.Items.Add(new OrderItemModel
+                Order.Items.Add(new OrderItem
                 {
                     Id = Guid.NewGuid(),
                     ProductId = item.ProductId,

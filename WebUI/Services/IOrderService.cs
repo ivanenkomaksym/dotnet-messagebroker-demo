@@ -1,9 +1,9 @@
-﻿using WebUI.Models;
+﻿using Common.Models;
 
 namespace WebUI.Services
 {
     public interface IOrderService
     {
-        Task<bool> CreateOrder(OrderModel order);
+        Task<bool> CreateOrder(Order order);
     }
 }

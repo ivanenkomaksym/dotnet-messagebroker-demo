@@ -10,8 +10,37 @@ namespace Common.Examples
             return new Order
             {
                 Id = Guid.NewGuid(),
-                ProductId = "prd01",
-                Quantity = 1
+                CustomerId = Guid.NewGuid(),
+                CustomerName = "Alice",
+                Items = new[]
+                {
+                    new OrderItem
+                    {
+                        Id = Guid.NewGuid(),
+                        ProductId = Guid.NewGuid(),
+                        ProductName = "Product 1",
+                        Quantity = 1,
+                        ProductPrice = 10.0
+                    }
+                },
+                TotalPrice = 10.0,
+                BillingAddress = new BillingAddress
+                {
+                    FirstName = "Alice",
+                    LastName = "Liddell",
+                    EmailAddress = "alice@gmail.com",
+                    AddressLine = "London",
+                    Country = "GB",
+                    ZipCode = "10000"
+                },
+                Payment = new Payment
+                {
+                    CardName = "Alice Liddell",
+                    CardNumber = "1234 5678 9101 1121 3141",
+                    Expiration = "01/28",
+                    CVV = "123",
+                    PaymentMethod = 0
+                }
             };
         }
     }
