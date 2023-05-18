@@ -4,6 +4,6 @@ namespace WebUI.Services
 {
     public interface IOrderService
     {
-        Task<bool> CreateOrder(Order order);
+        Task CreateOrder(Order order);
     }
 }

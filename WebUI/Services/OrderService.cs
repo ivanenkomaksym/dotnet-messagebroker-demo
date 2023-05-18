@@ -12,10 +12,14 @@ namespace WebUI.Services
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<bool> CreateOrder(Order order)
+        public async Task CreateOrder(Order order)
         {
             var response = await _client.PostAsJson($"/gateway/Order", order);
-            return await response.ReadContentAs<bool>();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Something went wrong when calling api.");
+            }
+            return;
         }
     }
 }

@@ -69,6 +69,8 @@ namespace WebUI.Pages
 
             await _orderService.CreateOrder(Order);
 
+            await _cartService.DeleteShoppingCart(customerId);
+
             return RedirectToPage("Confirmation", "OrderSubmitted");
         }
     }
