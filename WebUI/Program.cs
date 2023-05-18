@@ -20,6 +20,11 @@ builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>(option
     options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
 });
 
+builder.Services.AddHttpClient<IOrderService, OrderService>(options =>
+{
+    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+});
+
 builder.Services.AddSingleton<IUserProvider, DefaultUserProvider>();
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
