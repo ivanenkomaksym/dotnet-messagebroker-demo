@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Common.Models;
 using WebUI.Services;
 using WebUI.Users;
+using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace WebUI.Pages
 {
@@ -25,21 +26,26 @@ namespace WebUI.Pages
         [BindProperty]
         public Customer Customer { get; set; } = default!;
 
-        [TempData]
-        public string Username { get; set; }
-
-        [TempData]
-        public Guid CustomerId { get; set; }
+        [BindProperty]
+        public string ErrorMessage { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            var customer = await _customerService.GetCustomerByEmail(Customer.Email);
+            try
+            { 
+                var customer = await _customerService.Authenticate(Customer.Email, Customer.Password);
 
-            _userProvider.SetCustomer(HttpContext, customer);
-            Username = Customer.Name;
+                _userProvider.SetCustomer(HttpContext, customer);
 
-            return RedirectToPage("./Index");
+                return RedirectToPage("./Index");
+            }
+            catch (Exception ex) 
+            {
+                ErrorMessage = ex.Message;
+            }
+
+            return Page();
         }
     }
 }

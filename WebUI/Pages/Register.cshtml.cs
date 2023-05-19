@@ -25,22 +25,26 @@ namespace WebUI.Pages
         [BindProperty]
         public Customer Customer { get; set; } = default!;
 
-        [TempData]
-        public string Username { get; set; }
-
-        [TempData]
-        public Guid CustomerId { get; set; }
-
+        [BindProperty]
+        public string ErrorMessage { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            await _customerService.CreateCustomer(Customer);
+            try
+            {
+                await _customerService.CreateCustomer(Customer);
 
-            _userProvider.SetCustomer(HttpContext, Customer);
-            Username = Customer.Name;
+                _userProvider.SetCustomer(HttpContext, Customer);
 
-            return RedirectToPage("./Index");
+                return RedirectToPage("./Index");
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+
+            return Page();
         }
     }
 }

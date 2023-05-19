@@ -59,14 +59,14 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label asp-for="Order.BillingAddress.FirstName" for="firstName">First name</label>
-                        <input asp-for="Order.BillingAddress.FirstName" type="text" class="form-control" id="firstName" placeholder="" value="@Model.Customer.Name" required>
+                        <input asp-for="Order.BillingAddress.FirstName" type="text" class="form-control" id="firstName" placeholder="" value="@Model.Customer.FirstName" required>
                         <div class="invalid-feedback">
                             Valid first name is required.
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label asp-for="Order.BillingAddress.LastName" for="lastName">Last name</label>
-                        <input asp-for="Order.BillingAddress.LastName" type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                        <input asp-for="Order.BillingAddress.LastName" type="text" class="form-control" id="lastName" placeholder="" value="@Model.Customer.LastName" required>
                         <div class="invalid-feedback">
                             Valid last name is required.
                         </div>

@@ -18,7 +18,7 @@ namespace WebUI.Users
         public void SetCustomer(HttpContext httpContext, Customer customer)
         {
             httpContext.Session.SetString("CustomerId", customer.Id.ToString());
-            httpContext.Session.SetString("CustomerName", customer.Name);
+            httpContext.Session.SetString("CustomerName", customer.FirstName);
             httpContext.Session.SetString("CustomerEmail", customer.Email);
         }
     }

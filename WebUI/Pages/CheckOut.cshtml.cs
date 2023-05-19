@@ -32,8 +32,7 @@ namespace WebUI.Pages
         public async Task<IActionResult> OnGet()
         {
             var customerId = _userProvider.GetCustomerId(HttpContext);
-            var customerEmail = _userProvider.GetCustomerEmail(HttpContext);
-            Customer = await _customerService.GetCustomerByEmail(customerEmail);
+            Customer = await _customerService.GetCustomerById(customerId);
 
             ShoppingCart = await _cartService.GetShoppingCart(customerId);
 
