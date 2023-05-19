@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using CustomerAPI.Entities;
+using Common.Models;
 using CustomerAPI.Repositories;
 
 namespace CustomerAPI.Controllers
@@ -23,15 +23,29 @@ namespace CustomerAPI.Controllers
             return Ok(await Repository.GetCustomers());
         }
 
-        [HttpGet("{email}", Name = "GetCustomer")]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(Customer), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<Customer>> GetCustomerByEmail(string email)
+        [HttpGet("{customerId}", Name = "GetCustomerById")]
+        [ProducesResponseType(typeof(IEnumerable<Customer>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer(Guid customerId)
         {
-            var customer = await Repository.GetCustomerByEmail(email);
+            var customer = await Repository.GetCustomerById(customerId);
             if (customer == null)
             {
-                Logger.LogError($"Customer with email: {email}, not found.");
+                Logger.LogError($"Customer with id: {customerId}, not found.");
+                return NotFound($"Customer with id: {customerId}, not found.");
+            }
+
+            return Ok(customer);
+        }
+
+        [HttpPost("Authenticate")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(Customer), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<Customer>> Authenticate(string email, string password)
+        {
+            var customer = await Repository.Authenticate(email, password);
+            if (customer == null)
+            {
+                Logger.LogError($"Customer with email: {email} and password: {password}, not found.");
                 return NotFound();
             }
 
@@ -51,7 +65,7 @@ namespace CustomerAPI.Controllers
 
             await CustomerService.CreateCustomer(customer);
 
-            return CreatedAtRoute("GetCustomer", new { email = customer.Email }, customer);
+            return CreatedAtRoute("GetCustomerById", new { customerId = customer.Id }, customer);
         }
 
         [HttpDelete("{id}", Name = "DeleteCustomer")]

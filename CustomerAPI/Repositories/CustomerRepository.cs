@@ -1,5 +1,5 @@
-﻿using CustomerAPI.Data;
-using CustomerAPI.Entities;
+﻿using Common.Models;
+using CustomerAPI.Data;
 using MongoDB.Driver;
 
 namespace CustomerAPI.Repositories
@@ -21,19 +21,31 @@ namespace CustomerAPI.Repositories
                             .ToListAsync();
         }
 
-        public async Task<Customer> GetCustomerByEmail(string email)
+        public async Task<Customer> GetCustomerById(Guid customerId)
         {
-            FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq(c => c.Email, email);
+            var matchId = Builders<Customer>.Filter.Eq(c => c.Id, customerId);
 
             return await _context
                             .Customers
-                            .Find(filter)
+                            .Find(matchId)
+                            .FirstOrDefaultAsync();
+        }
+
+        public async Task<Customer> Authenticate(string email, string password)
+        {
+            var matchEmail = Builders<Customer>.Filter.Eq(c => c.Email, email);
+            var matchPassword = Builders<Customer>.Filter.Eq(c => c.Password, password);
+            var matchEmailAndPassword = Builders<Customer>.Filter.And(matchEmail, matchPassword);
+
+            return await _context
+                            .Customers
+                            .Find(matchEmailAndPassword)
                             .FirstOrDefaultAsync();
         }
 
         public async Task<Customer> CreateCustomer(Customer customer)
         {
-            var c = await GetCustomerByEmail(customer.Email);
+            var c = await Authenticate(customer.Email, customer.Password);
             if (c != null)
                 return null;
 

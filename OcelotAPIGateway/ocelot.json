@@ -102,9 +102,21 @@
             ]
         },
         {
-            "UpstreamPathTemplate": "/gateway/Customer/{email}",
+            "UpstreamPathTemplate": "/gateway/Customer/{customerId}",
             "UpstreamHttpMethod": [ "GET" ],
-            "DownstreamPathTemplate": "/api/Customer/{email}",
+            "DownstreamPathTemplate": "/api/Customer/{customerId}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7055
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Customer/Authenticate",
+            "UpstreamHttpMethod": [ "POST" ],
+            "DownstreamPathTemplate": "/api/Customer/Authenticate",
             "DownstreamScheme": "https",
             "DownstreamHostAndPorts": [
                 {

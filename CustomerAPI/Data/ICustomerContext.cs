@@ -1,4 +1,4 @@
-﻿using CustomerAPI.Entities;
+﻿using Common.Models;
 using MongoDB.Driver;
 
 namespace CustomerAPI.Data

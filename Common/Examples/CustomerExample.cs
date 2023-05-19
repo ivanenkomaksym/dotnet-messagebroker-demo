@@ -10,8 +10,10 @@ namespace Common.Examples
             return new Customer
             {
                 Id = Guid.NewGuid(),
-                Name = "Sam",
-                Email = "Sam.Andrew@gmail.com"
+                FirstName = "Alice",
+                LastName = "Liddell",
+                Email = "alice@gmail.com",
+                Password = "password"
             };
         }
     }
