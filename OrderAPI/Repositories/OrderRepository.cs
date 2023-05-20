@@ -15,6 +15,9 @@ namespace OrderAPI.Repositories
 
         public async Task<Order> CreateOrder(Order order)
         {
+            order.CreationDateTime = DateTime.Now;
+            order.OrderStatus = OrderStatus.New;
+
             await _context.Orders.InsertOneAsync(order);
             return order;
         }

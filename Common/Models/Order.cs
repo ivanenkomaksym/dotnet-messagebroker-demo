@@ -21,5 +21,9 @@ namespace Common.Models
         public BillingAddress BillingAddress { get; set; }
         [Required]
         public Payment Payment { get; set; }
+
+        public DateTime CreationDateTime { get; set; }
+
+        public OrderStatus OrderStatus { get; set; }
     }
 }

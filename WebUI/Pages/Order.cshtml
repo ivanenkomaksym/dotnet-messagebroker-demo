@@ -29,12 +29,12 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col"> </th>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Last Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Address</th>
-                            <th scope="col" class="text-right">TotalPrice</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Created at</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Shipping</th>
+                            <th scope="col">Items</th>
+                            <th scope="col">TotalPrice</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,12 +42,34 @@
                         @foreach (var order in Model.Orders)
                         {
                             <tr>
-                                <td><img src="https://dummyimage.com/50x50/55595c/fff" /></td>
-                                <td>@order.BillingAddress.FirstName</td>
-                                <td>@order.BillingAddress.LastName</td>
-                                <td>@order.BillingAddress.EmailAddress</td>
-                                <td>@order.BillingAddress.AddressLine</td>
-                                <td class="text-right">@order.TotalPrice $</td>
+                                <td>@order.Id</td>
+                                <td>@order.CreationDateTime</td>
+                                <td>@order.OrderStatus</td>
+                                <td>
+                                    @order.BillingAddress.Country<br>
+                                    @order.BillingAddress.State<br>
+                                    @order.BillingAddress.AddressLine<br>
+                                </td>
+                                <td>
+                                    <ul class="list-group mb-3">
+                                        @foreach (var item in order.Items)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                <div>
+                                                    <h6 class="my-0">@item.ProductName</h6>
+                                                    <small class="text-muted">@item.ProductName</small>
+                                                </div>
+                                                <span class="text-muted">$@item.ProductPrice</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span>Total (USD)</span>
+                                        <strong>$@order.TotalPrice</strong>
+                                    </li>
+                                </td>
                             </tr>
                         }
                     </tbody>
