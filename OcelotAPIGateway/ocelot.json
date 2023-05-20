@@ -91,7 +91,7 @@
         // Customer API
         {
             "UpstreamPathTemplate": "/gateway/Customer",
-            "UpstreamHttpMethod": [ "GET", "POST" ],
+            "UpstreamHttpMethod": [ "GET", "PUT", "POST" ],
             "DownstreamPathTemplate": "/api/Customer",
             "DownstreamScheme": "https",
             "DownstreamHostAndPorts": [

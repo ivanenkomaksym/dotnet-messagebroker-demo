@@ -37,7 +37,7 @@ namespace WebUI.Services
                 return await response.ReadContentAs<CatalogModel>();
             else
             {
-                throw new Exception("Something went wrong when calling api.");
+                throw new Exception(response.StatusCode.ToString());
             }
         }
     }

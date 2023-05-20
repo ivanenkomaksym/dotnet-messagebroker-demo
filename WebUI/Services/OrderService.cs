@@ -17,7 +17,7 @@ namespace WebUI.Services
             var response = await _client.PostAsJson($"/gateway/Order", order);
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Something went wrong when calling api.");
+                throw new Exception(response.StatusCode.ToString());
             }
             return;
         }

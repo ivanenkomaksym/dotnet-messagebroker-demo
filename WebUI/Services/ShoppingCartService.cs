@@ -17,7 +17,7 @@ namespace WebUI.Services
             var response = await _client.PostAsJson($"/gateway/ShoppingCart/{customerId}", "");
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Something went wrong when calling api.");
+                throw new Exception(response.StatusCode.ToString());
             }
             return true;
         }
@@ -27,25 +27,40 @@ namespace WebUI.Services
             var response = await _client.PostAsJson($"/gateway/ShoppingCart", shoppingCart);
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Something went wrong when calling api.");
+                throw new Exception(response.StatusCode.ToString());
             }
         }
 
         public async Task<bool> DeleteShoppingCart(Guid customerId)
         {
             var response = await _client.DeleteAsync($"/gateway/ShoppingCart/{customerId}");
-            return response.IsSuccessStatusCode;
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.StatusCode.ToString());
+            }
+
+            return true;
         }
 
         public async Task<ShoppingCartModel> GetShoppingCart(Guid customerId)
         {
             var response = await _client.GetAsync($"/gateway/ShoppingCart/{customerId}");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.StatusCode.ToString());
+            }
+
             return await response.ReadContentAs<ShoppingCartModel>();
         }
 
         public async Task<ShoppingCartModel> UpdateShoppingCart(ShoppingCartModel shoppingCart)
         {
             var response = await _client.PutAsJsonAsync($"/gateway/ShoppingCart", shoppingCart);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.StatusCode.ToString());
+            }
+
             return await response.ReadContentAs<ShoppingCartModel>();
         }
 

@@ -1,5 +1,6 @@
 ﻿using Common.Models;
 using WebUI.Extensions;
+using WebUI.Models;
 
 namespace WebUI.Services
 {
@@ -43,6 +44,17 @@ namespace WebUI.Services
                 return await response.ReadContentAs<Customer>();
             else
                 throw new Exception(response.StatusCode.ToString());
+        }
+
+        public async Task<bool> UpdateCustomer(Customer customer)
+        {
+            var response = await _client.PutAsJsonAsync($"/gateway/Customer", customer);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.StatusCode.ToString());
+            }
+
+            return await response.ReadContentAs<bool>();
         }
 
         public async Task<bool> DeleteCustomer(Guid customerId)

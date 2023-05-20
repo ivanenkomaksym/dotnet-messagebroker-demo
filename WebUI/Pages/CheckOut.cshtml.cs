@@ -23,16 +23,28 @@ namespace WebUI.Pages
         }
 
         [BindProperty]
-        public Order Order { get; set; }
+        public Order Order { get; set; } = new Order();
 
         public Customer Customer { get; set; } = new Customer();
 
         public ShoppingCartModel ShoppingCart { get; set; } = new ShoppingCartModel();
 
+        [BindProperty]
+        public string ErrorMessage { get; set; }
+
+        [BindProperty]
+        public bool SaveBillingAddressAndPayment { get; set; }
+
         public async Task<IActionResult> OnGet()
         {
             var customerId = _userProvider.GetCustomerId(HttpContext);
+            if (customerId == Guid.Empty)
+                return RedirectToPage("SignIn");
+
             Customer = await _customerService.GetCustomerById(customerId);
+
+            Order.BillingAddress = Customer.BillingAddress;
+            Order.Payment = Customer.Payment;
 
             ShoppingCart = await _cartService.GetShoppingCart(customerId);
 
@@ -41,36 +53,48 @@ namespace WebUI.Pages
 
         public async Task<IActionResult> OnPostCheckOutAsync()
         {
-            var customerId = _userProvider.GetCustomerId(HttpContext);
-
-            ShoppingCart = await _cartService.GetShoppingCart(customerId);
-
-            if (!ModelState.IsValid)
+            try
             {
-                return Page();
-            }
+                var customerId = _userProvider.GetCustomerId(HttpContext);
 
-            Order.CustomerId = customerId;
-            Order.CustomerName = ShoppingCart.CustomerName;
-            Order.TotalPrice = ShoppingCart.TotalPrice;
+                ShoppingCart = await _cartService.GetShoppingCart(customerId);
 
-            foreach (var item in ShoppingCart.Items)
-            {
-                Order.Items.Add(new OrderItem
+                if (SaveBillingAddressAndPayment)
                 {
-                    Id = Guid.NewGuid(),
-                    ProductId = item.ProductId,
-                    ProductName = item.ProductName,
-                    ProductPrice = item.ProductPrice,
-                    Quantity = item.Quantity
-                });
+                    Customer = await _customerService.GetCustomerById(customerId);
+
+                    Customer.BillingAddress = Order.BillingAddress;
+                    Customer.Payment = Order.Payment;
+
+                    await _customerService.UpdateCustomer(Customer);
+                }
+
+                Order.CustomerId = customerId;
+                Order.TotalPrice = ShoppingCart.TotalPrice;
+
+                foreach (var item in ShoppingCart.Items)
+                {
+                    Order.Items.Add(new OrderItem
+                    {
+                        Id = Guid.NewGuid(),
+                        ProductId = item.ProductId,
+                        ProductName = item.ProductName,
+                        ProductPrice = item.ProductPrice,
+                        Quantity = item.Quantity
+                    });
+                }
+
+                await _orderService.CreateOrder(Order);
+
+                await _cartService.DeleteShoppingCart(customerId);
+                return RedirectToPage("Confirmation", "OrderSubmitted");
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
             }
 
-            await _orderService.CreateOrder(Order);
-
-            await _cartService.DeleteShoppingCart(customerId);
-
-            return RedirectToPage("Confirmation", "OrderSubmitted");
+            return Page();
         }
     }
 }
