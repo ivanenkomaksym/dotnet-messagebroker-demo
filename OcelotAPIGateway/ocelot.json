@@ -78,8 +78,20 @@
         // Order API
         {
             "UpstreamPathTemplate": "/gateway/Order",
-            "UpstreamHttpMethod": [ "GET", "POST" ],
+            "UpstreamHttpMethod": [ "POST" ],
             "DownstreamPathTemplate": "/api/Order",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7137
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Order/{customerId}",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/Order/{customerId}",
             "DownstreamScheme": "https",
             "DownstreamHostAndPorts": [
                 {

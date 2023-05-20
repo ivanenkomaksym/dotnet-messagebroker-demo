@@ -1,9 +1,13 @@
 using System.Reflection;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Common.Configuration;
 using Common.Examples;
 using Common.Persistence;
 using OrderAPI;
+using OrderAPI.Data;
+using OrderAPI.Repositories;
+using MongoDB.Bson;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +17,9 @@ builder.Configuration.AddJsonFile("appsettings.Development.json", optional: true
 builder.Configuration.AddJsonFile("appsettings.k8s.json", optional: true, reloadOnChange: false);
 
 // Add services to the container.
+builder.Services.AddScoped<IOrderContext, OrderContext>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
 builder.Services.AddSingleton<IOrderService, OrderService>();
 builder.Services.AddSingleton<IRabbitMQChannelRegistry>(serviceProvider =>
 {
@@ -46,6 +53,11 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddSwaggerExamplesFromAssemblyOf<OrderExample>();
+
+builder.Services.AddHealthChecks()
+                .AddMongoDb(builder.Configuration["DatabaseSettings:ConnectionString"], "MongoDb Health", HealthStatus.Degraded);
+
+BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
 
 var app = builder.Build();
 
