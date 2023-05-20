@@ -53,6 +53,16 @@ namespace CustomerAPI.Repositories
             return customer;
         }
 
+        public async Task<bool> UpdateCustomer(Customer customer)
+        {
+            var updateResult = await _context
+                                        .Customers
+                                        .ReplaceOneAsync(filter: g => g.Id == customer.Id, replacement: customer);
+
+            return updateResult.IsAcknowledged
+                    && updateResult.ModifiedCount > 0;
+        }
+
         public async Task<bool> DeleteCustomer(Guid customerId)
         {
             FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq(c => c.Id, customerId);

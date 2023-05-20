@@ -8,7 +8,6 @@ namespace Common.Models
         public Guid Id { get; set; } = Guid.NewGuid();
         [Required]
         public Guid CustomerId { get; set; }
-        public string? CustomerName { get; set; }
         [Required]
         public IList<OrderItem> Items { get; set; } = new List<OrderItem>();
         [Required]

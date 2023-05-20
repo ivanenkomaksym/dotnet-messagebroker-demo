@@ -68,6 +68,13 @@ namespace CustomerAPI.Controllers
             return CreatedAtRoute("GetCustomerById", new { customerId = customer.Id }, customer);
         }
 
+        [HttpPut]
+        [ProducesResponseType(typeof(Customer), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> UpdateCustomer([FromBody] Customer customer)
+        {
+            return Ok(await Repository.UpdateCustomer(customer));
+        }
+
         [HttpDelete("{id}", Name = "DeleteCustomer")]
         [ProducesResponseType(typeof(Customer), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteCustomerById(Guid id)

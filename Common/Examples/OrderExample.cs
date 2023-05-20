@@ -11,7 +11,6 @@ namespace Common.Examples
             {
                 Id = Guid.NewGuid(),
                 CustomerId = Guid.NewGuid(),
-                CustomerName = "Alice",
                 Items = new[]
                 {
                     new OrderItem
