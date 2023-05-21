@@ -10,7 +10,7 @@ namespace WebUI.Services
         Task<ShoppingCartModel> UpdateShoppingCart(ShoppingCartModel shoppingCart);
         Task<bool> DeleteShoppingCart(Guid customerId);
 
-        Task<ShoppingCartModel> AddProductToCart(Guid customerId, CatalogModel product);
+        Task<ShoppingCartModel> AddProductToCart(Guid customerId, CatalogModel product, ushort quantity = 1);
 
         Task<bool> Checkout(Guid customerId);
     }

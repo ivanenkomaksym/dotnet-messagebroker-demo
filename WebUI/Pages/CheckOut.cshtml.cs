@@ -25,13 +25,7 @@ namespace WebUI.Pages
         [BindProperty]
         public Order Order { get; set; } = new Order();
 
-        public Customer Customer { get; set; } = new Customer();
-
         public ShoppingCartModel ShoppingCart { get; set; } = new ShoppingCartModel();
-
-        [BindProperty]
-        public string ErrorMessage { get; set; }
-
         [BindProperty]
         public bool SaveBillingAddressAndPayment { get; set; }
 
@@ -41,18 +35,19 @@ namespace WebUI.Pages
             if (customerId == Guid.Empty)
                 return RedirectToPage("SignIn");
 
-            Customer = await _customerService.GetCustomerById(customerId);
+            var customer = await _customerService.GetCustomerById(customerId);
 
-            Order.BillingAddress = Customer.BillingAddress;
-            Order.Payment = Customer.Payment;
-
-            ShoppingCart = await _cartService.GetShoppingCart(customerId);
+            Order.BillingAddress = customer.BillingAddress;
+            Order.Payment = customer.Payment;
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostCheckOutAsync()
         {
+            if (!ModelState.IsValid)
+                return Page();
+
             try
             {
                 var customerId = _userProvider.GetCustomerId(HttpContext);
@@ -61,12 +56,12 @@ namespace WebUI.Pages
 
                 if (SaveBillingAddressAndPayment)
                 {
-                    Customer = await _customerService.GetCustomerById(customerId);
+                    var customer = await _customerService.GetCustomerById(customerId);
 
-                    Customer.BillingAddress = Order.BillingAddress;
-                    Customer.Payment = Order.Payment;
+                    customer.BillingAddress = Order.BillingAddress;
+                    customer.Payment = Order.Payment;
 
-                    await _customerService.UpdateCustomer(Customer);
+                    await _customerService.UpdateCustomer(customer);
                 }
 
                 Order.CustomerId = customerId;
@@ -91,7 +86,7 @@ namespace WebUI.Pages
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.Message;
+                ModelState.AddModelError(nameof(Order.Id), "Problem creating order.");
             }
 
             return Page();

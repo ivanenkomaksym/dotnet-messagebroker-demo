@@ -23,6 +23,7 @@ namespace Common.Models
         public string Email { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         public BillingAddress? BillingAddress { get; set; }

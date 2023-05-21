@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 using WebUI.Models;
 using WebUI.Services;
 using WebUI.Users;
@@ -22,13 +23,8 @@ namespace WebUI.Pages
         public CatalogModel Product { get; set; }
 
         [BindProperty]
-        public string Color { get; set; }
-
-        [BindProperty]
-        public ushort Quantity { get; set; }
-
-        [TempData]
-        public Guid CustomerId { get; set; }
+        [Range(1, ushort.MaxValue)]
+        public ushort Quantity { get; set; } = 1;
 
         public async Task<IActionResult> OnGetAsync(Guid productId)
         {
@@ -51,7 +47,7 @@ namespace WebUI.Pages
 
             var customerId = _userProvider.GetCustomerId(HttpContext);
 
-            var cart = await _shoppingCartService.AddProductToCart(customerId, product);
+            var cart = await _shoppingCartService.AddProductToCart(customerId, product, Quantity);
 
             return RedirectToPage("Cart");
         }

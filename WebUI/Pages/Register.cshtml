@@ -8,6 +8,7 @@
 <h1>Create</h1>
 
 <h4>Customer</h4>
+<div class="text-danger" asp-validation-summary="All"></div>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -33,10 +34,6 @@
                 <input asp-for="Customer.Password" class="form-control" />
                 <span asp-validation-for="Customer.Password" class="text-danger"></span>
             </div>
-            @if (!string.IsNullOrEmpty(@Model.ErrorMessage))
-            {
-                <label>@Model.ErrorMessage</label>
-            }
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

@@ -17,7 +17,8 @@ namespace WebUI.Pages
             _userProvider = userProvider;
         }
 
-        public ShoppingCartModel Cart { get; set; } = new ShoppingCartModel();
+        [BindProperty]
+        public ShoppingCartModel Cart { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -25,7 +26,7 @@ namespace WebUI.Pages
 
             Cart = await _shoppingCartService.GetShoppingCart(customerId);
 
-            return Page();
+            return Page(); 
         }
 
         public async Task<IActionResult> OnPostRemoveToCartAsync(Guid productId)

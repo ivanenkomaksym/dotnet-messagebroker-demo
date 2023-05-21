@@ -25,12 +25,12 @@ namespace WebUI.Pages
         [BindProperty]
         public Customer Customer { get; set; } = default!;
 
-        [BindProperty]
-        public string ErrorMessage { get; set; }
-
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid)
+                return Page();
+
             try
             {
                 await _customerService.CreateCustomer(Customer);
@@ -41,7 +41,7 @@ namespace WebUI.Pages
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.Message;
+                ModelState.AddModelError(nameof(Customer.Email), "User with this email already exists.");
             }
 
             return Page();

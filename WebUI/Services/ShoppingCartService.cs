@@ -64,14 +64,14 @@ namespace WebUI.Services
             return await response.ReadContentAs<ShoppingCartModel>();
         }
 
-        public async Task<ShoppingCartModel> AddProductToCart(Guid customerId, CatalogModel product)
+        public async Task<ShoppingCartModel> AddProductToCart(Guid customerId, CatalogModel product, ushort quantity = 1)
         {
             var cart = await GetShoppingCart(customerId);
 
             var items = cart.Items.Where(x => x.ProductId == product.Id);
             if (items.Any())
             {
-                items.First().Quantity++;
+                items.First().Quantity += quantity;
             }
             else
             {
@@ -81,7 +81,7 @@ namespace WebUI.Services
                     ProductId = product.Id,
                     ProductName = product.Name,
                     ProductPrice = product.Price,
-                    Quantity = 1
+                    Quantity = quantity
                 });
             }
 
