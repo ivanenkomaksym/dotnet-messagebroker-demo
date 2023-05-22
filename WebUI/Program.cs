@@ -1,10 +1,29 @@
 using WebUI.Services;
 using WebUI.Users;
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
+using NToastNotify;
+using WebUI.Notifications;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddNToastNotifyToastr(new ToastrOptions
+{
+    ProgressBar = true,
+    TimeOut = 5000
+});
+
+// Add ToastNotification
+builder.Services.AddNotyf(config =>
+{
+    config.DurationInSeconds = 5;
+    config.IsDismissable = true;
+    config.Position = NotyfPosition.TopRight;
+});
+
+builder.Services.AddToastify(config => { config.DurationInSeconds = 1000; config.Position = Position.Right; config.Gravity = Gravity.Bottom; });
+
 builder.Services.AddHttpClient<ICustomerService, CustomerService>(options =>
 {
     options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
@@ -25,6 +44,7 @@ builder.Services.AddHttpClient<IOrderService, OrderService>(options =>
     options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
 });
 
+builder.Services.AddScoped<INotificationClient, NotificationClient>();
 builder.Services.AddSingleton<IUserProvider, DefaultUserProvider>();
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -47,6 +67,9 @@ app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseNToastNotify();
+app.UseNotyf();
 
 app.MapRazorPages();
 
