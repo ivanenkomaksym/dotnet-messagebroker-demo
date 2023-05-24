@@ -6,12 +6,16 @@ namespace Common.Models
     {
         [Required]
         public string CardName { get; set; }
+
         [Required]
         public string CardNumber { get; set; }
+
         [Required]
         public string Expiration { get; set; }
+
         [Required]
         public string CVV { get; set; }
+
         [Required]
         public int PaymentMethod { get; set; }
     }

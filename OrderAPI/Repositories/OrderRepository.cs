@@ -24,7 +24,7 @@ namespace OrderAPI.Repositories
 
         public async Task<IEnumerable<Order>> GetOrders(Guid customerId)
         {
-            var matchId = Builders<Order>.Filter.Eq(o => o.CustomerId, customerId);
+            var matchId = Builders<Order>.Filter.Eq(o => o.CustomerInfo.CustomerId, customerId);
 
             return await _context
                             .Orders

@@ -10,7 +10,13 @@ namespace Common.Examples
             return new Order
             {
                 Id = Guid.NewGuid(),
-                CustomerId = Guid.NewGuid(),
+                CustomerInfo = new()
+                {
+                    CustomerId = Guid.NewGuid(),
+                    FirstName = "Alice",
+                    LastName = "Liddell",
+                    Email = "alice@gmail.com"
+                },
                 Items = new[]
                 {
                     new OrderItem
@@ -23,11 +29,11 @@ namespace Common.Examples
                     }
                 },
                 TotalPrice = 10.0,
-                BillingAddress = new BillingAddress
+                ShippingAddress = new Address
                 {
                     FirstName = "Alice",
                     LastName = "Liddell",
-                    EmailAddress = "alice@gmail.com",
+                    Email = "alice@gmail.com",
                     AddressLine = "London",
                     Country = "GB",
                     ZipCode = "10000"

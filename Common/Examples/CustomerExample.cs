@@ -9,7 +9,6 @@ namespace Common.Examples
         {
             return new Customer
             {
-                Id = Guid.NewGuid(),
                 FirstName = "Alice",
                 LastName = "Liddell",
                 Email = "alice@gmail.com",

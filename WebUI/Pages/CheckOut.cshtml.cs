@@ -27,7 +27,7 @@ namespace WebUI.Pages
 
         public ShoppingCartModel ShoppingCart { get; set; } = new ShoppingCartModel();
         [BindProperty]
-        public bool SaveBillingAddressAndPayment { get; set; }
+        public bool SaveShippingAddressAndPayment { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -37,7 +37,7 @@ namespace WebUI.Pages
 
             var customer = await _customerService.GetCustomerById(customerId);
 
-            Order.BillingAddress = customer.BillingAddress;
+            Order.ShippingAddress = customer.ShippingAddress;
             Order.Payment = customer.Payment;
 
             return Page();
@@ -54,17 +54,22 @@ namespace WebUI.Pages
 
                 ShoppingCart = await _cartService.GetShoppingCart(customerId);
 
-                if (SaveBillingAddressAndPayment)
+                var customer = await _customerService.GetCustomerById(customerId);
+                if (SaveShippingAddressAndPayment)
                 {
-                    var customer = await _customerService.GetCustomerById(customerId);
-
-                    customer.BillingAddress = Order.BillingAddress;
+                    customer.ShippingAddress = Order.ShippingAddress;
                     customer.Payment = Order.Payment;
 
                     await _customerService.UpdateCustomer(customer);
                 }
 
-                Order.CustomerId = customerId;
+                Order.CustomerInfo = new()
+                {
+                    CustomerId = customer.Id,
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
+                    Email = customer.Email
+                };
                 Order.TotalPrice = ShoppingCart.TotalPrice;
 
                 foreach (var item in ShoppingCart.Items)

@@ -10,20 +10,24 @@ namespace Common.Models
         [BsonId]
         [BsonGuidRepresentation(GuidRepresentation.Standard)]
         public Guid Id { get; set; } = Guid.NewGuid();
+
+        public OrderStatus OrderStatus { get; set; }
+
         [Required]
-        [BsonGuidRepresentation(GuidRepresentation.Standard)]
-        public Guid CustomerId { get; set; }
+        public CustomerInfo CustomerInfo { get; set; }
+
         [Required]
         public IList<OrderItem> Items { get; set; } = new List<OrderItem>();
+
         [Required]
         public double TotalPrice { get; set; }
+
         [Required]
-        public BillingAddress BillingAddress { get; set; }
+        public Address ShippingAddress { get; set; }
+
         [Required]
         public Payment Payment { get; set; }
 
         public DateTime CreationDateTime { get; set; }
-
-        public OrderStatus OrderStatus { get; set; }
     }
 }

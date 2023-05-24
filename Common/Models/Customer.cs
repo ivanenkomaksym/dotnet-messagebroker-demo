@@ -26,7 +26,7 @@ namespace Common.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public BillingAddress? BillingAddress { get; set; }
+        public Address? ShippingAddress { get; set; }
 
         public Payment? Payment { get; set; }
     }

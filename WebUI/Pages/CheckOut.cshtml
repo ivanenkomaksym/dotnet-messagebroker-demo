@@ -54,21 +54,21 @@
             </form>
         </div>
         <div class="col-md-8 order-md-1">
-            <h4 class="mb-3">Billing address</h4>
+            <h4 class="mb-3">Shipping address</h4>
             <form asp-page-handler="CheckOut" method="post" class="needs-validation" novalidate>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label asp-for="Order.BillingAddress.FirstName" for="firstName">First name</label>
-                        <input asp-for="Order.BillingAddress.FirstName" type="text" class="form-control" id="firstName" placeholder="" required>
-                        <span asp-validation-for="Order.BillingAddress.FirstName" class="text-danger"></span>
+                        <label asp-for="Order.ShippingAddress.FirstName" for="firstName">First name</label>
+                        <input asp-for="Order.ShippingAddress.FirstName" type="text" class="form-control" id="firstName" placeholder="" required>
+                        <span asp-validation-for="Order.ShippingAddress.FirstName" class="text-danger"></span>
                         <div class="invalid-feedback">
                             Valid first name is required.
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label asp-for="Order.BillingAddress.LastName" for="lastName">Last name</label>
-                        <input asp-for="Order.BillingAddress.LastName" type="text" class="form-control" id="lastName" placeholder=""  required>
-                        <span asp-validation-for="Order.BillingAddress.LastName" class="text-danger"></span>
+                        <label asp-for="Order.ShippingAddress.LastName" for="lastName">Last name</label>
+                        <input asp-for="Order.ShippingAddress.LastName" type="text" class="form-control" id="lastName" placeholder=""  required>
+                        <span asp-validation-for="Order.ShippingAddress.LastName" class="text-danger"></span>
                         <div class="invalid-feedback">
                             Valid last name is required.
                         </div>
@@ -76,18 +76,18 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Order.BillingAddress.EmailAddress" for="email">Email <span class="text-muted">(Optional)</span></label>
-                    <input asp-for="Order.BillingAddress.EmailAddress" type="email" class="form-control" id="email">
-                    <span asp-validation-for="Order.BillingAddress.EmailAddress" class="text-danger"></span>
+                    <label asp-for="Order.ShippingAddress.Email" for="email">Email <span class="text-muted">(Optional)</span></label>
+                    <input asp-for="Order.ShippingAddress.Email" type="email" class="form-control" id="email">
+                    <span asp-validation-for="Order.ShippingAddress.Email" class="text-danger"></span>
                     <div class="invalid-feedback">
                         Please enter a valid email address for shipping updates.
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Order.BillingAddress.AddressLine" for="address">Address</label>
-                    <input asp-for="Order.BillingAddress.AddressLine" type="text" class="form-control" id="address" placeholder="1234 Main St" required>
-                    <span asp-validation-for="Order.BillingAddress.AddressLine" class="text-danger"></span>
+                    <label asp-for="Order.ShippingAddress.AddressLine" for="address">Address</label>
+                    <input asp-for="Order.ShippingAddress.AddressLine" type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+                    <span asp-validation-for="Order.ShippingAddress.AddressLine" class="text-danger"></span>
                     <div class="invalid-feedback">
                         Please enter your shipping address.
                     </div>
@@ -100,31 +100,31 @@
 
                 <div class="row">
                     <div class="col-md-5 mb-3">
-                        <label asp-for="Order.BillingAddress.Country" for="country">Country</label>
-                        <select asp-for="Order.BillingAddress.Country" class="custom-select d-block w-100" id="country" required>
+                        <label asp-for="Order.ShippingAddress.Country" for="country">Country</label>
+                        <select asp-for="Order.ShippingAddress.Country" class="custom-select d-block w-100" id="country" required>
                             <option value="">Choose...</option>
                             <option>United States</option>
                         </select>
-                        <span asp-validation-for="Order.BillingAddress.Country" class="text-danger"></span>
+                        <span asp-validation-for="Order.ShippingAddress.Country" class="text-danger"></span>
                         <div class="invalid-feedback">
                             Please select a valid country.
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label asp-for="Order.BillingAddress.State" for="state">State</label>
-                        <select asp-for="Order.BillingAddress.State" class="custom-select d-block w-100" id="state" required>
+                        <label asp-for="Order.ShippingAddress.State" for="state">State</label>
+                        <select asp-for="Order.ShippingAddress.State" class="custom-select d-block w-100" id="state" required>
                             <option value="">Choose...</option>
                             <option>California</option>
                         </select>
-                        <span asp-validation-for="Order.BillingAddress.State" class="text-danger"></span>
+                        <span asp-validation-for="Order.ShippingAddress.State" class="text-danger"></span>
                         <div class="invalid-feedback">
                             Please provide a valid state.
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label asp-for="Order.BillingAddress.ZipCode" for="zip">Zip</label>
-                        <input asp-for="Order.BillingAddress.ZipCode" type="text" class="form-control" id="zip" placeholder="" required>
-                        <span asp-validation-for="Order.BillingAddress.ZipCode" class="text-danger"></span>
+                        <label asp-for="Order.ShippingAddress.ZipCode" for="zip">Zip</label>
+                        <input asp-for="Order.ShippingAddress.ZipCode" type="text" class="form-control" id="zip" placeholder="" required>
+                        <span asp-validation-for="Order.ShippingAddress.ZipCode" class="text-danger"></span>
                         <div class="invalid-feedback">
                             Zip code required.
                         </div>
@@ -136,7 +136,7 @@
                     <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
                 </div>
                 <div class="custom-control custom-checkbox">
-                    <input asp-for="@Model.SaveBillingAddressAndPayment" type="checkbox" class="custom-control-input" id="save-info">
+                    <input asp-for="@Model.SaveShippingAddressAndPayment" type="checkbox" class="custom-control-input" id="save-info">
                     <label class="custom-control-label" for="save-info">Save this information for next time</label>
                 </div>
                 <hr class="mb-4">

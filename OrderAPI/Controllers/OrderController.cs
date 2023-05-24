@@ -36,7 +36,7 @@ namespace OrderAPI.Controllers
             }
 
             await OrderService.CreateOrder(order);
-            return CreatedAtRoute("GetOrders", new { customerId = order.CustomerId}, order);
+            return CreatedAtRoute("GetOrders", new { customerId = order.CustomerInfo.CustomerId}, order);
         }
 
         private readonly IOrderService OrderService;
