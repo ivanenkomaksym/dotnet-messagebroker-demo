@@ -1,9 +1,14 @@
 ﻿using Warehouse;
+using Warehouse.Data;
+using Warehouse.Repositories;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<WarehouseWorker>();
+
+        services.AddScoped<IWarehouseContext, WarehouseContext>();
+        services.AddScoped<IWarehouseRepository, WarehouseRepository>();
     })
     .ConfigureAppConfiguration((context, config) =>
     {
