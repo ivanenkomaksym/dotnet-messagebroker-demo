@@ -1,14 +1,13 @@
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Common.Configuration;
 using Common.Examples;
-using Common.Persistence;
 using OrderAPI;
 using OrderAPI.Data;
 using OrderAPI.Repositories;
 using MongoDB.Bson;
 using Swashbuckle.AspNetCore.Filters;
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,16 +19,11 @@ builder.Configuration.AddJsonFile("appsettings.k8s.json", optional: true, reload
 builder.Services.AddScoped<IOrderContext, OrderContext>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-builder.Services.AddSingleton<IOrderService, OrderService>();
-builder.Services.AddSingleton<IRabbitMQChannelRegistry>(serviceProvider =>
-{
-    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    var rabbitMQOptions = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
-    if (rabbitMQOptions.UseStub)
-        return new StubRabbitMQChannelRegistry();
-    else
-        return new RabbitMQChannelRegistry();
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq();
 });
 
 builder.Services.AddControllers();

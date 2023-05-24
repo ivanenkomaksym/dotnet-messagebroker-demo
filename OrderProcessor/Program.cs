@@ -1,9 +1,18 @@
-﻿using OrderProcessor;
+﻿using MassTransit;
+using OrderProcessor;
+using OrderProcessor.Consumers;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<OrderProcessorWorker>();
+
+        services.AddMassTransit(x =>
+        {
+            x.AddConsumer<OrderCreatedConsumer>();
+
+            x.UsingRabbitMq((context, cfg) => { cfg.ConfigureEndpoints(context); });
+        });
     })
     .ConfigureAppConfiguration((context, config) =>
     {

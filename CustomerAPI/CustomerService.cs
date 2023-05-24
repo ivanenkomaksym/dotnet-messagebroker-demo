@@ -1,45 +1,39 @@
-﻿using System.Text;
-using System.Text.Json;
-using Common;
-using Common.Configuration;
+﻿using System.Text.Json;
+using Common.Events;
 using Common.Models;
-using Common.Persistence;
-using RabbitMQ.Client;
+using MassTransit;
 
 namespace CustomerAPI
 {
     public class CustomerService : ICustomerService
     {
-        public CustomerService(IRabbitMQChannelRegistry rabbitMQChannelRegistry, IConfiguration configuration, ILogger<CustomerService> logger)
-        {
-            RabbitMQChannelRegistry = rabbitMQChannelRegistry;
+        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly ILogger<CustomerService> _logger;
 
-            var rabbitMQOptions = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>();
-            HostName = rabbitMQOptions.HostName;
-            Port = rabbitMQOptions.Port;
-            Logger = logger;
+        public CustomerService(IPublishEndpoint publishEndpoint, ILogger<CustomerService> logger)
+        {
+            _publishEndpoint = publishEndpoint;
+            _logger = logger;
         }
 
-        public Task CreateCustomer(Customer customer)
+        public async Task CreateCustomer(Customer customer)
         {
-            var channel = RabbitMQChannelRegistry.GetOrCreateExchange(HostName, Port, Consts.CustomerStatusExchange, ExchangeType.Fanout, string.Empty, null);
+            var customerCreatedEvent = new CustomerCreated
+            {
+                CustomerInfo = new CustomerInfo
+                {
+                    CustomerId = customer.Id,
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
+                    Email = customer.Email
+                },
+                CreationDateTime = DateTime.Now
+            };
 
-            var message = JsonSerializer.Serialize(customer);
-            var body = Encoding.UTF8.GetBytes(message);
+            await _publishEndpoint.Publish(customerCreatedEvent);
 
-            channel.BasicPublish(exchange: Consts.CustomerStatusExchange,
-                                           routingKey: Consts.CustomerStatusRegistered,
-                                 basicProperties: null,
-                                 body: body);
-
-            Logger.LogInformation($"['{Consts.CustomerStatusExchange}' exchange] Sent '{message}' with routingKey '{Consts.CustomerStatusRegistered}'");
-
-            return Task.CompletedTask;
+            var message = JsonSerializer.Serialize(customerCreatedEvent);
+            _logger.LogInformation($"Sent `CustomerCreated` event with content: {message}");
         }
-
-        IRabbitMQChannelRegistry RabbitMQChannelRegistry;
-        private readonly ILogger<CustomerService> Logger;
-        private readonly string HostName;
-        private readonly ushort Port;
     }
 }

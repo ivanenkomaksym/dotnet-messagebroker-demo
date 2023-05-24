@@ -1,14 +1,13 @@
 using System.Reflection;
-using Microsoft.OpenApi.Models;
-using Common.Configuration;
 using Common.Examples;
-using Common.Persistence;
 using CustomerAPI;
 using CustomerAPI.Data;
 using CustomerAPI.Repositories;
-using Swashbuckle.AspNetCore.Filters;
+using MassTransit;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.OpenApi.Models;
 using MongoDB.Bson;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,16 +19,11 @@ builder.Configuration.AddJsonFile("appsettings.k8s.json", optional: true, reload
 builder.Services.AddScoped<ICustomerContext, CustomerContext>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
-builder.Services.AddSingleton<ICustomerService, CustomerService>();
-builder.Services.AddSingleton<IRabbitMQChannelRegistry>(serviceProvider =>
-{
-    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    var rabbitMQOptions = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
-    if (rabbitMQOptions.UseStub)
-        return new StubRabbitMQChannelRegistry();
-    else
-        return new RabbitMQChannelRegistry();
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq();
 });
 
 builder.Services.AddControllers();

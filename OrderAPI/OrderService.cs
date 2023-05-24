@@ -1,40 +1,38 @@
-﻿using System.Text;
-using System.Text.Json;
-using Common;
-using Common.Configuration;
+﻿using System.Text.Json;
+using Common.Events;
 using Common.Models;
 using Common.Persistence;
-using RabbitMQ.Client;
+using MassTransit;
 
 namespace OrderAPI
 {
     public class OrderService : IOrderService
     {
-        public OrderService(IRabbitMQChannelRegistry rabbitMQChannelRegistry, IConfiguration configuration, ILogger<OrderService> logger)
-        {
-            RabbitMQChannelRegistry = rabbitMQChannelRegistry;
+        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly ILogger<OrderService> _logger;
 
-            var rabbitMQOptions = configuration.GetSection(RabbitMQOptions.Name).Get<RabbitMQOptions>();
-            HostName = rabbitMQOptions.HostName;
-            Port = rabbitMQOptions.Port;
-            Logger = logger;
+        public OrderService(IPublishEndpoint publishEndpoint, ILogger<OrderService> logger)
+        {
+            _publishEndpoint = publishEndpoint;
+            _logger = logger;
         }
-
-        public Task CreateOrder(Order order)
+        public async Task CreateOrder(Order order)
         {
-            var channel = RabbitMQChannelRegistry.GetOrCreateQueue(HostName, Port, Consts.OrderQueue, null);
+            var orderCreatedEvent = new OrderCreated
+            {
+                OrderId = order.Id,
+                CustomerInfo = order.CustomerInfo,
+                OrderStatus = order.OrderStatus,
+                ShippingAddress = order.ShippingAddress,
+                Payment = order.Payment,
+                Items = order.Items,
+                CreationDateTime = DateTime.Now
+            };
 
-            var message = JsonSerializer.Serialize(order);
-            var body = Encoding.UTF8.GetBytes(message);
+            await _publishEndpoint.Publish(orderCreatedEvent);
 
-            channel.BasicPublish(exchange: string.Empty,
-                                 routingKey: Consts.OrderQueue,
-                                 basicProperties: null,
-                                 body: body);
-
-            Logger.LogInformation($"['{Consts.OrderQueue}' queue] Sent '{message}'");
-
-            return Task.CompletedTask;
+            var message = JsonSerializer.Serialize(orderCreatedEvent);
+            _logger.LogInformation($"Sent `CustomerCreated` event with content: {message}");
         }
 
         IRabbitMQChannelRegistry RabbitMQChannelRegistry;
