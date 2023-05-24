@@ -6,19 +6,33 @@ namespace OrderProcessor.Consumers
 {
     internal class OrderCreatedConsumer : IConsumer<OrderCreated>
     {
+        private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<OrderCreatedConsumer> _logger;
 
-        public OrderCreatedConsumer(ILogger<OrderCreatedConsumer> logger)
+        public OrderCreatedConsumer(IPublishEndpoint publishEndpoint, ILogger<OrderCreatedConsumer> logger)
         {
+            _publishEndpoint = publishEndpoint;
             _logger = logger;
         }
 
-        public Task Consume(ConsumeContext<OrderCreated> context)
+        public async Task Consume(ConsumeContext<OrderCreated> context)
         {
-            var message = JsonSerializer.Serialize(context.Message);
+            // In
+            var orderCreated = context.Message;
+            var message = JsonSerializer.Serialize(orderCreated);
             _logger.LogInformation($"Received `OrderCreated` event with content: {message}");
 
-            return Task.CompletedTask;
+            // Out
+            var reserveStockEvent = new ReserveStock
+            {
+                OrderId = orderCreated.OrderId,
+                Items = orderCreated.Items
+            };
+
+            await _publishEndpoint.Publish(reserveStockEvent);
+
+            message = JsonSerializer.Serialize(reserveStockEvent);
+            _logger.LogInformation($"Sent `ReserveStock` event with content: {message}");
         }
     }
 }
