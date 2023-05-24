@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
 
-namespace WebUI.Extensions
+namespace Common.Extensions
 {
     public static class HttpClientExtensions
     {

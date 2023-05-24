@@ -1,5 +1,5 @@
-﻿using Common.Models;
-using WebUI.Extensions;
+﻿using Common.Extensions;
+using Common.Models;
 
 namespace WebUI.Services
 {

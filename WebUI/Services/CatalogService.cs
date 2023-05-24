@@ -1,4 +1,4 @@
-﻿using WebUI.Extensions;
+﻿using Common.Extensions;
 using WebUI.Models;
 
 namespace WebUI.Services
