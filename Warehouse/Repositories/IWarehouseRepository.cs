@@ -2,7 +2,7 @@
 
 namespace Warehouse.Repositories
 {
-    internal interface IWarehouseRepository
+    public interface IWarehouseRepository
     {
         Task<IEnumerable<StockItem>> GetStockItems();
         Task<StockItem> GetStockItemByProductId(Guid productId);

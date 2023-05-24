@@ -11,7 +11,7 @@ namespace Common.Models.Warehouse
         [BsonGuidRepresentation(GuidRepresentation.Standard)]
         public Guid Id { get; set; }
 
-        [Required]
+        [BsonGuidRepresentation(GuidRepresentation.Standard)]
         public Guid ProductId { get; set; }
 
         public string? ProductName { get; set; }
