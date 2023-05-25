@@ -3,6 +3,7 @@ using Common.Models;
 using Microsoft.AspNetCore.Mvc;
 using OrderAPI.Repositories;
 using Swashbuckle.AspNetCore.Filters;
+using System.Net;
 
 namespace OrderAPI.Controllers
 {
@@ -17,10 +18,27 @@ namespace OrderAPI.Controllers
             Logger = logger;
         }
 
-        [HttpGet("{customerId}", Name = "GetOrders")]
-        public async Task<ActionResult<List<Order>>> Get(Guid customerId)
+        [HttpGet("{orderId}", Name = "GetOrder")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<Order>> GetOrderById(Guid orderId)
         {
-            return Ok(await OrderRepository.GetOrders(customerId));
+            var order = await OrderRepository.GetOrderById(orderId);
+
+            if (order == null)
+            {
+                Logger.LogError($"Order with id: {orderId}, not found.");
+                return NotFound();
+            }
+
+            return Ok(order);
+        }
+
+        [Route("[action]/{customerId}", Name = "GetOrdersByCustomerId")]
+        [HttpGet]
+        public async Task<ActionResult<List<Order>>> GetOrdersByCustomerId(Guid customerId)
+        {
+            return Ok(await OrderRepository.GetOrdersByCustomerId(customerId));
         }
 
         [HttpPost]
@@ -36,7 +54,7 @@ namespace OrderAPI.Controllers
             }
 
             await OrderService.CreateOrder(order);
-            return CreatedAtRoute("GetOrders", new { customerId = order.CustomerInfo.CustomerId}, order);
+            return CreatedAtRoute("GetOrdersByCustomerId", new { customerId = order.CustomerInfo.CustomerId}, order);
         }
 
         private readonly IOrderService OrderService;

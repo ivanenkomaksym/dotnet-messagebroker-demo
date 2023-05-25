@@ -4,7 +4,8 @@ namespace OrderAPI.Repositories
 {
     public interface IOrderRepository
     {
-        Task<IEnumerable<Order>> GetOrders(Guid customerId);
+        Task<Order> GetOrderById(Guid orderId);
+        Task<IEnumerable<Order>> GetOrdersByCustomerId(Guid customerId);
         Task<Order> CreateOrder(Order order);
     }
 }

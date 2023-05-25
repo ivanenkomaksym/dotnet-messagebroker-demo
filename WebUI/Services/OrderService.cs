@@ -14,7 +14,7 @@ namespace WebUI.Services
 
         public async Task<IEnumerable<Order>> GetOrders(Guid customerId)
         {
-            var response = await _client.GetAsync($"/gateway/Order/{customerId}");
+            var response = await _client.GetAsync($"/gateway/Order/GetOrdersByCustomerId/{customerId}");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());

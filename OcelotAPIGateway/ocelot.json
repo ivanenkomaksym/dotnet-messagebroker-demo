@@ -89,9 +89,21 @@
             ]
         },
         {
-            "UpstreamPathTemplate": "/gateway/Order/{customerId}",
+            "UpstreamPathTemplate": "/gateway/Order/{orderId}",
             "UpstreamHttpMethod": [ "GET" ],
-            "DownstreamPathTemplate": "/api/Order/{customerId}",
+            "DownstreamPathTemplate": "/api/Order/{orderId}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7137
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Order/GetOrdersByCustomerId/{customerId}",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/Order/GetOrdersByCustomerId/{customerId}",
             "DownstreamScheme": "https",
             "DownstreamHostAndPorts": [
                 {
