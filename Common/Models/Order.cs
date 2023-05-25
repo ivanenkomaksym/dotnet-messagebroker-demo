@@ -1,6 +1,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations;
+using Common.Models.Payment;
 
 namespace Common.Models
 {
@@ -26,7 +27,7 @@ namespace Common.Models
         public Address ShippingAddress { get; set; }
 
         [Required]
-        public Payment Payment { get; set; }
+        public PaymentInfo PaymentInfo { get; set; }
 
         public DateTime CreationDateTime { get; set; }
     }

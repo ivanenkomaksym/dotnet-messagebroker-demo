@@ -24,7 +24,7 @@ namespace OrderAPI
                 CustomerInfo = order.CustomerInfo,
                 OrderStatus = order.OrderStatus,
                 ShippingAddress = order.ShippingAddress,
-                Payment = order.Payment,
+                PaymentInfo = order.PaymentInfo,
                 Items = order.Items,
                 CreationDateTime = DateTime.Now
             };

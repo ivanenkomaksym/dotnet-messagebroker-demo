@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Common.Models
+namespace Common.Models.Payment
 {
-    public record Payment
+    public record PaymentInfo
     {
         [Required]
         public string CardName { get; set; }
@@ -17,6 +17,6 @@ namespace Common.Models
         public string CVV { get; set; }
 
         [Required]
-        public int PaymentMethod { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
     }
 }

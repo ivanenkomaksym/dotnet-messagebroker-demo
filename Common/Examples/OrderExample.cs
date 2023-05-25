@@ -1,4 +1,5 @@
 ﻿using Common.Models;
+using Common.Models.Payment;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Common.Examples
@@ -38,7 +39,7 @@ namespace Common.Examples
                     Country = "GB",
                     ZipCode = "10000"
                 },
-                Payment = new Payment
+                PaymentInfo = new PaymentInfo
                 {
                     CardName = "Alice Liddell",
                     CardNumber = "1234 5678 9101 1121 3141",

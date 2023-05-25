@@ -38,7 +38,7 @@ namespace WebUI.Pages
             var customer = await _customerService.GetCustomerById(customerId);
 
             Order.ShippingAddress = customer.ShippingAddress;
-            Order.Payment = customer.Payment;
+            Order.PaymentInfo = customer.PaymentInfo;
 
             return Page();
         }
@@ -58,7 +58,7 @@ namespace WebUI.Pages
                 if (SaveShippingAddressAndPayment)
                 {
                     customer.ShippingAddress = Order.ShippingAddress;
-                    customer.Payment = Order.Payment;
+                    customer.PaymentInfo = Order.PaymentInfo;
 
                     await _customerService.UpdateCustomer(customer);
                 }

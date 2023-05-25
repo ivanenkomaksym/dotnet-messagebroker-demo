@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using Common.Models.Payment;
 
 namespace Common.Models
 {
@@ -28,6 +29,6 @@ namespace Common.Models
 
         public Address? ShippingAddress { get; set; }
 
-        public Payment? Payment { get; set; }
+        public PaymentInfo? PaymentInfo { get; set; }
     }
 }

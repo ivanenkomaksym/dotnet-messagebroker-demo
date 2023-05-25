@@ -145,32 +145,32 @@
 
                 <div class="d-block my-3">
                     <div class="custom-control custom-radio">
-                        <input asp-for="Order.Payment.PaymentMethod" id="credit" name="paymentMethod" type="radio" value="Credit card" class="custom-control-input" checked required>
-                        <label asp-for="Order.Payment.PaymentMethod" class="custom-control-label" for="credit">Credit card</label>
+                        <input asp-for="Order.PaymentInfo.PaymentMethod" id="credit" name="paymentMethod" type="radio" value="Credit card" class="custom-control-input" checked required>
+                        <label asp-for="Order.PaymentInfo.PaymentMethod" class="custom-control-label" for="credit">Credit card</label>
                     </div>
                     <div class="custom-control custom-radio">
-                        <input asp-for="Order.Payment.PaymentMethod" id="debit" name="paymentMethod" type="radio" value="Debit card" class="custom-control-input" required>
-                        <label asp-for="Order.Payment.PaymentMethod" class="custom-control-label" for="debit">Debit card</label>
+                        <input asp-for="Order.PaymentInfo.PaymentMethod" id="debit" name="paymentMethod" type="radio" value="Debit card" class="custom-control-input" required>
+                        <label asp-for="Order.PaymentInfo.PaymentMethod" class="custom-control-label" for="debit">Debit card</label>
                     </div>
                     <div class="custom-control custom-radio">
-                        <input asp-for="Order.Payment.PaymentMethod" id="paypal" name="paymentMethod" type="radio" value="Paypal" class="custom-control-input" required>
-                        <label asp-for="Order.Payment.PaymentMethod" class="custom-control-label" for="paypal">Paypal</label>
+                        <input asp-for="Order.PaymentInfo.PaymentMethod" id="paypal" name="paymentMethod" type="radio" value="Paypal" class="custom-control-input" required>
+                        <label asp-for="Order.PaymentInfo.PaymentMethod" class="custom-control-label" for="paypal">Paypal</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label asp-for="Order.Payment.CardName" for="cc-name">Name on card</label>
-                        <input asp-for="Order.Payment.CardName" type="text" class="form-control" id="cc-name" placeholder="" required>
-                        <span asp-validation-for="Order.Payment.CardName" class="text-danger"></span>
+                        <label asp-for="Order.PaymentInfo.CardName" for="cc-name">Name on card</label>
+                        <input asp-for="Order.PaymentInfo.CardName" type="text" class="form-control" id="cc-name" placeholder="" required>
+                        <span asp-validation-for="Order.PaymentInfo.CardName" class="text-danger"></span>
                         <small class="text-muted">Full name as displayed on card</small>
                         <div class="invalid-feedback">
                             Name on card is required
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label asp-for="Order.Payment.CardNumber" for="cc-number">Credit card number</label>
-                        <input asp-for="Order.Payment.CardNumber" type="text" class="form-control" id="cc-number" placeholder="" required>
-                        <span asp-validation-for="Order.Payment.CardNumber" class="text-danger"></span>
+                        <label asp-for="Order.PaymentInfo.CardNumber" for="cc-number">Credit card number</label>
+                        <input asp-for="Order.PaymentInfo.CardNumber" type="text" class="form-control" id="cc-number" placeholder="" required>
+                        <span asp-validation-for="Order.PaymentInfo.CardNumber" class="text-danger"></span>
                         <div class="invalid-feedback">
                             Credit card number is required
                         </div>
@@ -178,17 +178,17 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3 mb-3">
-                        <label asp-for="Order.Payment.Expiration" for="cc-expiration">Expiration</label>
-                        <input asp-for="Order.Payment.Expiration" type="text" class="form-control" id="cc-expiration" placeholder="" required>
-                        <span asp-validation-for="Order.Payment.Expiration" class="text-danger"></span>
+                        <label asp-for="Order.PaymentInfo.Expiration" for="cc-expiration">Expiration</label>
+                        <input asp-for="Order.PaymentInfo.Expiration" type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                        <span asp-validation-for="Order.PaymentInfo.Expiration" class="text-danger"></span>
                         <div class="invalid-feedback">
                             Expiration date required
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label asp-for="Order.Payment.CVV" for="cc-expiration">CVV</label>
-                        <input asp-for="Order.Payment.CVV" type="text" class="form-control" id="cc-cvv" placeholder="" required>
-                        <span asp-validation-for="Order.Payment.CVV" class="text-danger"></span>
+                        <label asp-for="Order.PaymentInfo.CVV" for="cc-expiration">CVV</label>
+                        <input asp-for="Order.PaymentInfo.CVV" type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                        <span asp-validation-for="Order.PaymentInfo.CVV" class="text-danger"></span>
                         <div class="invalid-feedback">
                             Security code required
                         </div>

@@ -1,4 +1,5 @@
 ﻿using Common.Models;
+using Common.Models.Payment;
 
 namespace Common.Events
 {
@@ -12,7 +13,7 @@ namespace Common.Events
 
         public Address ShippingAddress { get; init; }
 
-        public Payment Payment { get; init; }
+        public PaymentInfo PaymentInfo { get; init; }
 
         public IList<OrderItem> Items { get; init; } = new List<OrderItem>();
 
