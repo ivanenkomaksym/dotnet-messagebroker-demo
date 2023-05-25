@@ -12,6 +12,7 @@ namespace Common.Models.Warehouse
         public Guid Id { get; set; }
 
         [Required]
+        [BsonGuidRepresentation(GuidRepresentation.Standard)]
         public Guid StockItemId { get; set; }
 
         [Required]

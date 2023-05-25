@@ -11,9 +11,10 @@ namespace Common.Models.Warehouse
         public Guid Id { get; set; }
 
         [Required]
+        [BsonGuidRepresentation(GuidRepresentation.Standard)]
         public Guid OrderId { get; set; }
 
         [Required]
-        public List<ReservedStockItem> ReservedStockItem { get; set; } = new List<ReservedStockItem>();
+        public List<ReservedStockItem> ReservedStockItems { get; set; } = new List<ReservedStockItem>();
     }
 }

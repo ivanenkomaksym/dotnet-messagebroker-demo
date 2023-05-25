@@ -1,4 +1,5 @@
-﻿using Common.Models.Warehouse;
+﻿using Common.Models;
+using Common.Models.Warehouse;
 using MongoDB.Driver;
 using Warehouse.Data;
 
@@ -17,6 +18,14 @@ namespace Warehouse.Repositories
         {
             await _context.StockItems.InsertOneAsync(stockItem);
             return stockItem;
+        }
+
+        public async Task<bool> UpdateStockItem(StockItem stockItem)
+        {
+            var updateResult = await _context
+                                        .StockItems
+                                        .ReplaceOneAsync(filter: s => s.Id == stockItem.Id, replacement: stockItem);
+            return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
         }
 
         public async Task<bool> DeleteReserve(Guid orderId)
