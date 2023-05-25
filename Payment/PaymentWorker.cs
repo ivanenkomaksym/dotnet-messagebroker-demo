@@ -1,4 +1,4 @@
-namespace Payment
+namespace PaymentService
 {
     public class PaymentWorker : BackgroundService
     {

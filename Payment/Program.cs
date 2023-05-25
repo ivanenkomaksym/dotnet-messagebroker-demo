@@ -1,4 +1,4 @@
-using Payment;
+using PaymentService;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
