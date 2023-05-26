@@ -12,7 +12,9 @@ namespace Common.Models
         [BsonGuidRepresentation(GuidRepresentation.Standard)]
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public OrderStatus OrderStatus { get; set; }
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.New;
+
+        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Unpaid;
 
         [Required]
         public CustomerInfo CustomerInfo { get; set; }

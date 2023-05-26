@@ -1,5 +1,6 @@
 ﻿using Common.Models;
 using Common.Extensions;
+using System.Net.Http.Json;
 
 namespace OrderProcessor.Services
 {
@@ -20,6 +21,17 @@ namespace OrderProcessor.Services
                 throw new Exception(response.StatusCode.ToString());
             }
             return await response.ReadContentAs<Order>();
+        }
+
+        public async Task<bool> UpdateOrder(Order order)
+        {
+            var response = await _client.PutAsJsonAsync($"/gateway/Order", order);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.StatusCode.ToString());
+            }
+
+            return await response.ReadContentAs<bool>();
         }
     }
 }

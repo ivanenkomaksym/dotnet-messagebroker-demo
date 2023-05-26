@@ -57,6 +57,13 @@ namespace OrderAPI.Controllers
             return CreatedAtRoute("GetOrdersByCustomerId", new { customerId = order.CustomerInfo.CustomerId}, order);
         }
 
+        [HttpPut]
+        [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> UpdateOrder([FromBody] Order order)
+        {
+            return Ok(await OrderRepository.UpdateOrder(order));
+        }
+
         private readonly IOrderService OrderService;
         private readonly IOrderRepository OrderRepository;
         private readonly ILogger<OrderController> Logger;

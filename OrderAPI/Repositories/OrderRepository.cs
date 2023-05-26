@@ -40,5 +40,15 @@ namespace OrderAPI.Repositories
                             .Orders
                             .Find(matchId).ToListAsync();
         }
+
+        public async Task<bool> UpdateOrder(Order order)
+        {
+            var updateResult = await _context
+                                        .Orders
+                                        .ReplaceOneAsync(filter: o => o.Id == order.Id, replacement: order);
+
+            return updateResult.IsAcknowledged
+                    && updateResult.ModifiedCount > 0;
+        }
     }
 }
