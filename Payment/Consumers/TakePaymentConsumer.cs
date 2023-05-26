@@ -26,17 +26,48 @@ namespace PaymentService.Consumers
             var message = JsonSerializer.Serialize(takePayment);
             _logger.LogInformation($"Received `TakePayment` event with content: {message}");
 
+            // TODO: Hardcode different PaymentStatus depending on PaymentMethod
+            var paymentStatus = PaymentStatus.Unpaid;
+            var paidAmount = 0.0;
+            switch (takePayment.PaymentInfo.PaymentMethod)
+            {
+                case PaymentMethod.CreditCard_AlwaysExpire:
+                    paymentStatus = PaymentStatus.Expired;
+                    break;
+                case PaymentMethod.Crypto:
+                    paymentStatus = PaymentStatus.Paid;
+                    paidAmount = takePayment.ToBePaidAmount;
+                    break;
+                case PaymentMethod.PayPal_AlwaysFail:
+                    paymentStatus = PaymentStatus.Failed;
+                    break;
+            }
+
             var payment = await _paymentRepository.CreatePayment(new Payment
             {
                 Id = Guid.NewGuid(),
                 OrderId = takePayment.OrderId,
                 CustomerInfo = takePayment.CustomerInfo,
                 PaymentInfo = takePayment.PaymentInfo,
-                PaymentStatus = PaymentStatus.Unpaid
+                CreatedOn = DateTime.UtcNow,
+                PaymentStatus = paymentStatus,
+                PaidAmount = paidAmount
             });
 
             // Out
-            // TODO: send PaymentTaken message if successful
+            var paymentResultEvent = new PaymentResult
+            {
+                OrderId = payment.OrderId,
+                PaymentId = payment.Id,
+                CustomerInfo = payment.CustomerInfo,
+                PaymentInfo = payment.PaymentInfo,
+                PaymentStatus = payment.PaymentStatus
+            };
+
+            await _publishEndpoint.Publish(paymentResultEvent);
+
+            message = JsonSerializer.Serialize(paymentResultEvent);
+            _logger.LogInformation($"Sent `PaymentResult` event with content: {message}");
         }
     }
 }

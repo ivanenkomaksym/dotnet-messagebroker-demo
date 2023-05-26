@@ -2,8 +2,8 @@
 {
     public enum PaymentMethod
     {
-        CreditCard,
+        CreditCard_AlwaysExpire,
         Crypto,
-        PayPal
+        PayPal_AlwaysFail
     }
 }
