@@ -1,13 +1,7 @@
 ﻿using Catalog.API.Repositories.Interfaces;
 using CatalogAPI.Data;
 using CatalogAPI.Entities;
-using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MongoDB.Bson.Serialization;
 
 namespace Catalog.API.Repositories
 {
