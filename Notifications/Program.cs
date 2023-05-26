@@ -10,6 +10,8 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddMassTransit(x =>
         {
             x.AddConsumer<CustomerCreatedConsumer>();
+            x.AddConsumer<OrderCreatedConsumer>();
+            x.AddConsumer<PaymentResultConsumer>();
 
             x.UsingRabbitMq((context, cfg) => { cfg.ConfigureEndpoints(context); });
         });
