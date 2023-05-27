@@ -7,6 +7,8 @@ namespace Common.Events
     {
         public Guid OrderId { get; init; }
 
+        public PaymentStatus PaymentStatus { get; set; }
+
         public CustomerInfo CustomerInfo { get; init; }
 
         public OrderStatus OrderStatus { get; init; }

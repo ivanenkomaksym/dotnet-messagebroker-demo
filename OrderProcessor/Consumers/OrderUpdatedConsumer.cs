@@ -1,4 +1,5 @@
 ﻿using Common.Events;
+using Common.Models;
 using MassTransit;
 using System.Text.Json;
 
@@ -23,15 +24,32 @@ namespace OrderProcessor.Consumers
             _logger.LogInformation($"Received `OrderUpdated` event with content: {message}");
 
             // Out
+            switch (orderUpdated.PaymentStatus)
+            {
+                case Common.Models.Payment.PaymentStatus.Unpaid:
+                case Common.Models.Payment.PaymentStatus.Failed:
+                case Common.Models.Payment.PaymentStatus.Expired:
+                    await ProduceReserveStock(orderUpdated.OrderId, orderUpdated.Items);
+                    break;
+                case Common.Models.Payment.PaymentStatus.Paid:
+                case Common.Models.Payment.PaymentStatus.Refunding:
+                case Common.Models.Payment.PaymentStatus.Refund:
+                default:
+                    break;
+            }
+        }
+
+        private async Task ProduceReserveStock(Guid orderId, IList<OrderItem> items)
+        {
             var reserveStockEvent = new ReserveStock
             {
-                OrderId = orderUpdated.OrderId,
-                Items = orderUpdated.Items
+                OrderId = orderId,
+                Items = items
             };
 
             await _publishEndpoint.Publish(reserveStockEvent);
 
-            message = JsonSerializer.Serialize(reserveStockEvent);
+            var message = JsonSerializer.Serialize(reserveStockEvent);
             _logger.LogInformation($"Sent `ReserveStock` event with content: {message}");
         }
     }

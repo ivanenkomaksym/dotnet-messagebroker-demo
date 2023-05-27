@@ -40,6 +40,7 @@ namespace OrderAPI
             var orderUpdatedEvent = new OrderUpdated
             {
                 OrderId = order.Id,
+                PaymentStatus = order.PaymentStatus,
                 CustomerInfo = order.CustomerInfo,
                 OrderStatus = order.OrderStatus,
                 ShippingAddress = order.ShippingAddress,
