@@ -43,16 +43,26 @@ namespace PaymentService.Consumers
                     break;
             }
 
-            var payment = await _paymentRepository.CreatePayment(new Payment
+            // Payment can already be found for known orders with failed previously payments
+            var payment = await _paymentRepository.GetPaymentByOrderId(takePayment.OrderId);
+            if (payment != null)
             {
-                Id = Guid.NewGuid(),
-                OrderId = takePayment.OrderId,
-                CustomerInfo = takePayment.CustomerInfo,
-                PaymentInfo = takePayment.PaymentInfo,
-                CreatedOn = DateTime.UtcNow,
-                PaymentStatus = paymentStatus,
-                PaidAmount = paidAmount
-            });
+                payment.PaymentStatus = paymentStatus;
+                await _paymentRepository.UpdatePayment(payment);
+            }
+            else
+            {
+                payment = await _paymentRepository.CreatePayment(new Payment
+                {
+                    Id = Guid.NewGuid(),
+                    OrderId = takePayment.OrderId,
+                    CustomerInfo = takePayment.CustomerInfo,
+                    PaymentInfo = takePayment.PaymentInfo,
+                    CreatedOn = DateTime.UtcNow,
+                    PaymentStatus = paymentStatus,
+                    PaidAmount = paidAmount
+                });
+            }
 
             // Out
             var paymentResultEvent = new PaymentResult

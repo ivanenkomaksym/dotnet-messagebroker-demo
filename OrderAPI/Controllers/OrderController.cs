@@ -61,7 +61,15 @@ namespace OrderAPI.Controllers
         [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateOrder([FromBody] Order order)
         {
-            return Ok(await OrderRepository.UpdateOrder(order));
+            var result = await OrderRepository.UpdateOrder(order);
+            if (!result)
+            {
+                Logger.LogError($"Failed to update order.");
+                return BadRequest();
+            }
+
+            await OrderService.UpdateOrder(order);
+            return Ok(result);
         }
 
         private readonly IOrderService OrderService;

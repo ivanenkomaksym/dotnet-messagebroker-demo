@@ -32,7 +32,25 @@ namespace OrderAPI
             await _publishEndpoint.Publish(orderCreatedEvent);
 
             var message = JsonSerializer.Serialize(orderCreatedEvent);
-            _logger.LogInformation($"Sent `CustomerCreated` event with content: {message}");
+            _logger.LogInformation($"Sent `OrderCreated` event with content: {message}");
+        }
+
+        public async Task UpdateOrder(Order order)
+        {
+            var orderUpdatedEvent = new OrderUpdated
+            {
+                OrderId = order.Id,
+                CustomerInfo = order.CustomerInfo,
+                OrderStatus = order.OrderStatus,
+                ShippingAddress = order.ShippingAddress,
+                PaymentInfo = order.PaymentInfo,
+                Items = order.Items
+            };
+
+            await _publishEndpoint.Publish(orderUpdatedEvent);
+
+            var message = JsonSerializer.Serialize(orderUpdatedEvent);
+            _logger.LogInformation($"Sent `OrderUpdated` event with content: {message}");
         }
 
         IRabbitMQChannelRegistry RabbitMQChannelRegistry;

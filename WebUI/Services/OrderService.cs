@@ -22,6 +22,16 @@ namespace WebUI.Services
             return await response.ReadContentAs<IEnumerable<Order>>();
         }
 
+        public async Task<Order> GetOrder(Guid orderId)
+        {
+            var response = await _client.GetAsync($"/gateway/Order/{orderId}");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.StatusCode.ToString());
+            }
+            return await response.ReadContentAs<Order>();
+        }
+
         public async Task CreateOrder(Order order)
         {
             var response = await _client.PostAsJson($"/gateway/Order", order);
@@ -30,6 +40,17 @@ namespace WebUI.Services
                 throw new Exception(response.StatusCode.ToString());
             }
             return;
+        }
+
+        public async Task<bool> UpdateOrder(Order order)
+        {
+            var response = await _client.PutAsJsonAsync($"/gateway/Order", order);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.StatusCode.ToString());
+            }
+
+            return await response.ReadContentAs<bool>();
         }
     }
 }
