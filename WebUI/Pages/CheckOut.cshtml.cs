@@ -36,25 +36,34 @@ namespace WebUI.Pages
                 return RedirectToPage("SignIn");
 
             var customer = await _customerService.GetCustomerById(customerId);
-
             Order.ShippingAddress = customer.ShippingAddress;
             Order.PaymentInfo = customer.PaymentInfo;
+
+            Order.CustomerInfo = new CustomerInfo
+            {
+                CustomerId = customerId,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                Email = customer.Email
+            };
+
+            ShoppingCart = await _cartService.GetShoppingCart(customerId);
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostCheckOutAsync()
         {
+            var customerId = _userProvider.GetCustomerId(HttpContext);
+            var customer = await _customerService.GetCustomerById(customerId);
+
             if (!ModelState.IsValid)
                 return Page();
 
             try
             {
-                var customerId = _userProvider.GetCustomerId(HttpContext);
-
                 ShoppingCart = await _cartService.GetShoppingCart(customerId);
 
-                var customer = await _customerService.GetCustomerById(customerId);
                 if (SaveShippingAddressAndPayment)
                 {
                     customer.ShippingAddress = Order.ShippingAddress;
@@ -63,13 +72,6 @@ namespace WebUI.Pages
                     await _customerService.UpdateCustomer(customer);
                 }
 
-                Order.CustomerInfo = new()
-                {
-                    CustomerId = customer.Id,
-                    FirstName = customer.FirstName,
-                    LastName = customer.LastName,
-                    Email = customer.Email
-                };
                 Order.TotalPrice = ShoppingCart.TotalPrice;
 
                 foreach (var item in ShoppingCart.Items)

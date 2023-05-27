@@ -32,6 +32,7 @@
                             <th scope="col">Id</th>
                             <th scope="col">Created at</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Payment</th>
                             <th scope="col">Shipping</th>
                             <th scope="col">Items</th>
                             <th scope="col">TotalPrice</th>
@@ -41,36 +42,9 @@
 
                         @foreach (var order in Model.Orders)
                         {
-                            <tr>
-                                <td>@order.Id</td>
-                                <td>@order.CreationDateTime</td>
-                                <td>@order.OrderStatus</td>
-                                <td>
-                                    @order.ShippingAddress.Country<br>
-                                    @order.ShippingAddress.State<br>
-                                    @order.ShippingAddress.AddressLine<br>
-                                </td>
-                                <td>
-                                    <ul class="list-group mb-3">
-                                        @foreach (var item in order.Items)
-                                        {
-                                            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                                <div>
-                                                    <h6 class="my-0">@item.ProductName</h6>
-                                                    <small class="text-muted">@item.ProductName</small>
-                                                </div>
-                                                <span class="text-muted">$@item.ProductPrice</span>
-                                            </li>
-                                        }
-                                    </ul>
-                                </td>
-                                <td>
-                                    <li class="list-group-item d-flex justify-content-between">
-                                        <span>Total (USD)</span>
-                                        <strong>$@order.TotalPrice</strong>
-                                    </li>
-                                </td>
-                            </tr>
+                            <div>
+                                <partial name="_OrderItemPartial" model="@order" />
+                            </div>
                         }
                     </tbody>
                 </table>
