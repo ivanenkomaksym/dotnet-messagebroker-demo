@@ -20,9 +20,6 @@ namespace Common.Models
         public string Country { get; set; }
 
         [Required]
-        public string State { get; set; }
-
-        [Required]
         public string ZipCode { get; set; }
     }
 }
