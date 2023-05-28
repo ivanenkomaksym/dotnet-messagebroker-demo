@@ -39,7 +39,6 @@
                     <input type="hidden" asp-for="Order.ShippingAddress.LastName" class="form-control" id="lastName" placeholder="" required>
                     <input type="hidden" asp-for="Order.ShippingAddress.Email" class="form-control" id="email">
                     <input type="hidden" asp-for="Order.ShippingAddress.Country" class="form-control" id="address" placeholder="1234 Main St" required>
-                    <input type="hidden" asp-for="Order.ShippingAddress.State" class="form-control" id="address" placeholder="" required>
                     <input type="hidden" asp-for="Order.ShippingAddress.AddressLine" class="form-control" id="address" placeholder="1234 Main St" required>
                     <input type="hidden" asp-for="Order.ShippingAddress.ZipCode" class="form-control" id="zip" placeholder="" required>
 
@@ -63,9 +62,6 @@
                                 <td>@Model.Order.PaymentStatus</td>
                                 <td>
                                     @Model.Order.ShippingAddress.Country
-                                    <br>
-                                    @Model.Order.ShippingAddress.State
-                                    <br>
                                     @Model.Order.ShippingAddress.AddressLine
                                     <br>
                                 </td>

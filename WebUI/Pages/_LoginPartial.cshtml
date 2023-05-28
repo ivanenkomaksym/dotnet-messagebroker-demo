@@ -1,0 +1,23 @@
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+@if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+{
+    <div class="row">
+        <div id="welcomeDiv">Welcome, @HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value!</div>
+    </div>
+    <div class="row">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Account/Logout">Sign out</a>
+    </div>
+    <div class="row">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Order">My Orders</a>
+    </div>
+}
+else
+{
+    <div class="row">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Account/Login">Sign in</a>
+    </div>
+    <div class="row">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Register">Register</a>
+    </div>
+}

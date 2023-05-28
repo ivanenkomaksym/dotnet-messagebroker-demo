@@ -1,4 +1,5 @@
 using Common.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebUI.Services;
@@ -6,6 +7,7 @@ using WebUI.Users;
 
 namespace WebUI.Pages
 {
+    [Authorize]
     public class OrderModel : PageModel
     {
         private readonly IOrderService _orderService;
@@ -26,7 +28,7 @@ namespace WebUI.Pages
         {
             var customerId = _userProvider.GetCustomerId(HttpContext);
             if (customerId == Guid.Empty)
-                return RedirectToPage("SignIn");
+                return RedirectToPage("/Account/Login");
 
             try
             {

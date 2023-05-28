@@ -1,4 +1,5 @@
 using Common.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebUI.Services;
@@ -6,6 +7,7 @@ using WebUI.Users;
 
 namespace WebUI.Pages
 {
+    [Authorize]
     public class OrderDetailModel : PageModel
     {
         private readonly IOrderService _orderService;
@@ -43,7 +45,7 @@ namespace WebUI.Pages
             try
             {
                 _orderService.UpdateOrder(order);
-                return RedirectToPage("Confirmation", "OrderUpdated");
+                return RedirectToPage("Order");
             }
             catch (Exception ex)
             {

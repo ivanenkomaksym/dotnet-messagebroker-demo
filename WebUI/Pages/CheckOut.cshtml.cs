@@ -25,7 +25,7 @@ namespace WebUI.Pages
         [BindProperty]
         public Order Order { get; set; } = new Order();
 
-        public ShoppingCartModel ShoppingCart { get; set; } = new ShoppingCartModel();
+        public ShoppingCartModel ShoppingCart { get; set; }
         [BindProperty]
         public bool SaveShippingAddressAndPayment { get; set; }
 
@@ -33,7 +33,7 @@ namespace WebUI.Pages
         {
             var customerId = _userProvider.GetCustomerId(HttpContext);
             if (customerId == Guid.Empty)
-                return RedirectToPage("SignIn");
+                return RedirectToPage("/Account/Login", new { returnUrl = "/CheckOut" });
 
             var customer = await _customerService.GetCustomerById(customerId);
             Order.ShippingAddress = customer.ShippingAddress;

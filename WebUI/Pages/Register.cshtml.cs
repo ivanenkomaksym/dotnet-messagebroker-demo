@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Common.Models;
 using WebUI.Services;
 using WebUI.Users;
+using WebUI.Data;
 
 namespace WebUI.Pages
 {
@@ -35,7 +36,14 @@ namespace WebUI.Pages
             {
                 await _customerService.CreateCustomer(Customer);
 
-                _userProvider.SetCustomer(HttpContext, Customer);
+                var user = new ApplicationUser
+                {
+                    CustomerId = Customer.Id,
+                    Email = Customer.Email,
+                    FullName = $"{Customer.FirstName} {Customer.LastName}"
+                };
+
+                await _userProvider.SignInAsync(HttpContext, user);
 
                 return RedirectToPage("./Index");
             }

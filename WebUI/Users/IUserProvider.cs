@@ -1,4 +1,4 @@
-﻿using Common.Models;
+﻿using WebUI.Data;
 
 namespace WebUI.Users
 {
@@ -6,8 +6,8 @@ namespace WebUI.Users
     {
         public Guid GetCustomerId(HttpContext context);
 
-        public string GetCustomerEmail(HttpContext httpContext);
+        public Task<ApplicationUser> AuthenticateUserAsync(string email, string password);
 
-        public void SetCustomer(HttpContext httpContext, Customer customer);
+        public Task SignInAsync(HttpContext httpContext, ApplicationUser user);
     }
 }

@@ -133,29 +133,15 @@
                 <div class="row">
                     <div class="col-md-5 mb-3">
                         <label asp-for="Order.ShippingAddress.Country" for="country">Country</label>
-                        <select asp-for="Order.ShippingAddress.Country" class="custom-select d-block w-100" id="country" required>
-                            <option value="">Choose...</option>
-                            <option>United States</option>
-                        </select>
+                        <input asp-for="Order.ShippingAddress.Country" type="text" class="form-control" id="address" placeholder="England" required>
                         <span asp-validation-for="Order.ShippingAddress.Country" class="text-danger"></span>
                         <div class="invalid-feedback">
                             Please select a valid country.
                         </div>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label asp-for="Order.ShippingAddress.State" for="state">State</label>
-                        <select asp-for="Order.ShippingAddress.State" class="custom-select d-block w-100" id="state" required>
-                            <option value="">Choose...</option>
-                            <option>California</option>
-                        </select>
-                        <span asp-validation-for="Order.ShippingAddress.State" class="text-danger"></span>
-                        <div class="invalid-feedback">
-                            Please provide a valid state.
-                        </div>
-                    </div>
                     <div class="col-md-3 mb-3">
                         <label asp-for="Order.ShippingAddress.ZipCode" for="zip">Zip</label>
-                        <input asp-for="Order.ShippingAddress.ZipCode" type="text" class="form-control" id="zip" placeholder="" required>
+                        <input asp-for="Order.ShippingAddress.ZipCode" type="text" class="form-control" id="zip" placeholder="12345" required>
                         <span asp-validation-for="Order.ShippingAddress.ZipCode" class="text-danger"></span>
                         <div class="invalid-feedback">
                             Zip code required.

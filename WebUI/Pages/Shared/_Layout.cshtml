@@ -34,12 +34,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Cart">Cart</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Register">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/SignIn">Sign in</a>
-                        </li>
                     </ul>
 
                     <form class="form-inline my-2 my-lg-0">
@@ -64,16 +58,7 @@
                         </a>
                     </form>
                 </div>
-                @{
-                    var displayedUserName = "User";
-                    var userName = Context.Session.GetString("CustomerName");
-                    if (!string.IsNullOrEmpty(userName))
-                    {
-                        displayedUserName = userName;                    
-                    }
-                }
-                <div id="welcomeDiv">Welcome, @displayedUserName</div>
-                <a class="nav-link text-dark" asp-area="" asp-page="/Order">My Orders</a>
+                @await Html.PartialAsync("_LoginPartial")
             </div>
         </nav>
     </header>
