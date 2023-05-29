@@ -11,7 +11,7 @@ namespace Common.Models.Shipment
         [BsonGuidRepresentation(GuidRepresentation.Standard)]
         public Guid Id { get; set; }
 
-        [BsonId]
+        [BsonGuidRepresentation(GuidRepresentation.Standard)]
         public Guid OrderId { get; set; }
 
         [Required]

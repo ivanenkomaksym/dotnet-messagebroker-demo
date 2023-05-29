@@ -1,4 +1,5 @@
 ﻿using Common.Events;
+using Common.Models;
 using MassTransit;
 using OrderProcessor.Services;
 using System.Text.Json;
@@ -39,7 +40,7 @@ namespace OrderProcessor.Consumers
                     await ProduceRemoveReserve(paymentResult.OrderId, RemoveReserveReason.PaymentExpired);
                     break;
                 case Common.Models.Payment.PaymentStatus.Paid:
-                    await ProduceShipOrder(paymentResult.OrderId);
+                    await ProduceShipOrder(order);
                     break;
                 default:
                     break;
@@ -60,10 +61,19 @@ namespace OrderProcessor.Consumers
             _logger.LogInformation($"Sent `RemoveReserve` event with content: {message}");
         }
 
-        private Task ProduceShipOrder(Guid orderId)
+        private async Task ProduceShipOrder(Order order)
         {
-            // TODO: Implement shipping order
-            return Task.CompletedTask;
+            var shipOrderEvent = new ShipOrder
+            {
+                OrderId = order.Id,
+                CustomerInfo = order.CustomerInfo,
+                ShippingAddress = order.ShippingAddress
+            };
+
+            await _publishEndpoint.Publish(shipOrderEvent);
+
+            var message = JsonSerializer.Serialize(shipOrderEvent);
+            _logger.LogInformation($"Sent `ShipOrder` event with content: {message}");
         }
     }
 }

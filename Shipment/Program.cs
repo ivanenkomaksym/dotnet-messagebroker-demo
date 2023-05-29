@@ -1,8 +1,9 @@
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Shipment;
 using Shipment.Data;
 using Shipment.Repositories;
+using Shipment.Consumers;
 using MassTransit;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
 
 IHost host = Host.CreateDefaultBuilder(args)
@@ -11,10 +12,12 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddHostedService<Worker>();
 
         services.AddScoped<IShipmentContext, ShipmentContext>();
-        services.AddScoped<ShipmentRepository, ShipmentRepository>();
+        services.AddScoped<IShipmentRepository, ShipmentRepository>();
 
         services.AddMassTransit(x =>
         {
+            x.AddConsumer<ShipOrderConsumer>();
+
             x.UsingRabbitMq((context, cfg) => { cfg.ConfigureEndpoints(context); });
         });
 
@@ -22,13 +25,6 @@ IHost host = Host.CreateDefaultBuilder(args)
                 .AddMongoDb(hostContext.Configuration["DatabaseSettings:ConnectionString"], "MongoDb Health", HealthStatus.Degraded);
 
         BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
-    })
-    .ConfigureAppConfiguration((context, config) =>
-    {
-        config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
-        config.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: false);
-        config.AddJsonFile("appsettings.k8s.json", optional: true, reloadOnChange: false);
-    })
-    .Build();
+    }).Build();
 
 host.Run();

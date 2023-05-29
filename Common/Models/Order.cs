@@ -2,6 +2,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations;
 using Common.Models.Payment;
+using Common.Models.Shipment;
 
 namespace Common.Models
 {
@@ -15,6 +16,8 @@ namespace Common.Models
         public OrderStatus OrderStatus { get; set; } = OrderStatus.New;
 
         public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Unpaid;
+
+        public DeliveryStatus DeliveryStatus { get; set; } = DeliveryStatus.None;
 
         [Required]
         public CustomerInfo CustomerInfo { get; set; }
