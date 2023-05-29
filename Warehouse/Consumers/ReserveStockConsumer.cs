@@ -28,7 +28,25 @@ namespace Warehouse.Consumers
             _logger.LogInformation($"Received `ReserveStock` event with content: {message}");
 
             // TODO: Implement rollback in case of failure - remove reserve and restore AvailableOnStock
+            var orderReserve = await CreateReserveAndUpdateStock(reserveStock);
 
+            // Out
+            var stockReservedEvent = new StockReserved
+            {
+                OrderReserveId = orderReserve.Id,
+                OrderId = orderReserve.OrderId,
+                ReservedStockItems = orderReserve.ReservedStockItems
+            };
+
+            await _publishEndpoint.Publish(stockReservedEvent);
+
+            message = JsonSerializer.Serialize(stockReservedEvent);
+            _logger.LogInformation($"Sent `StockReserved` event with content: {message}");
+        }
+
+        private async Task<OrderReserve> CreateReserveAndUpdateStock(ReserveStock reserveStock)
+        {
+            // TODO: To be moved to WarehouseRepository itself and made atomic operation
             var reserveStockItems = new List<ReservedStockItem>();
             foreach (var item in reserveStock.Items)
             {
@@ -47,25 +65,12 @@ namespace Warehouse.Consumers
                 await _warehouseRepository.UpdateStockItem(stockItem);
             }
 
-            var orderReserve = await _warehouseRepository.CreateOrderReserve(new OrderReserve
+            return await _warehouseRepository.CreateOrderReserve(new OrderReserve
             {
                 Id = Guid.NewGuid(),
                 OrderId = reserveStock.OrderId,
                 ReservedStockItems = reserveStockItems
             });
-
-            // Out
-            var stockReservedEvent = new StockReserved
-            {
-                OrderReserveId = orderReserve.Id,
-                OrderId = orderReserve.OrderId,
-                ReservedStockItems = orderReserve.ReservedStockItems
-            };
-
-            await _publishEndpoint.Publish(stockReservedEvent);
-
-            message = JsonSerializer.Serialize(stockReservedEvent);
-            _logger.LogInformation($"Sent `StockReserved` event with content: {message}");
         }
     }
 }

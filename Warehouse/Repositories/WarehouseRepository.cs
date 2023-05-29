@@ -60,6 +60,16 @@ namespace Warehouse.Repositories
                             .FirstOrDefaultAsync();
         }
 
+        public async Task<StockItem> GetStockItemById(Guid stockItemId)
+        {
+            var matchStockItemId = Builders<StockItem>.Filter.Eq(s => s.Id, stockItemId);
+
+            return await _context
+                            .StockItems
+                            .Find(matchStockItemId)
+                            .FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<StockItem>> GetStockItems()
         {
             return await _context
@@ -72,6 +82,16 @@ namespace Warehouse.Repositories
         {
             await _context.OrderReserves.InsertOneAsync(orderReserve);
             return orderReserve;
+        }
+        
+        public async Task<OrderReserve> GetOrderReserveByOrderId(Guid orderId)
+        {
+            var matchOrderId = Builders<OrderReserve>.Filter.Eq(o => o.OrderId, orderId);
+
+            return await _context
+                            .OrderReserves
+                            .Find(matchOrderId)
+                            .FirstOrDefaultAsync();
         }
     }
 }
