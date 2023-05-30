@@ -15,13 +15,6 @@ IHost host = Host.CreateDefaultBuilder(args)
 
             x.UsingRabbitMq((context, cfg) => { cfg.ConfigureEndpoints(context); });
         });
-    })
-    .ConfigureAppConfiguration((context, config) =>
-    {
-        config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
-        config.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: false);
-        config.AddJsonFile("appsettings.k8s.json", optional: true, reloadOnChange: false);
-    })
-    .Build();
+    }).Build();
 
 host.Run();

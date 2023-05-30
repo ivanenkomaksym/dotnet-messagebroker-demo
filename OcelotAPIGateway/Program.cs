@@ -3,9 +3,7 @@ using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile($"ocelot.json", optional: true, reloadOnChange: false);
-builder.Configuration.AddJsonFile($"ocelot.Development.json", optional: true, reloadOnChange: false);
-builder.Configuration.AddJsonFile($"ocelot.k8s.json", optional: true, reloadOnChange: false);
+builder.Configuration.AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: false);
 
 // Add services to the container.
 builder.Services.AddRazorPages();

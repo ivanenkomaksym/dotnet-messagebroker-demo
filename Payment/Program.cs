@@ -25,13 +25,6 @@ IHost host = Host.CreateDefaultBuilder(args)
                 .AddMongoDb(hostContext.Configuration["DatabaseSettings:ConnectionString"], "MongoDb Health", HealthStatus.Degraded);
 
         BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
-    })
-    .ConfigureAppConfiguration((context, config) =>
-    {
-        config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
-        config.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: false);
-        config.AddJsonFile("appsettings.k8s.json", optional: true, reloadOnChange: false);
-    })
-    .Build();
+    }).Build();
 
 host.Run();

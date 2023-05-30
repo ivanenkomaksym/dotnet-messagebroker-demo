@@ -11,10 +11,6 @@ using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
-builder.Configuration.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: false);
-builder.Configuration.AddJsonFile("appsettings.k8s.json", optional: true, reloadOnChange: false);
-
 // Add services to the container.
 builder.Services.AddScoped<IOrderContext, OrderContext>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();

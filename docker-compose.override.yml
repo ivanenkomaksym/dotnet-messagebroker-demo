@@ -1,0 +1,111 @@
+version: '3.4'
+
+services:
+  shopdb:
+    container_name: shopdb
+    restart: always
+    ports:
+        - "27017:27017"
+    volumes:
+        - mongo_data:/data/db
+
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+
+  catalogapi:
+    container_name: catalogapi
+    environment:
+      - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    depends_on:
+      - shopdb
+    ports:
+      - "8001:80"
+
+  customerapi:
+    container_name: customerapi
+    environment:
+      - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    depends_on:
+      - shopdb
+    ports:
+      - "8002:80"
+
+  #notifications:
+  #  container_name: notifications
+  #  ports:
+  #    - "8011:80"
+
+  ocelotapigateway:
+    container_name: ocelotapigateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=k8s
+    depends_on:
+        - catalogapi
+        - customerapi
+        - orderapi
+        - shoppingcartapi
+    ports:
+      - "8003:80"
+
+  orderapi:
+    container_name: orderapi
+    environment:
+      - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    depends_on:
+      - shopdb
+    ports:
+      - "8004:80"
+
+  orderprocessor:
+    container_name: orderprocessor
+    environment:
+      - "ApiSettings:GatewayAddress=http://ocelotapigateway"
+    ports:
+      - "8005:80"
+
+  payment:
+    container_name: payment
+    environment:
+      - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    ports:
+      - "8006:80"
+
+  shipment:
+    container_name: shipment
+    environment:
+      - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    ports:
+      - "8007:80"
+
+  shoppingcartapi:
+    container_name: shoppingcartapi
+    environment:
+      - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    depends_on:
+      - shopdb
+    ports:
+      - "8008:80"
+
+  warehouse:
+    container_name: warehouse
+    environment:
+      - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    ports:
+      - "8009:80"
+
+  webui:
+    container_name: webui
+    environment:
+      - "ApiSettings:GatewayAddress=http://ocelotapigateway"
+    depends_on:
+        - catalogapi
+        - customerapi
+        - orderapi
+        - ocelotapigateway
+        - shoppingcartapi
+    ports:
+      - "8010:80"

@@ -3,17 +3,15 @@ using Common.Examples;
 using CustomerAPI;
 using CustomerAPI.Data;
 using CustomerAPI.Repositories;
+using HealthChecks.UI.Client;
 using MassTransit;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using MongoDB.Bson;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
-builder.Configuration.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: false);
-builder.Configuration.AddJsonFile("appsettings.k8s.json", optional: true, reloadOnChange: false);
 
 // Add services to the container.
 builder.Services.AddScoped<ICustomerContext, CustomerContext>();
@@ -62,5 +60,10 @@ app.UseSwaggerUI();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/hc", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();

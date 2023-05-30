@@ -8,8 +8,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8001
+                    "Host": "catalogapi",
+                    "Port": 80
                 }
             ],
             "FileCacheOptions": { "TtlSeconds": 30 }
@@ -21,8 +21,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8001
+                    "Host": "catalogapi",
+                    "Port": 80
                 }
             ]
         },
@@ -33,8 +33,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8001
+                    "Host": "catalogapi",
+                    "Port": 80
                 }
             ]
         },
@@ -46,8 +46,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8002
+                    "Host": "customerapi",
+                    "Port": 80
                 }
             ]
         },
@@ -58,8 +58,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8002
+                    "Host": "customerapi",
+                    "Port": 80
                 }
             ]
         },
@@ -70,8 +70,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8002
+                    "Host": "customerapi",
+                    "Port": 80
                 }
             ]
         },
@@ -82,8 +82,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8002
+                    "Host": "customerapi",
+                    "Port": 80
                 }
             ]
         },
@@ -95,8 +95,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8004
+                    "Host": "orderapi",
+                    "Port": 80
                 }
             ]
         },
@@ -107,8 +107,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8004
+                    "Host": "orderapi",
+                    "Port": 80
                 }
             ]
         },
@@ -119,8 +119,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8004
+                    "Host": "orderapi",
+                    "Port": 80
                 }
             ]
         },
@@ -132,8 +132,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8008
+                    "Host": "shoppingcartapi",
+                    "Port": 80
                 }
             ]
         },
@@ -144,8 +144,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8008
+                    "Host": "shoppingcartapi",
+                    "Port": 80
                 }
             ]
         },
@@ -156,8 +156,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8008
+                    "Host": "shoppingcartapi",
+                    "Port": 80
                 }
             ]
         }

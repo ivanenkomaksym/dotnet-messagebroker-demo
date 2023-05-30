@@ -1,51 +1,78 @@
 version: '3.4'
 
 services:
+  shopdb:
+    image: mongo
+
+  catalogapi:
+    image: ${DOCKER_REGISTRY-}catalogapi
+    build:
+      context: .
+      dockerfile: CatalogAPI/Dockerfile
+
+  customerapi:
+    image: ${DOCKER_REGISTRY-}customerapi
+    build:
+      context: .
+      dockerfile: CustomerAPI/Dockerfile
+
   notifications:
-    image: ${DOCKER_REGISTRY-}notifications:1.16.0
+    image: ${DOCKER_REGISTRY-}notifications
     build:
       context: .
       dockerfile: Notifications/Dockerfile
 
   orderapi:
-    image: ${DOCKER_REGISTRY-}orderapi:1.16.0
+    image: ${DOCKER_REGISTRY-}orderapi
     build:
       context: .
       dockerfile: OrderAPI/Dockerfile
 
   orderprocessor:
-    image: ${DOCKER_REGISTRY-}orderprocessor:1.16.0
+    image: ${DOCKER_REGISTRY-}orderprocessor
     build:
       context: .
       dockerfile: OrderProcessor/Dockerfile
 
+  payment:
+    image: ${DOCKER_REGISTRY-}payment
+    build:
+      context: .
+      dockerfile: Payment/Dockerfile
+
+  shipment:
+    image: ${DOCKER_REGISTRY-}shipment
+    build:
+      context: .
+      dockerfile: Shipment/Dockerfile
+
+  shoppingcartapi:
+    image: ${DOCKER_REGISTRY-}shoppingcartapi
+    build:
+      context: .
+      dockerfile: ShoppingCartAPI/Dockerfile
+
   warehouse:
-    image: ${DOCKER_REGISTRY-}warehouse:1.16.0
+    image: ${DOCKER_REGISTRY-}warehouse
     build:
       context: .
       dockerfile: Warehouse/Dockerfile
 
-  customerapi:
-    image: ${DOCKER_REGISTRY-}customerapi:1.16.0
+  webui:
+    image: ${DOCKER_REGISTRY-}webui
     build:
       context: .
-      dockerfile: CustomerAPI/Dockerfile
+      dockerfile: WebUI/Dockerfile
 
   ocelotapigateway:
-    image: ${DOCKER_REGISTRY-}ocelotapigateway:1.16.0
+    image: ${DOCKER_REGISTRY-}ocelotapigateway
     build:
       context: .
       dockerfile: OcelotAPIGateway/Dockerfile
-      
+
   rabbitmq:
-    image: rabbitmq:management:1.16.0
-    container_name: rabbitmq
-    ports:
-      - 5672:5672
-      - 15672:15672
-    volumes:
-      - rabbitmqdata:/var/lib/rabbitmq
-    hostname: rabbitmq
+    image: rabbitmq:3-management-alpine
 
 volumes:
+  mongo_data:
   rabbitmqdata:
