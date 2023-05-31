@@ -28,6 +28,12 @@ services:
       context: .
       dockerfile: OrderAPI/Dockerfile
 
+  ordergrpc:
+    image: ${DOCKER_REGISTRY-}ordergrpc
+    build:
+      context: .
+      dockerfile: OrderGrpc/Dockerfile
+
   orderprocessor:
     image: ${DOCKER_REGISTRY-}orderprocessor
     build:

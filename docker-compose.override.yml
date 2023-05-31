@@ -34,11 +34,6 @@ services:
     ports:
       - "8002:80"
 
-  #notifications:
-  #  container_name: notifications
-  #  ports:
-  #    - "8011:80"
-
   ocelotapigateway:
     container_name: ocelotapigateway
     environment:
@@ -60,26 +55,35 @@ services:
     ports:
       - "8004:80"
 
+  ordergrpc:
+    container_name: ordergrpc
+    environment:
+      - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    depends_on:
+      - shopdb
+    ports:
+      - "8005:80"
+
   orderprocessor:
     container_name: orderprocessor
     environment:
-      - "ApiSettings:GatewayAddress=http://ocelotapigateway"
+      - "GrpcSettings:OrderGrpcUrl=http://ordergrpc"
     ports:
-      - "8005:80"
+      - "8006:80"
 
   payment:
     container_name: payment
     environment:
       - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
     ports:
-      - "8006:80"
+      - "8007:80"
 
   shipment:
     container_name: shipment
     environment:
       - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
     ports:
-      - "8007:80"
+      - "8008:80"
 
   shoppingcartapi:
     container_name: shoppingcartapi
@@ -88,14 +92,14 @@ services:
     depends_on:
       - shopdb
     ports:
-      - "8008:80"
+      - "8009:80"
 
   warehouse:
     container_name: warehouse
     environment:
       - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
     ports:
-      - "8009:80"
+      - "8010:80"
 
   webui:
     container_name: webui
@@ -108,4 +112,9 @@ services:
         - ocelotapigateway
         - shoppingcartapi
     ports:
-      - "8010:80"
+      - "8011:80"
+
+  #notifications:
+  #  container_name: notifications
+  #  ports:
+  #    - "8012:80"

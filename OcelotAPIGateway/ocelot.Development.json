@@ -133,7 +133,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 8008
+                    "Port": 8009
                 }
             ]
         },
@@ -145,7 +145,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 8008
+                    "Port": 8009
                 }
             ]
         },
@@ -157,7 +157,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 8008
+                    "Port": 8009
                 }
             ]
         }
