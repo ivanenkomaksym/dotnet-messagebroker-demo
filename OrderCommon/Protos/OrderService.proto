@@ -1,0 +1,63 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Common.Protos";
+
+// The producer service definition.
+service OrderService {
+  // Sends a GetOrder message
+  rpc GetOrder (GetOrderRequest) returns (GetOrderReply);
+
+  // Sends an UpdateOrder message
+  rpc UpdateOrder (UpdateOrderRequest) returns (UpdateOrderReply);
+}
+
+message GetOrderRequest {
+	string orderId = 1;
+}
+
+message CustomerInfo {
+    string customerId = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string email = 4;
+}
+
+message Address {
+    string firstName = 1;
+    string lastName = 2;
+    string email = 3;
+    string addressLine = 4;
+    string country = 5;
+    string zipCode = 6;
+}
+
+message PaymentInfo {
+    string cardName = 1;
+    string cardNumber = 2;
+    string expiration = 3;
+    string cvv = 4;
+    int32 paymentMethod = 5;
+}
+
+message GetOrderReply {
+	string orderId = 1;
+    int32 orderStatus = 2;
+    int32 paymentStatus = 3;
+    int32 deliveryStatus = 4;
+    CustomerInfo customerInfo = 5;
+    Address shippingAddress = 6;
+    PaymentInfo paymentInfo = 7;
+}
+
+// The request message containing the user's name.
+message UpdateOrderRequest {
+  string orderId = 1;
+  optional int32 orderStatus = 2;
+  optional int32 paymentStatus = 3;
+  optional int32 deliveryStatus = 4;
+}
+
+// The response message containing the greetings.
+message UpdateOrderReply {
+  bool success = 1;
+}

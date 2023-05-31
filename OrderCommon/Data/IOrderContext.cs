@@ -1,7 +1,7 @@
 ﻿using Common.Models;
 using MongoDB.Driver;
 
-namespace OrderAPI.Data
+namespace OrderCommon.Data
 {
     public interface IOrderContext
     {

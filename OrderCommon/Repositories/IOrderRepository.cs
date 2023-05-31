@@ -1,6 +1,6 @@
 ﻿using Common.Models;
 
-namespace OrderAPI.Repositories
+namespace OrderCommon.Repositories
 {
     public interface IOrderRepository
     {

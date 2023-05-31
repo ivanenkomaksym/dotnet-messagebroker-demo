@@ -25,7 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCartAPI", "Shopping
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentService", "Payment\PaymentService.csproj", "{87412784-AD66-42C3-B86E-F537253CC6C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipment", "Shipment\Shipment.csproj", "{AB5BE90F-4B76-4F90-BDCC-AB6E8F077C6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipment", "Shipment\Shipment.csproj", "{AB5BE90F-4B76-4F90-BDCC-AB6E8F077C6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderCommon", "OrderCommon\OrderCommon.csproj", "{31B2E095-B614-44EA-A797-E18D54448E5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderGrpc", "OrderGrpc\OrderGrpc.csproj", "{6D734573-2815-434B-90DB-0898E571973B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +85,14 @@ Global
 		{AB5BE90F-4B76-4F90-BDCC-AB6E8F077C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB5BE90F-4B76-4F90-BDCC-AB6E8F077C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB5BE90F-4B76-4F90-BDCC-AB6E8F077C6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31B2E095-B614-44EA-A797-E18D54448E5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31B2E095-B614-44EA-A797-E18D54448E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31B2E095-B614-44EA-A797-E18D54448E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31B2E095-B614-44EA-A797-E18D54448E5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D734573-2815-434B-90DB-0898E571973B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D734573-2815-434B-90DB-0898E571973B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D734573-2815-434B-90DB-0898E571973B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D734573-2815-434B-90DB-0898E571973B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

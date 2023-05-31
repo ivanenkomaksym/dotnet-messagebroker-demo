@@ -2,23 +2,21 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["OrderAPI/OrderAPI.csproj", "OrderAPI/"]
-COPY ["Common/Common.csproj", "Common/"]
+COPY ["OrderGrpc/OrderGrpc.csproj", "OrderGrpc/"]
 COPY ["OrderCommon/OrderCommon.csproj", "OrderCommon/"]
-RUN dotnet restore "OrderAPI/OrderAPI.csproj"
+COPY ["Common/Common.csproj", "Common/"]
+RUN dotnet restore "OrderGrpc/OrderGrpc.csproj"
 COPY . .
-WORKDIR "/src/OrderAPI"
-RUN dotnet build "OrderAPI.csproj" -c Release -o /app/build
+WORKDIR "/src/OrderGrpc"
+RUN dotnet build "OrderGrpc.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "OrderAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "OrderGrpc.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "OrderAPI.dll"]
+ENTRYPOINT ["dotnet", "OrderGrpc.dll"]

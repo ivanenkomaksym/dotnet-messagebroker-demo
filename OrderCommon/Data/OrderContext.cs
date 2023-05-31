@@ -1,7 +1,8 @@
 ﻿using Common.Models;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
-namespace OrderAPI.Data
+namespace OrderCommon.Data
 {
     public class OrderContext : IOrderContext
     {

@@ -1,8 +1,8 @@
 ﻿using Common.Models;
 using MongoDB.Driver;
-using OrderAPI.Data;
+using OrderCommon.Data;
 
-namespace OrderAPI.Repositories
+namespace OrderCommon.Repositories
 {
     public class OrderRepository : IOrderRepository
     {
