@@ -26,6 +26,7 @@ namespace OrderProcessor.Consumers
             _logger.LogInformation($"Received `ShipmentResult` event with content: {message}");
 
             // Out
+            var result = await _grpcOrderClient.UpdateOrder(shipmentResult.OrderId, deliveryStatus: shipmentResult.DeliveryStatus);
         }
     }
 }

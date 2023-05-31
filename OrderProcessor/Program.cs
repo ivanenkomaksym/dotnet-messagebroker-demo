@@ -1,17 +1,16 @@
 ﻿using MassTransit;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using OrderProcessor;
+using OrderProcessor.Clients;
 using OrderProcessor.Consumers;
-using OrderProcessor.Services;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
     {
         services.AddHostedService<OrderProcessorWorker>();
 
-        services.AddHttpClient<IOrderService, OrderService>(options =>
-        {
-            options.BaseAddress = new Uri(hostContext.Configuration["ApiSettings:GatewayAddress"]);
-        });
+        services.AddSingleton<IGrpcOrderClient, GrpcOrderClient>();
 
         services.AddMassTransit(x =>
         {
@@ -20,9 +19,11 @@ IHost host = Host.CreateDefaultBuilder(args)
             x.AddConsumer<StockReservedConsumer>();
             x.AddConsumer<ReserveRemovedConsumer>();
             x.AddConsumer<PaymentResultConsumer>();
+            x.AddConsumer<ShipmentResultConsumer>();
 
             x.UsingRabbitMq((context, cfg) => { cfg.ConfigureEndpoints(context); });
         });
-    }).Build();
+    })
+    .Build();
 
 host.Run();

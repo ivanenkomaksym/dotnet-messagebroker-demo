@@ -1,19 +1,19 @@
 ﻿using Common.Events;
 using MassTransit;
-using OrderProcessor.Services;
+using OrderProcessor.Clients;
 using System.Text.Json;
 
 namespace OrderProcessor.Consumers
 {
     internal sealed class StockReservedConsumer : IConsumer<StockReserved>
     {
-        private readonly IOrderService _orderService;
+        private readonly IGrpcOrderClient _grpcOrderClient;
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<OrderCreatedConsumer> _logger;
 
-        public StockReservedConsumer(IOrderService orderService, IPublishEndpoint publishEndpoint, ILogger<OrderCreatedConsumer> logger)
+        public StockReservedConsumer(IGrpcOrderClient grpcOrderClient, IPublishEndpoint publishEndpoint, ILogger<OrderCreatedConsumer> logger)
         {
-            _orderService = orderService;
+            _grpcOrderClient = grpcOrderClient;
             _publishEndpoint = publishEndpoint;
             _logger = logger;
         }
@@ -26,7 +26,7 @@ namespace OrderProcessor.Consumers
             _logger.LogInformation($"Received `StockReserved` event with content: {message}");
 
             // Out
-            var order = await _orderService.GetOrderById(stockReserved.OrderId);
+            var order = await _grpcOrderClient.GetOrder(stockReserved.OrderId);
 
             var takePaymentEvent = new TakePayment
             {

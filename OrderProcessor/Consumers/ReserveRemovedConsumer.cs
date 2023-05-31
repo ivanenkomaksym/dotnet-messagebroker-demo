@@ -1,5 +1,4 @@
 ﻿using Common.Events;
-using OrderProcessor.Services;
 using MassTransit;
 using System.Text.Json;
 
@@ -9,7 +8,7 @@ namespace OrderProcessor.Consumers
     {
         private readonly ILogger<OrderCreatedConsumer> _logger;
 
-        public ReserveRemovedConsumer(IOrderService orderService, IPublishEndpoint publishEndpoint, ILogger<OrderCreatedConsumer> logger)
+        public ReserveRemovedConsumer(IPublishEndpoint publishEndpoint, ILogger<OrderCreatedConsumer> logger)
         {
             _logger = logger;
         }
