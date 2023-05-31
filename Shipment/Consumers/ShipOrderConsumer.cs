@@ -28,19 +28,50 @@ namespace Shipment.Consumers
 
             await ProduceRemoveReserve(shipOrder.OrderId, RemoveReserveReason.TakeFromStockForShipment);
 
+            var deliveryStatus = DeliveryStatus.Shipping;
             var delivery = await _shipmentRepository.CreateDelivery(new Delivery
             {
                 Id = Guid.NewGuid(),
                 OrderId = shipOrder.OrderId,
                 CustomerInfo = shipOrder.CustomerInfo,
                 ShippingAddress = shipOrder.ShippingAddress,
-                DeliveryStatus = DeliveryStatus.Shipping
+                DeliveryStatus = deliveryStatus
             });
 
             // Out
-            // TODO: Send ShipmentResult message
+            await ProduceShipmentResult(shipOrder.OrderId, deliveryStatus);
+
+            _ = ScheduleShipmentUpdate(shipOrder.OrderId, deliveryStatus);
         }
 
+        private Task ScheduleShipmentUpdate(Guid orderId, DeliveryStatus currentDeliveryStatus)
+        {
+            return Task.Run(async () =>
+            {
+                await Task.Delay(30 * 1000); // wait 30s
+
+                var newDeliveryStatus = currentDeliveryStatus;
+                switch (currentDeliveryStatus)
+                {
+                    case DeliveryStatus.Shipping:
+                        newDeliveryStatus = DeliveryStatus.Shipped;
+                        break;
+                    case DeliveryStatus.Shipped:
+                        newDeliveryStatus = DeliveryStatus.Collecting;
+                        break;
+                    default:
+                        return;
+                }
+
+                var delivery = await _shipmentRepository.GetDeliveryByOrderId(orderId);
+                delivery.DeliveryStatus = newDeliveryStatus;
+                var result = await _shipmentRepository.UpdateDelivery(delivery);
+
+                await ProduceShipmentResult(orderId, newDeliveryStatus);
+
+                _ = ScheduleShipmentUpdate(orderId, newDeliveryStatus);
+            });
+        }
 
         private async Task ProduceRemoveReserve(Guid orderId, RemoveReserveReason reason)
         {
@@ -54,6 +85,20 @@ namespace Shipment.Consumers
 
             var message = JsonSerializer.Serialize(removeReserveEvent);
             _logger.LogInformation($"Sent `RemoveReserve` event with content: {message}");
+        }
+
+        private async Task ProduceShipmentResult(Guid orderId, DeliveryStatus deliveryStatus)
+        {
+            var shipmentResultEvent = new ShipmentResult
+            {
+                OrderId = orderId,
+                DeliveryStatus = deliveryStatus
+            };
+
+            await _publishEndpoint.Publish(shipmentResultEvent);
+
+            var message = JsonSerializer.Serialize(shipmentResultEvent);
+            _logger.LogInformation($"Sent `ShipmentResult` event with content: {message}");
         }
     }
 }
