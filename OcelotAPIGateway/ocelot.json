@@ -124,6 +124,42 @@
                 }
             ]
         },
+        {
+            "UpstreamPathTemplate": "/gateway/Order/{orderId}/Payment",
+            "UpstreamHttpMethod": [ "PUT" ],
+            "DownstreamPathTemplate": "/api/Order/{orderId}/Payment",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8004
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Order/{orderId}/Cancel",
+            "UpstreamHttpMethod": [ "POST" ],
+            "DownstreamPathTemplate": "/api/Order/{orderId}/Cancel",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8004
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Order/{orderId}/Collected",
+            "UpstreamHttpMethod": [ "POST" ],
+            "DownstreamPathTemplate": "/api/Order/{orderId}/Collected",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8004
+                }
+            ]
+        },
         // ShoppingCart API
         {
             "UpstreamPathTemplate": "/gateway/ShoppingCart",

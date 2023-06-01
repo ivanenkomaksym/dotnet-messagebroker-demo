@@ -1,5 +1,6 @@
 using Common.Examples;
 using Common.Models;
+using Common.Models.Payment;
 using Microsoft.AspNetCore.Mvc;
 using OrderCommon.Repositories;
 using Swashbuckle.AspNetCore.Filters;
@@ -57,18 +58,54 @@ namespace OrderAPI.Controllers
             return CreatedAtRoute("GetOrdersByCustomerId", new { customerId = order.CustomerInfo.CustomerId}, order);
         }
 
-        [HttpPut]
-        [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateOrder([FromBody] Order order)
+        [HttpPut("{orderId}/Payment")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> UpdatePayment(Guid orderId, [FromBody] PaymentInfo paymentInfo)
         {
-            var result = await OrderRepository.UpdateOrder(order);
+            var result = await OrderRepository.UpdatePayment(orderId, paymentInfo);
             if (!result)
             {
-                Logger.LogError($"Failed to update order.");
+                Logger.LogError($"Failed to update payment.");
                 return BadRequest();
             }
-
+            var order = await OrderRepository.GetOrderById(orderId);
             await OrderService.UpdateOrder(order);
+
+            return Ok(result);
+        }
+
+        [HttpPost("{orderId}/Cancel")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Cancel(Guid orderId)
+        {
+            var result = await OrderRepository.Cancel(orderId);
+            if (!result)
+            {
+                Logger.LogError($"Failed to cancel order.");
+                return BadRequest();
+            }
+            var order = await OrderRepository.GetOrderById(orderId);
+            await OrderService.UpdateOrder(order);
+
+            return Ok(result);
+        }
+
+        [HttpPost("{orderId}/Collected")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Collected(Guid orderId)
+        {
+            var result = await OrderRepository.Collected(orderId);
+            if (!result)
+            {
+                Logger.LogError($"Failed to set Collected on order.");
+                return BadRequest();
+            }
+            var order = await OrderRepository.GetOrderById(orderId);
+            await OrderService.UpdateOrder(order);
+
             return Ok(result);
         }
 

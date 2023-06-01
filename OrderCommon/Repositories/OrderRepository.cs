@@ -1,4 +1,5 @@
 ﻿using Common.Models;
+using Common.Models.Payment;
 using MongoDB.Driver;
 using OrderCommon.Data;
 
@@ -39,6 +40,41 @@ namespace OrderCommon.Repositories
             return await _context
                             .Orders
                             .Find(matchId).ToListAsync();
+        }
+
+
+        public async Task<bool> UpdatePayment(Guid orderId, PaymentInfo payment)
+        {
+            var order = await GetOrderById(orderId);
+            if (order == null)
+                return false;
+
+            order.PaymentInfo = payment;
+            var result = await UpdateOrder(order);
+            return result;
+        }
+
+        public async Task<bool> Cancel(Guid orderId)
+        {
+            var order = await GetOrderById(orderId);
+            if (order == null)
+                return false;
+
+            order.OrderStatus = OrderStatus.Cancelled;
+            var result = await UpdateOrder(order);
+            return result;
+        }
+
+        public async Task<bool> Collected(Guid orderId)
+        {
+            var order = await GetOrderById(orderId);
+            if (order == null)
+                return false;
+
+            order.OrderStatus = OrderStatus.Delivered;
+            order.DeliveryStatus = Common.Models.Shipment.DeliveryStatus.Collected;
+            var result = await UpdateOrder(order);
+            return result;
         }
 
         public async Task<bool> UpdateOrder(Order order)
