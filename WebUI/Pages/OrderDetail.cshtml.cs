@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebUI.Services;
-using WebUI.Users;
 
 namespace WebUI.Pages
 {
@@ -30,7 +29,7 @@ namespace WebUI.Pages
         }
         public IActionResult OnPostUpdatePayment(Guid orderId)
         {
-            return RedirectToPage("/UpdatePayment", new { orderId = orderId });
+            return RedirectToPage("/UpdatePayment", new { orderId = orderId, returnUrl = "/Order" });
         }
 
         public async Task<IActionResult> OnPostCancelAsync(Guid orderId)

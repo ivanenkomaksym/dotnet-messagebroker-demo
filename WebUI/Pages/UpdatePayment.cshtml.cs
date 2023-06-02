@@ -24,8 +24,11 @@ namespace WebUI.Pages
         [BindProperty]
         public PaymentInfo PaymentInfo { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(Guid orderId)
+        public string ReturnUrl { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(Guid orderId, string returnUrl = null)
         {
+            ReturnUrl = returnUrl;
             OrderId = orderId;
             var order = await _orderService.GetOrder(orderId);
             if (order == null)
@@ -37,7 +40,7 @@ namespace WebUI.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostUpdatePaymentAsync(Guid orderId)
+        public async Task<IActionResult> OnPostUpdatePaymentAsync(Guid orderId, string returnUrl = null)
         {
             if (!ModelState.IsValid)
                 return Page();
@@ -45,7 +48,8 @@ namespace WebUI.Pages
             try
             {
                 await _orderService.UpdatePayment(orderId, PaymentInfo);
-                return RedirectToPage("OrderDetail", new { orderId = orderId });
+
+                return LocalRedirect(Helpers.GetLocalUrl(Url, returnUrl));
             }
             catch (Exception ex)
             {

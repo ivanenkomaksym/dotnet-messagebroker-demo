@@ -28,12 +28,9 @@
             <div class="table-responsive">
                 <table class="table table-striped">
                     <tbody>
-
-                        @foreach (var order in Model.Orders)
+                        @foreach (var order in Model.Orders.Reverse())
                         {
-                            <div>
-                                <partial name="_OrderItemPartial" model="@order" />
-                            </div>
+                            <partial name="_OrderItemPartial" model="@order" />
                         }
                     </tbody>
                 </table>

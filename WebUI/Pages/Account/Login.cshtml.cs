@@ -60,7 +60,7 @@ namespace WebUI.Pages.Account
                 _logger.LogInformation("User {Email} logged in at {Time}.",
                     user.Email, DateTime.UtcNow);
 
-                return LocalRedirect(GetLocalUrl(Url, returnUrl));
+                return LocalRedirect(Helpers.GetLocalUrl(Url, returnUrl));
             }
             catch (Exception ex)
             {
@@ -68,16 +68,6 @@ namespace WebUI.Pages.Account
             }
 
             return Page();
-        }
-
-        public static string GetLocalUrl(IUrlHelper urlHelper, string localUrl)
-        {
-            if (!urlHelper.IsLocalUrl(localUrl))
-            {
-                return urlHelper!.Page("/Index");
-            }
-
-            return localUrl;
         }
     }
 }

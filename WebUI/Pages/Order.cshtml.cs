@@ -43,7 +43,27 @@ namespace WebUI.Pages
 
         public IActionResult OnPostUpdatePayment(Guid orderId)
         {
-            return RedirectToPage("/UpdatePayment", new { orderId = orderId });
+            return RedirectToPage("/UpdatePayment", new { orderId = orderId, returnUrl = "/Order" });
+        }
+
+        public async Task<IActionResult> OnPostCancelAsync(Guid orderId)
+        {
+            var result = await _orderService.Cancel(orderId);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return RedirectToPage("/Order");
+        }
+
+        public async Task<IActionResult> OnPostConfirmCollectionAsync(Guid orderId)
+        {
+            var result = await _orderService.Collected(orderId);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return RedirectToPage("/Order");
         }
     }
 }

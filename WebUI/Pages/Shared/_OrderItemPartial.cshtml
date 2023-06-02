@@ -47,8 +47,7 @@
                 <p>Total Price: $@Model.TotalPrice</p>
             </div>
             <div class="buttons-container">
-                @if (Model.PaymentStatus == Common.Models.Payment.PaymentStatus.Failed ||
-                Model.PaymentStatus == Common.Models.Payment.PaymentStatus.Expired)
+                @if (Model.OrderStatus == OrderStatus.PaymentFailed)
                 {
                     <form asp-page-handler="UpdatePayment" asp-route-orderId="@Model.Id" method="post" name="updatePayment">
                         <button onclick="parentNode.submit();" type="submit" name="handler" value="UpdatePayment" class="btn btn-primary">Update Payment</button>
@@ -59,7 +58,7 @@
                         <input type="hidden" asp-for="@Model.Id" name="productId" />
                     </form>
                 }
-                @if (Model.DeliveryStatus == Common.Models.Shipment.DeliveryStatus.Shipped)
+                @if (Model.OrderStatus == OrderStatus.AwaitingCollection)
                 {
                     <form asp-page-handler="ConfirmCollection" asp-route-orderId="@Model.Id" method="post" name="confirmCollection">
                         <button onclick="parentNode.submit();" type="submit" name="handler" value="ConfirmOrderCollection" class="btn btn-success">Confirm Order Collection</button>
