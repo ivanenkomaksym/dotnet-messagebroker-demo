@@ -54,6 +54,34 @@ namespace OrderAPI
             _logger.LogInformation($"Sent `OrderUpdated` event with content: {message}");
         }
 
+        public async Task CancelOrder(Guid orderId)
+        {
+            var cancelOrderEvent = new CancelOrder
+            {
+                OrderId = orderId,
+                CancelDateTime = DateTime.Now
+            };
+
+            await _publishEndpoint.Publish(cancelOrderEvent);
+
+            var message = JsonSerializer.Serialize(cancelOrderEvent);
+            _logger.LogInformation($"Sent `CancelOrder` event with content: {message}");
+        }
+
+        public async Task OrderCollected(Guid orderId)
+        {
+            var orderCollectedEvent = new OrderCollected
+            {
+                OrderId = orderId,
+                CollectedDateTime = DateTime.Now
+            };
+
+            await _publishEndpoint.Publish(orderCollectedEvent);
+
+            var message = JsonSerializer.Serialize(orderCollectedEvent);
+            _logger.LogInformation($"Sent `OrderCollected` event with content: {message}");
+        }
+
         IRabbitMQChannelRegistry RabbitMQChannelRegistry;
         private readonly ILogger<OrderService> Logger;
         private readonly string HostName;

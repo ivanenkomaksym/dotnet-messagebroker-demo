@@ -28,7 +28,7 @@ namespace OrderAPI.Controllers
 
             if (order == null)
             {
-                Logger.LogError($"Order with id: {orderId}, not found.");
+                Logger.LogError($"Order with id: {orderId} not found.");
                 return NotFound();
             }
 
@@ -80,16 +80,17 @@ namespace OrderAPI.Controllers
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Cancel(Guid orderId)
         {
-            var result = await OrderRepository.Cancel(orderId);
-            if (!result)
-            {
-                Logger.LogError($"Failed to cancel order.");
-                return BadRequest();
-            }
             var order = await OrderRepository.GetOrderById(orderId);
-            await OrderService.UpdateOrder(order);
 
-            return Ok(result);
+            if (order == null)
+            {
+                Logger.LogError($"Order with id: {orderId} not found.");
+                return NotFound();
+            }
+
+            await OrderService.CancelOrder(orderId);
+
+            return Ok(true);
         }
 
         [HttpPost("{orderId}/Collected")]
@@ -97,16 +98,17 @@ namespace OrderAPI.Controllers
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Collected(Guid orderId)
         {
-            var result = await OrderRepository.Collected(orderId);
-            if (!result)
-            {
-                Logger.LogError($"Failed to set Collected on order.");
-                return BadRequest();
-            }
             var order = await OrderRepository.GetOrderById(orderId);
-            await OrderService.UpdateOrder(order);
 
-            return Ok(result);
+            if (order == null)
+            {
+                Logger.LogError($"Order with id: {orderId} not found.");
+                return NotFound();
+            }
+
+            await OrderService.OrderCollected(orderId);
+
+            return Ok(true);
         }
 
         private readonly IOrderService OrderService;

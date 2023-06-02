@@ -34,7 +34,7 @@ namespace PaymentService.Consumers
         {
             return Task.Run(async () =>
             {
-                await Task.Delay(30 * 1000); // wait 30s
+                await Task.Delay(10 * 1000); // wait 10s
 
                 await HandlePayment(takePayment);
             });
