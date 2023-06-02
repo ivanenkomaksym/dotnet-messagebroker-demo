@@ -22,5 +22,7 @@ namespace Common.Models
 
         [Required]
         public ushort Quantity { get; set; }
+
+        public string? ImageFile { get; set; }
     }
 }

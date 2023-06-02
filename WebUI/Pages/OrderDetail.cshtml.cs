@@ -11,24 +11,16 @@ namespace WebUI.Pages
     public class OrderDetailModel : PageModel
     {
         private readonly IOrderService _orderService;
-        private readonly IUserProvider _userProvider;
 
-        public OrderDetailModel(IOrderService orderService, IUserProvider userProvider)
+        public OrderDetailModel(IOrderService orderService)
         {
             _orderService = orderService;
-            _userProvider = userProvider;
         }
 
-        [BindProperty]
         public Order Order { get; set; }
 
-        public async Task<IActionResult> OnGet(Guid orderId)
+        public async Task<IActionResult> OnGetAsync(Guid orderId)
         {
-            if (orderId == null)
-            {
-                return NotFound();
-            }
-
             Order = await _orderService.GetOrder(orderId);
             if (Order == null)
             {
@@ -36,22 +28,33 @@ namespace WebUI.Pages
             }
             return Page();
         }
-
-        public async Task<IActionResult> OnPostUpdateOrderAsync(Order order)
+        public IActionResult OnPostUpdatePayment(Guid orderId)
         {
-            if (!ModelState.IsValid)
-                return Page();
+            return RedirectToPage("/UpdatePayment", new { orderId = orderId });
+        }
 
-            try
+        public async Task<IActionResult> OnPostCancelAsync(Guid orderId)
+        {
+            var result = await _orderService.Cancel(orderId);
+            if (!result)
             {
-                _orderService.UpdateOrder(order);
-                return RedirectToPage("Order");
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(nameof(Order.Id), "Problem updating order.");
-            }
+            return RedirectToPage("/Order");
+        }
 
+        public async Task<IActionResult> OnPostConfirmCollectionAsync(Guid orderId)
+        {
+            var result = await _orderService.Collected(orderId);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return RedirectToPage("/Order");
+        }
+
+        public IActionResult OnPostRefund(Guid orderId)
+        {
             return Page();
         }
     }

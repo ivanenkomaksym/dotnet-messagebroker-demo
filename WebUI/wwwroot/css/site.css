@@ -20,3 +20,88 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.vertical-line {
+    width: 1px;
+    height: 32px;
+    background-color: #ddd;
+    margin: 0 8px;
+}
+
+.order-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.order-title {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.order-status {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.order-item-image {
+    max-width: 120px;
+    max-height: 120px;
+}
+
+.order-date {
+    margin-right: 8px;
+}
+
+.order-id {
+    margin: 0;
+}
+
+.order-date-id {
+    display: flex;
+    flex-direction: column;
+}
+
+.order-details {    
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+}
+
+.order-item-details {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+.order-details p {
+    margin-bottom: 0px;
+}
+
+.order-item-price {
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+}
+
+    .buttons-container button {
+        margin-left: 8px;
+    }

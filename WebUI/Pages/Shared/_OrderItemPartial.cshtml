@@ -2,41 +2,72 @@
 @using WebUI.Models;
 @model Order
 
-<div class="card">
-    <a asp-page="OrderDetail" asp-route-orderId="@Model.Id"></a>
-    <div class="card-body">
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="order-container">
+        <div class="order-header">
+            <div class="order-status">
+                <p class="order-status">@Model.OrderStatus</p>
+            </div>
+            <div class="order-details">
+                <div class="order-date-id">
+                    <div class="order-date">
+                        Order Date: @Model.CreationDateTime
+                    </div>
+                    <div class="order-id">
+                        <p>Order Id: @Model.Id</p>
+                    </div>
+                </div>
+                <span class="vertical-line"></span>
+                <a asp-page="OrderDetail" asp-route-orderId="@Model.Id"><p class="order-title">Order Details</p></a>
+            </div>
+        </div>
+
         <div class="row">
-            <tr>
-                <td><a asp-page="OrderDetail" asp-route-orderId="@Model.Id" class="color-main">@Model.Id</a></td>
-                <td>@Model.CreationDateTime</td>
-                <td>@Model.OrderStatus</td>
-                <td>@Model.PaymentStatus</td>
-                <td>
-                    @Model.ShippingAddress.Country<br>
-                    @Model.ShippingAddress.AddressLine<br>
-                </td>
-                <td>
-                    <ul class="list-group mb-3">
-                        @foreach (var item in Model.Items)
-                        {
-                            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 class="my-0">@item.ProductName</h6>
-                                </div>
-                                <span class="text-muted">$@item.ProductPrice</span>
-                            </li>
-                        }
-                    </ul>
-                </td>
-                <td>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Total (USD)</span>
-                        <strong>$@Model.TotalPrice</strong>
-                    </li>
-                </td>
-            </tr>
-            <div class="col">
+            <div class="col-md-6">
+                <h5>Order Items</h5>
+                <div class="row">
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="col-4 mb-3">
+                            <a asp-page="ProductDetail" asp-route-productId="@item.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@item.ImageFile" alt="Order Item"></a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="order-item-details">
+            <div class="order-item-price">
+                <p>Total Price: $@Model.TotalPrice</p>
+            </div>
+            <div class="buttons-container">
+                @if (Model.PaymentStatus == Common.Models.Payment.PaymentStatus.Failed ||
+                Model.PaymentStatus == Common.Models.Payment.PaymentStatus.Expired)
+                {
+                    <form asp-page-handler="UpdatePayment" asp-route-orderId="@Model.Id" method="post" name="updatePayment">
+                        <button onclick="parentNode.submit();" type="submit" name="handler" value="UpdatePayment" class="btn btn-primary">Update Payment</button>
+                        <input type="hidden" asp-for="@Model.Id" name="productId" />
+                    </form>
+                    <form asp-page-handler="Cancel" asp-route-orderId="@Model.Id" method="post" name="cancel">
+                        <button onclick="parentNode.submit();" type="submit" name="handler" value="CancelOrder" class="btn btn-danger">Cancel Order</button>
+                        <input type="hidden" asp-for="@Model.Id" name="productId" />
+                    </form>
+                }
+                @if (Model.DeliveryStatus == Common.Models.Shipment.DeliveryStatus.Shipped)
+                {
+                    <form asp-page-handler="ConfirmCollection" asp-route-orderId="@Model.Id" method="post" name="confirmCollection">
+                        <button onclick="parentNode.submit();" type="submit" name="handler" value="ConfirmOrderCollection" class="btn btn-success">Confirm Order Collection</button>
+                        <input type="hidden" asp-for="@Model.Id" name="productId" />
+                    </form>
+                }
             </div>
         </div>
     </div>
-</div>
+</body>
+</html>

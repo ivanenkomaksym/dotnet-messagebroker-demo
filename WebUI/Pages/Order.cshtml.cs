@@ -40,5 +40,10 @@ namespace WebUI.Pages
             }
             return Page();
         }
+
+        public IActionResult OnPostUpdatePayment(Guid orderId)
+        {
+            return RedirectToPage("/UpdatePayment", new { orderId = orderId });
+        }
     }
 }

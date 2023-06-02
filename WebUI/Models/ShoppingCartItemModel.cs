@@ -7,5 +7,6 @@
         public string? ProductName { get; init; }
         public double ProductPrice { get; init; }
         public ushort Quantity { get; set; }
+        public string? ImageFile { get; set; }
     }
 }

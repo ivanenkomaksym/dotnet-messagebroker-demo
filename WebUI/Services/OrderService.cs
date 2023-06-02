@@ -1,5 +1,6 @@
 ﻿using Common.Extensions;
 using Common.Models;
+using Common.Models.Payment;
 
 namespace WebUI.Services
 {
@@ -42,9 +43,31 @@ namespace WebUI.Services
             return;
         }
 
-        public async Task<bool> UpdateOrder(Order order)
+        public async Task<bool> UpdatePayment(Guid orderId, PaymentInfo payment)
         {
-            var response = await _client.PutAsJsonAsync($"/gateway/Order", order);
+            var response = await _client.PutAsJson($"/gateway/Order/{orderId}/Payment", payment);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.StatusCode.ToString());
+            }
+
+            return await response.ReadContentAs<bool>();
+        }
+
+        public async Task<bool> Cancel(Guid orderId)
+        {
+            var response = await _client.PostAsJson($"/gateway/Order/{orderId}/Cancel", "");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.StatusCode.ToString());
+            }
+
+            return await response.ReadContentAs<bool>();
+        }
+
+        public async Task<bool> Collected(Guid orderId)
+        {
+            var response = await _client.PostAsJson($"/gateway/Order/{orderId}/Collected", "");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());

@@ -1,4 +1,5 @@
 ﻿using Common.Models;
+using Common.Models.Payment;
 
 namespace WebUI.Services
 {
@@ -9,6 +10,10 @@ namespace WebUI.Services
         Task<Order> GetOrder(Guid orderId);
         Task CreateOrder(Order order);
 
-        Task<bool> UpdateOrder(Order order);
+        Task<bool> UpdatePayment(Guid orderId, PaymentInfo payment);
+
+        Task<bool> Cancel(Guid orderId);
+
+        Task<bool> Collected(Guid orderId);
     }
 }

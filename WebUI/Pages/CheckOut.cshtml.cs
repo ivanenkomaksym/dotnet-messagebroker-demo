@@ -82,7 +82,8 @@ namespace WebUI.Pages
                         ProductId = item.ProductId,
                         ProductName = item.ProductName,
                         ProductPrice = item.ProductPrice,
-                        Quantity = item.Quantity
+                        Quantity = item.Quantity,
+                        ImageFile = item.ImageFile
                     });
                 }
 
