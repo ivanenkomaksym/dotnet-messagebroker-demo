@@ -71,7 +71,7 @@ namespace OrderCommon.Repositories
             if (order == null)
                 return false;
 
-            order.OrderStatus = OrderStatus.Delivered;
+            order.OrderStatus = OrderStatus.Completed;
             order.DeliveryStatus = Common.Models.Shipment.DeliveryStatus.Collected;
             var result = await UpdateOrder(order);
             return result;

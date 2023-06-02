@@ -33,13 +33,21 @@ namespace OrderProcessor.Consumers
             switch (paymentResult.PaymentStatus)
             {
                 case Common.Models.Payment.PaymentStatus.Failed:
+                    // Payment failed, update order status
+                    result = await _grpcOrderClient.UpdateOrder(paymentResult.OrderId, orderStatus: OrderStatus.PaymentFailed);
                     await ProduceRemoveReserve(paymentResult.OrderId, RemoveReserveReason.PaymentFailed);
                     break;
                 case Common.Models.Payment.PaymentStatus.Expired:
+                    // Payment failed, update order status
+                    result = await _grpcOrderClient.UpdateOrder(paymentResult.OrderId, orderStatus: OrderStatus.PaymentFailed);
                     await ProduceRemoveReserve(paymentResult.OrderId, RemoveReserveReason.PaymentExpired);
                     break;
                 case Common.Models.Payment.PaymentStatus.Paid:
+                    // Payment succeded, update order status
+                    result = await _grpcOrderClient.UpdateOrder(paymentResult.OrderId, orderStatus: OrderStatus.Paid);
                     await ProduceShipOrder(order);
+                    // Shipment scheduled, update order status
+                    result = await _grpcOrderClient.UpdateOrder(paymentResult.OrderId, orderStatus: OrderStatus.AwaitingShipment);
                     break;
                 default:
                     break;

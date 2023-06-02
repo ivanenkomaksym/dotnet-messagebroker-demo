@@ -38,6 +38,9 @@ namespace OrderProcessor.Consumers
 
             await _publishEndpoint.Publish(takePaymentEvent);
 
+            // Payment process begins, update order status
+            var result = await _grpcOrderClient.UpdateOrder(order.Id, orderStatus: Common.Models.OrderStatus.PaymentProcessing);
+
             message = JsonSerializer.Serialize(takePaymentEvent);
             _logger.LogInformation($"Sent `TakePayment` event with content: {message}");
         }

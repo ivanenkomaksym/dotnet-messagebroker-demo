@@ -26,7 +26,22 @@ namespace PaymentService.Consumers
             var message = JsonSerializer.Serialize(takePayment);
             _logger.LogInformation($"Received `TakePayment` event with content: {message}");
 
-            // TODO: Hardcode different PaymentStatus depending on PaymentMethod
+            // Out
+            _ = SchedulePayment(takePayment);
+        }
+
+        private Task SchedulePayment(TakePayment takePayment)
+        {
+            return Task.Run(async () =>
+            {
+                await Task.Delay(30 * 1000); // wait 30s
+
+                await HandlePayment(takePayment);
+            });
+        }
+
+        private async Task HandlePayment(TakePayment takePayment)
+        {
             var paymentStatus = PaymentStatus.Unpaid;
             var paidAmount = 0.0;
             switch (takePayment.PaymentInfo.PaymentMethod)
@@ -64,7 +79,6 @@ namespace PaymentService.Consumers
                 });
             }
 
-            // Out
             var paymentResultEvent = new PaymentResult
             {
                 OrderId = payment.OrderId,
@@ -76,7 +90,7 @@ namespace PaymentService.Consumers
 
             await _publishEndpoint.Publish(paymentResultEvent);
 
-            message = JsonSerializer.Serialize(paymentResultEvent);
+            var message = JsonSerializer.Serialize(paymentResultEvent);
             _logger.LogInformation($"Sent `PaymentResult` event with content: {message}");
         }
     }
