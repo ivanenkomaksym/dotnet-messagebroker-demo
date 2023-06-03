@@ -84,7 +84,16 @@ namespace OrderAPI
 
         public async Task ReturnOrder(Guid orderId)
         {
-            // TODO: Send ReturnOrder event
+            var returnOrderEvent = new ReturnOrder
+            {
+                OrderId = orderId,
+                ReturnDateTime = DateTime.Now
+            };
+
+            await _publishEndpoint.Publish(returnOrderEvent);
+
+            var message = JsonSerializer.Serialize(returnOrderEvent);
+            _logger.LogInformation($"Sent `ReturnOrder` event with content: {message}");
         }
 
         IRabbitMQChannelRegistry RabbitMQChannelRegistry;

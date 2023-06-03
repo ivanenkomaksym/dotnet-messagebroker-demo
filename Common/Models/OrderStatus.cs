@@ -10,6 +10,9 @@
         Shipping,
         AwaitingCollection,
         Completed,
+        AwaitingReturn,
+        Refunding,
+        Refunded,
         Cancelled
     }
 }
