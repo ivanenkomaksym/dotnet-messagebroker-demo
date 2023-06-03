@@ -75,5 +75,16 @@ namespace WebUI.Services
 
             return await response.ReadContentAs<bool>();
         }
+
+        public async Task<bool> Return(Guid orderId)
+        {
+            var response = await _client.PostAsJson($"/gateway/Order/{orderId}/Return", "");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.StatusCode.ToString());
+            }
+
+            return await response.ReadContentAs<bool>();
+        }
     }
 }

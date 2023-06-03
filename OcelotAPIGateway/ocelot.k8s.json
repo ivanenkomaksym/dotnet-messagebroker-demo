@@ -160,6 +160,18 @@
                 }
             ]
         },
+        {
+            "UpstreamPathTemplate": "/gateway/Order/{orderId}/Return",
+            "UpstreamHttpMethod": [ "POST" ],
+            "DownstreamPathTemplate": "/api/Order/{orderId}/Return",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "orderapi",
+                    "Port": 80
+                }
+            ]
+        },
         // ShoppingCart API
         {
             "UpstreamPathTemplate": "/gateway/ShoppingCart",

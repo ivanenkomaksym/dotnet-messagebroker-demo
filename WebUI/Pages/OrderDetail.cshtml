@@ -64,6 +64,12 @@
                         <button type="submit" name="handler" value="ConfirmOrderCollection" class="btn btn-success">Confirm Order Collection</button>
                     </form>
                 }
+                @if (Model.Order.OrderStatus == Common.Models.OrderStatus.Completed)
+                {
+                    <form asp-page-handler="ReturnOrder" method="post" name="ReturnOrder">
+                        <button type="submit" name="handler" value="ReturnOrder" class="btn btn-warning">Return</button>
+                    </form>
+                }
             </div>
         </div>
     </div>

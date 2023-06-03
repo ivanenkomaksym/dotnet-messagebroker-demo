@@ -111,6 +111,24 @@ namespace OrderAPI.Controllers
             return Ok(true);
         }
 
+        [HttpPost("{orderId}/Return")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Return(Guid orderId)
+        {
+            var order = await OrderRepository.GetOrderById(orderId);
+
+            if (order == null)
+            {
+                Logger.LogError($"Order with id: {orderId} not found.");
+                return NotFound();
+            }
+
+            await OrderService.OrderCollected(orderId);
+
+            return Ok(true);
+        }
+
         private readonly IOrderService OrderService;
         private readonly IOrderRepository OrderRepository;
         private readonly ILogger<OrderController> Logger;

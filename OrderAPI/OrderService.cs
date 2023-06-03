@@ -82,6 +82,11 @@ namespace OrderAPI
             _logger.LogInformation($"Sent `OrderCollected` event with content: {message}");
         }
 
+        public async Task ReturnOrder(Guid orderId)
+        {
+            // TODO: Send ReturnOrder event
+        }
+
         IRabbitMQChannelRegistry RabbitMQChannelRegistry;
         private readonly ILogger<OrderService> Logger;
         private readonly string HostName;

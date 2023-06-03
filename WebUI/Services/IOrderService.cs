@@ -15,5 +15,7 @@ namespace WebUI.Services
         Task<bool> Cancel(Guid orderId);
 
         Task<bool> Collected(Guid orderId);
+
+        Task<bool> Return(Guid orderId);
     }
 }

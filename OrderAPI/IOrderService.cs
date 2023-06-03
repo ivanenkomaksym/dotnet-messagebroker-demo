@@ -11,5 +11,7 @@ namespace OrderAPI
         public Task CancelOrder(Guid orderId);
 
         public Task OrderCollected(Guid orderId);
+
+        public Task ReturnOrder(Guid orderId);
     }
 }

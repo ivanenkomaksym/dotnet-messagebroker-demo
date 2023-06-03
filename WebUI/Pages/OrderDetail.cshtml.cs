@@ -52,9 +52,14 @@ namespace WebUI.Pages
             return RedirectToPage("/Order");
         }
 
-        public IActionResult OnPostRefund(Guid orderId)
+        public async Task<IActionResult> OnPostReturnOrderAsync(Guid orderId)
         {
-            return Page();
+            var result = await _orderService.Return(orderId);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return RedirectToPage("/ReturnOrder");
         }
     }
 }
