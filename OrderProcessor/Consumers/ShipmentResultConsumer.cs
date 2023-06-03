@@ -27,17 +27,15 @@ namespace OrderProcessor.Consumers
             _logger.LogInformation($"Received `ShipmentResult` event with content: {message}");
 
             // Out
-            var result = await _grpcOrderClient.UpdateOrder(shipmentResult.OrderId, deliveryStatus: shipmentResult.DeliveryStatus);
-
             switch (shipmentResult.DeliveryStatus)
             {
                 case Common.Models.Shipment.DeliveryStatus.Shipping:
                     // Order shipment in progress, update order status
-                    result = await _grpcOrderClient.UpdateOrder(shipmentResult.OrderId, orderStatus: OrderStatus.Shipping);
+                    await _grpcOrderClient.UpdateOrder(shipmentResult.OrderId, orderStatus: OrderStatus.Shipping);
                     break;
                 case Common.Models.Shipment.DeliveryStatus.Shipped:
                     // Order shipped, update order status
-                    result = await _grpcOrderClient.UpdateOrder(shipmentResult.OrderId, orderStatus: OrderStatus.AwaitingCollection);
+                    await _grpcOrderClient.UpdateOrder(shipmentResult.OrderId, orderStatus: OrderStatus.AwaitingCollection);
                     break;
                 default:
                     break;

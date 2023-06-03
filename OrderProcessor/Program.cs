@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Common.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using OrderProcessor;
@@ -22,6 +23,8 @@ IHost host = Host.CreateDefaultBuilder(args)
             x.AddConsumer<ShipmentResultConsumer>();
             x.AddConsumer<OrderCollectedConsumer>();
             x.AddConsumer<CancelOrderConsumer>();
+            x.AddConsumer<ReturnOrderConsumer>();
+            x.AddConsumer<ShipmentReturnedConsumer>();
 
             x.UsingRabbitMq((context, cfg) => { cfg.ConfigureEndpoints(context); });
         });

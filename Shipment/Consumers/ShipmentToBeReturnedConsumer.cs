@@ -50,7 +50,16 @@ namespace Shipment.Consumers
 
         private async Task ProduceShipmentReturned(Guid orderId, DeliveryStatus deliveryStatus)
         {
-            // TODO: Send ShipmentReturned event
+            var shipmentReturnedEvent = new ShipmentReturned
+            {
+                OrderId = orderId,
+                DeliveryStatus = DeliveryStatus.Returned
+            };
+
+            await _publishEndpoint.Publish(shipmentReturnedEvent);
+
+            var message = JsonSerializer.Serialize(shipmentReturnedEvent);
+            _logger.LogInformation($"Sent `ShipmentReturned` event with content: {message}");
         }
     }
 }
