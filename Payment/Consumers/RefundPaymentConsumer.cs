@@ -45,7 +45,19 @@ namespace PaymentService.Consumers
                 payment.PaymentStatus = PaymentStatus.Refunded;
                 await _paymentRepository.UpdatePayment(payment);
 
-                // TODO: Send PaymentRefunded
+                var paymentRefundedEvent = new PaymentRefunded
+                {
+                    OrderId = payment.OrderId,
+                    PaymentId = payment.Id,
+                    CustomerInfo = payment.CustomerInfo,
+                    PaymentInfo = payment.PaymentInfo,
+                    PaymentStatus = payment.PaymentStatus
+                };
+
+                await _publishEndpoint.Publish(paymentRefundedEvent);
+
+                var message = JsonSerializer.Serialize(paymentRefundedEvent);
+                _logger.LogInformation($"Sent `PaymentRefunded` event with content: {message}");
             });
         }
     }
