@@ -7,6 +7,6 @@
         Expired,
         Paid,
         Refunding,
-        Refund
+        Refunded
     }
 }

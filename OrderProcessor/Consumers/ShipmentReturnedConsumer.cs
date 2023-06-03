@@ -27,7 +27,20 @@ namespace OrderProcessor.Consumers
 
             // Out
             var result = await _grpcOrderClient.UpdateOrder(shipmentReturned.OrderId, orderStatus: Common.Models.OrderStatus.Refunding);
-            // TODO: Send RefundPayment event
+
+            var order = await _grpcOrderClient.GetOrder(shipmentReturned.OrderId);
+            var refundPaymentEvent = new RefundPayment
+            {
+                OrderId = order.Id,
+                CustomerInfo = order.CustomerInfo,
+                PaymentInfo = order.PaymentInfo,
+                TotalPrice = order.TotalPrice
+            };
+
+            await _publishEndpoint.Publish(refundPaymentEvent);
+
+            message = JsonSerializer.Serialize(refundPaymentEvent);
+            _logger.LogInformation($"Sent `RefundPayment` event with content: {message}");
         }
     }
 }

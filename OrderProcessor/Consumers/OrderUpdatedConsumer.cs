@@ -33,7 +33,7 @@ namespace OrderProcessor.Consumers
                     break;
                 case Common.Models.Payment.PaymentStatus.Paid:
                 case Common.Models.Payment.PaymentStatus.Refunding:
-                case Common.Models.Payment.PaymentStatus.Refund:
+                case Common.Models.Payment.PaymentStatus.Refunded:
                 default:
                     break;
             }
