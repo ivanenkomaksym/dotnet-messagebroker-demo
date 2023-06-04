@@ -1,4 +1,4 @@
-﻿using CatalogAPI.Entities;
+﻿using Common.Models;
 
 namespace Catalog.API.Repositories.Interfaces
 {

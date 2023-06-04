@@ -1,6 +1,6 @@
 ﻿using Catalog.API.Repositories.Interfaces;
 using CatalogAPI.Data;
-using CatalogAPI.Entities;
+using Common.Models;
 using MongoDB.Driver;
 
 namespace Catalog.API.Repositories

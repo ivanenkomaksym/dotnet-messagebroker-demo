@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseCommon", "Warehous
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseAPI", "WarehouseAPI\WarehouseAPI.csproj", "{1761D277-E843-4B77-94CA-D626AE7B1023}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUIAggregatorAPI", "WebUIAggregatorAPI\WebUIAggregatorAPI.csproj", "{1831911C-318F-49E3-B990-8D583F9B67F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{1761D277-E843-4B77-94CA-D626AE7B1023}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1761D277-E843-4B77-94CA-D626AE7B1023}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1761D277-E843-4B77-94CA-D626AE7B1023}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1831911C-318F-49E3-B990-8D583F9B67F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1831911C-318F-49E3-B990-8D583F9B67F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1831911C-318F-49E3-B990-8D583F9B67F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1831911C-318F-49E3-B990-8D583F9B67F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

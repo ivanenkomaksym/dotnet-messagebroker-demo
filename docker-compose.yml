@@ -76,6 +76,12 @@ services:
       context: .
       dockerfile: WebUI/Dockerfile
 
+  webuiaggregatorapi:
+    image: ${DOCKER_REGISTRY-}webuiaggregatorapi
+    build:
+      context: .
+      dockerfile: WebUIAggregatorAPI/Dockerfile
+
   ocelotapigateway:
     image: ${DOCKER_REGISTRY-}ocelotapigateway
     build:

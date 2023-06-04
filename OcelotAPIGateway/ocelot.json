@@ -221,6 +221,44 @@
                     "Port": 8012
                 }
             ]
+        },
+        // WebUI Aggregator API
+        {
+            "UpstreamPathTemplate": "/gateway/Products",
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+            "DownstreamPathTemplate": "/api/Products",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8013
+                }
+            ],
+            "FileCacheOptions": { "TtlSeconds": 30 }
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Products/{id}",
+            "UpstreamHttpMethod": [ "GET", "DELETE" ],
+            "DownstreamPathTemplate": "/api/Products/{id}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8013
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Products/GetProductByCategory/{category}",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/Products/GetProductByCategory/{category}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8013
+                }
+            ]
         }
     ],
     "GlobalConfiguration": {

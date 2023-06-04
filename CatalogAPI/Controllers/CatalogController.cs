@@ -1,5 +1,5 @@
 ﻿using Catalog.API.Repositories.Interfaces;
-using CatalogAPI.Entities;
+using Common.Models;
 using DnsClient.Internal;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

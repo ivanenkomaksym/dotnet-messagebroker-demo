@@ -43,6 +43,8 @@ services:
         - customerapi
         - orderapi
         - shoppingcartapi
+        - warehouseapi
+        - webuiaggregatorapi
     ports:
       - "8003:80"
 
@@ -98,6 +100,8 @@ services:
     container_name: warehouse
     environment:
       - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    depends_on:
+      - shopdb
     ports:
       - "8010:80"
 
@@ -105,6 +109,8 @@ services:
     container_name: warehouseapi
     environment:
       - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    depends_on:
+      - shopdb
     ports:
       - "8012:80"
 
@@ -118,8 +124,16 @@ services:
         - orderapi
         - ocelotapigateway
         - shoppingcartapi
+        - webuiaggregatorapi
     ports:
       - "8011:80"
+
+  webuiaggregatorapi:
+    container_name: webuiaggregatorapi
+    environment:
+      - "ApiSettings:GatewayAddress=http://ocelotapigateway"
+    ports:
+      - "8013:80"
 
   #notifications:
   #  container_name: notifications
