@@ -22,9 +22,9 @@ namespace Common.Models.Warehouse
         public ushort Quantity { get; set; }
 
         [Required]
-        public decimal Price { get; set; }
+        public double Price { get; set; }
 
-        public decimal Discount { get; set; }
+        public double Discount { get; set; }
 
         public ushort Sold { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using Common.Extensions;
+using Common.Models;
 using WebUI.Models;
 
 namespace WebUI.Services
@@ -64,7 +65,7 @@ namespace WebUI.Services
             return await response.ReadContentAs<ShoppingCartModel>();
         }
 
-        public async Task<ShoppingCartModel> AddProductToCart(Guid customerId, CatalogModel product, ushort quantity = 1)
+        public async Task<ShoppingCartModel> AddProductToCart(Guid customerId, ProductWithStock product, ushort quantity = 1)
         {
             var cart = await GetShoppingCart(customerId);
 
@@ -80,7 +81,7 @@ namespace WebUI.Services
                     Id = Guid.NewGuid(),
                     ProductId = product.Id,
                     ProductName = product.Name,
-                    ProductPrice = product.Price,
+                    ProductPrice = product.DiscountedPrice,
                     Quantity = quantity,
                     ImageFile = product.ImageFile
                 });

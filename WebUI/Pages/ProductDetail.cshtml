@@ -4,6 +4,14 @@
     ViewData["Title"] = "ProductDetail";
 }
 
+@{
+    bool isAvailableOnStock = Model.Product.AvailableOnStock > 0;
+    string buttonCssClass = isAvailableOnStock ? "btn-success" : "btn-secondary";
+    string imageCssClass = isAvailableOnStock ? "" : "image-disabled";
+    string stockLabel = isAvailableOnStock ? "In Stock" : "Out of Stock";
+    string stockLabelCssClass = isAvailableOnStock ? "stock-label-in" : "stock-label-out";
+}
+
 <div class="container">
     <div class="row">
         <div class="col">
@@ -25,7 +33,7 @@
             <div class="card bg-light mb-3">
                 <div class="card-body">
                     <a href="" data-toggle="modal" data-target="#productModal">
-                        <img class="img-fluid" src="@Model.Product.ImageFile" />
+                        <img asp-append-version="true" class="card-img-top @imageCssClass @(!isAvailableOnStock ? "black-and-white" : "")" src="@Model.Product.ImageFile" alt="">
                         <p class="text-center">@Model.Product.Name</p>
                     </a>
                 </div>
@@ -36,7 +44,22 @@
         <div class="col-12 col-lg-6 add_to_cart_block">
             <div class="card bg-light mb-3">
                 <div class="card-body">
-                    <p class="price">@Model.Product.Price $</p>
+                    <div class="price-wrapper">
+                        <div class="new-price">
+                            @Model.Product.DiscountedPrice.ToString("C")
+                        </div>
+                        <div class="old-price">
+                            @if (Model.Product.Discount > 0)
+                            {
+                                <del>@Model.Product.Price.ToString("C")</del>
+                            }
+                        </div>
+                    </div>
+                    <div class="sold-rating-wrapper">
+                        <div class="sold-items">@Model.Product.Sold.ToString("N0") sold</div>
+                        <div class="rating">@Model.Product.Rating.ToString("0.0")</div>
+                    </div>
+                    <div class="stock-label @stockLabelCssClass">@stockLabel</div>
                     <form asp-page-handler="AddToCart" method="post" name="addToCartForm" id="add_cart_form">
                         <div class="form-group">
                         </div>
@@ -44,9 +67,7 @@
                             <label>Quantity :</label>
                             @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control",min="1" ,max="100" } })
                         </div>
-                        <a href="javascript:;" onclick="parentNode.submit();" class="btn btn-success btn-lg btn-block text-uppercase">
-                            <i class="fa fa-shopping-cart"></i> Add To Cart
-                        </a>
+                        <button type="submit" class="btn btn-block @buttonCssClass" @(!isAvailableOnStock ? "disabled" : "")>Add to Cart</button>
                         <input type="hidden" asp-for="@Model.Product.Id" name="productId" />
                     </form>
                     <div class="product_rassurance">

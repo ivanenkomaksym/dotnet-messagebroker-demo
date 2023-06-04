@@ -1,4 +1,5 @@
-﻿using WebUI.Models;
+﻿using Common.Models;
+using WebUI.Models;
 
 namespace WebUI.Services
 {
@@ -10,7 +11,7 @@ namespace WebUI.Services
         Task<ShoppingCartModel> UpdateShoppingCart(ShoppingCartModel shoppingCart);
         Task<bool> DeleteShoppingCart(Guid customerId);
 
-        Task<ShoppingCartModel> AddProductToCart(Guid customerId, CatalogModel product, ushort quantity = 1);
+        Task<ShoppingCartModel> AddProductToCart(Guid customerId, ProductWithStock product, ushort quantity = 1);
 
         Task<bool> Checkout(Guid customerId);
     }

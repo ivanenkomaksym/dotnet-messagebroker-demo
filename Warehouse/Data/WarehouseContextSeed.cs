@@ -36,7 +36,7 @@ namespace Warehouse.Data
                     Supplier = "ABC LTD",
                     Quantity = quantity,
                     Price = product.Price,
-                    Discount = (decimal)(rand.NextDouble() * 0.2),
+                    Discount = (rand.NextDouble() * 0.2),
                     Sold = sold,
                     AvailableOnStock = availableOnStock
                 });

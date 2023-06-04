@@ -30,7 +30,7 @@ builder.Services.AddHttpClient<ICustomerService, CustomerService>(options =>
     options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
 });
 
-builder.Services.AddHttpClient<ICatalogService, CatalogService>(options =>
+builder.Services.AddHttpClient<IProductService, ProductService>(options =>
 {
     options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
 });

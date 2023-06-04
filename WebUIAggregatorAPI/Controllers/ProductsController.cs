@@ -112,6 +112,7 @@ namespace WebUIAggregatorAPI.Controllers
                 Id = product.Id,
                 Name = product.Name,
                 Category = product.Category,
+                Summary = product.Summary,
                 ImageFile = product.ImageFile,
                 Price = product.Price,
                 Quantity = stockItem?.Quantity ?? 0,

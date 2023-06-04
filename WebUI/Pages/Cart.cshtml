@@ -37,13 +37,15 @@
                         @foreach (var cartItem in Model.Cart.Items)
                         {
                             <tr>
-                                <td><img src="https://dummyimage.com/50x50/55595c/fff" /></td>
+                                <td>
+                                    <a asp-page="ProductDetail" asp-route-productId="@cartItem.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@cartItem.ImageFile" alt="Order Item"></a>
+                                </td>
                                 <td>@cartItem.ProductName</td>
                                 <td>In stock</td>
                                 <td>
                                     @cartItem.Quantity
                                 </td>
-                                <td class="text-right">@(cartItem.ProductPrice * cartItem.Quantity) $</td>
+                                <td class="text-right">@((cartItem.ProductPrice * cartItem.Quantity).ToString("C")) $</td>
                                 <td class="text-right">
 
                                     <form asp-page-handler="removetocart" method="post">
@@ -61,7 +63,7 @@
                             <td></td>
                             <td></td>
                             <td><strong>Total</strong></td>
-                            <td class="text-right"><strong>@Model.Cart.TotalPrice $</strong></td>
+                            <td class="text-right"><strong>@Model.Cart.TotalPrice.ToString("C") $</strong></td>
                         </tr>
                     </tbody>
                 </table>

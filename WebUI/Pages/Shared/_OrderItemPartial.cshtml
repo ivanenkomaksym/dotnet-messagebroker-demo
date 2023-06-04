@@ -44,7 +44,7 @@
 
         <div class="order-item-details">
             <div class="order-item-price">
-                <p>Total Price: $@Model.TotalPrice</p>
+                <p>Total Price: @Model.TotalPrice.ToString("C")</p>
             </div>
             <div class="buttons-container">
                 @if (Model.OrderStatus == OrderStatus.PaymentFailed)

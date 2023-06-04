@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Common.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using WebUI.Models;
@@ -9,18 +10,18 @@ namespace WebUI.Pages
 {
     public class ProductDetailModel : PageModel
     {
-        private readonly ICatalogService _catalogService;
+        private readonly IProductService _productService;
         private readonly IShoppingCartService _shoppingCartService;
         private readonly IUserProvider _userProvider;
 
-        public ProductDetailModel(ICatalogService catalogService, IShoppingCartService shoppingCartService, IUserProvider userProvider)
+        public ProductDetailModel(IProductService productService, IShoppingCartService shoppingCartService, IUserProvider userProvider)
         {
-            _catalogService = catalogService ?? throw new ArgumentNullException(nameof(catalogService));
+            _productService = productService ?? throw new ArgumentNullException(nameof(productService));
             _shoppingCartService = shoppingCartService ?? throw new ArgumentNullException(nameof(shoppingCartService));
             _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));
         }
 
-        public CatalogModel Product { get; set; }
+        public ProductWithStock Product { get; set; }
 
         [BindProperty]
         [Range(1, ushort.MaxValue)]
@@ -33,7 +34,7 @@ namespace WebUI.Pages
                 return NotFound();
             }
 
-            Product = await _catalogService.GetCatalog(productId);
+            Product = await _productService.GetProduct(productId);
             if (Product == null)
             {
                 return NotFound();
@@ -43,7 +44,7 @@ namespace WebUI.Pages
 
         public async Task<IActionResult> OnPostAddToCartAsync(Guid productId)
         {
-            var product = await _catalogService.GetCatalog(productId);
+            var product = await _productService.GetProduct(productId);
 
             var customerId = _userProvider.GetCustomerId(HttpContext);
 
