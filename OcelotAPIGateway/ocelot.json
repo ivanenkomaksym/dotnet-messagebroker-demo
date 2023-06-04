@@ -208,6 +208,19 @@
                     "Port": 8009
                 }
             ]
+        },
+        // Warehouse API
+        {
+            "UpstreamPathTemplate": "/gateway/StockItem/GetStockItemByProductId/{productId}",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/StockItem/GetStockItemByProductId/{productId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8012
+                }
+            ]
         }
     ],
     "GlobalConfiguration": {

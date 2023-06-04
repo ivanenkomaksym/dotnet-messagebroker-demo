@@ -1,9 +1,8 @@
-﻿using Common.Models;
-using Common.Models.Warehouse;
+﻿using Common.Models.Warehouse;
+using WarehouseCommon.Data;
 using MongoDB.Driver;
-using Warehouse.Data;
 
-namespace Warehouse.Repositories
+namespace WarehouseCommon.Repositories
 {
     public class WarehouseRepository : IWarehouseRepository
     {

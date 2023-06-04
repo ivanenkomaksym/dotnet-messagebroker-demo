@@ -4,7 +4,8 @@ using MongoDB.Bson;
 using Warehouse;
 using Warehouse.Consumers;
 using Warehouse.Data;
-using Warehouse.Repositories;
+using WarehouseCommon.Data;
+using WarehouseCommon.Repositories;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>

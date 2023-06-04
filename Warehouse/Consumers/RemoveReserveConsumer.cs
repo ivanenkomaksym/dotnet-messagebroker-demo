@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Common.Events;
-using Warehouse.Repositories;
+using WarehouseCommon.Repositories;
 using MassTransit;
 using System.Diagnostics;
 

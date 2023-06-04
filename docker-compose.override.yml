@@ -101,6 +101,13 @@ services:
     ports:
       - "8010:80"
 
+  warehouseapi:
+    container_name: warehouseapi
+    environment:
+      - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    ports:
+      - "8012:80"
+
   webui:
     container_name: webui
     environment:

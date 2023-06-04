@@ -1,6 +1,6 @@
 ﻿using Common.Models.Warehouse;
 
-namespace Warehouse.Repositories
+namespace WarehouseCommon.Repositories
 {
     public interface IWarehouseRepository
     {

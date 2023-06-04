@@ -64,6 +64,12 @@ services:
       context: .
       dockerfile: Warehouse/Dockerfile
 
+  warehouseapi:
+    image: ${DOCKER_REGISTRY-}warehouseapi
+    build:
+      context: .
+      dockerfile: WarehouseAPI/Dockerfile
+
   webui:
     image: ${DOCKER_REGISTRY-}webui
     build:

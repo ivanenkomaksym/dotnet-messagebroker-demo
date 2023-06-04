@@ -3,7 +3,7 @@ using Common.Models.Warehouse;
 using MassTransit;
 using System.Diagnostics;
 using System.Text.Json;
-using Warehouse.Repositories;
+using WarehouseCommon.Repositories;
 
 namespace Warehouse.Consumers
 {

@@ -16,12 +16,11 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-    <PackageReference Include="MongoDB.Bson" Version="2.19.1" />
-    <PackageReference Include="MongoDB.Driver" Version="2.19.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\WarehouseCommon\WarehouseCommon.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿using Warehouse.Data;
+﻿using WarehouseCommon.Data;
 
 namespace Warehouse
 {
