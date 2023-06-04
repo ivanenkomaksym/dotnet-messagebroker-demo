@@ -1,6 +1,5 @@
 ﻿using Common.Models;
 using Common.Models.Payment;
-using Common.Models.Shipment;
 using Common.Protos;
 using Grpc.Net.Client;
 
@@ -35,8 +34,6 @@ namespace OrderProcessor.Clients
             {
                 Id = orderId,
                 OrderStatus = (OrderStatus)reply.OrderStatus,
-                PaymentStatus = (PaymentStatus)reply.PaymentStatus,
-                DeliveryStatus = (DeliveryStatus)reply.DeliveryStatus,
                 CustomerInfo = new Common.Models.CustomerInfo
                 {
                     CustomerId = customerId,
@@ -64,10 +61,7 @@ namespace OrderProcessor.Clients
             };
         }
 
-        public async Task<bool> UpdateOrder(Guid orderId,
-                                            OrderStatus? orderStatus = null,
-                                            PaymentStatus? paymentStatus = null,
-                                            DeliveryStatus? deliveryStatus = null)
+        public async Task<bool> UpdateOrder(Guid orderId, OrderStatus orderStatus)
         {
             _logger.LogInformation($"[GRPC] Sending `UpdateOrderRequest` event with content: {orderId}");
 
@@ -76,12 +70,7 @@ namespace OrderProcessor.Clients
 
             var request = new UpdateOrderRequest();
             request.OrderId = orderId.ToString();
-            if (orderStatus.HasValue)
-                request.OrderStatus = (int)orderStatus.Value;
-            if (paymentStatus.HasValue)
-                request.PaymentStatus = (int)paymentStatus.Value;
-            if (deliveryStatus.HasValue)
-                request.DeliveryStatus = (int)deliveryStatus.Value;
+            request.OrderStatus = (int)orderStatus;
 
             var reply = await client.UpdateOrderAsync(request);
 

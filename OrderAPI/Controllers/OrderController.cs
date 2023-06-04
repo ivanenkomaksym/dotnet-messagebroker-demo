@@ -124,7 +124,7 @@ namespace OrderAPI.Controllers
                 return NotFound();
             }
 
-            await OrderService.OrderCollected(orderId);
+            await OrderService.ReturnOrder(orderId);
 
             return Ok(true);
         }

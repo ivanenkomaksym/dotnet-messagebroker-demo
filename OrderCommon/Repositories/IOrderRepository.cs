@@ -12,9 +12,5 @@ namespace OrderCommon.Repositories
         Task<bool> UpdateOrder(Order order);
 
         Task<bool> UpdatePayment(Guid orderId, PaymentInfo payment);
-
-        Task<bool> Cancel(Guid orderId);
-
-        Task<bool> Collected(Guid orderId);
     }
 }

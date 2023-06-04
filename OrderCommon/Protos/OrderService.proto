@@ -42,19 +42,15 @@ message PaymentInfo {
 message GetOrderReply {
 	string orderId = 1;
     int32 orderStatus = 2;
-    int32 paymentStatus = 3;
-    int32 deliveryStatus = 4;
-    CustomerInfo customerInfo = 5;
-    Address shippingAddress = 6;
-    PaymentInfo paymentInfo = 7;
+    CustomerInfo customerInfo = 3;
+    Address shippingAddress = 4;
+    PaymentInfo paymentInfo = 5;
 }
 
 // The request message containing the user's name.
 message UpdateOrderRequest {
   string orderId = 1;
-  optional int32 orderStatus = 2;
-  optional int32 paymentStatus = 3;
-  optional int32 deliveryStatus = 4;
+  int32 orderStatus = 2;
 }
 
 // The response message containing the greetings.

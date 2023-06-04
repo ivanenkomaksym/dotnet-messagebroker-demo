@@ -54,29 +54,6 @@ namespace OrderCommon.Repositories
             return result;
         }
 
-        public async Task<bool> Cancel(Guid orderId)
-        {
-            var order = await GetOrderById(orderId);
-            if (order == null)
-                return false;
-
-            order.OrderStatus = OrderStatus.Cancelled;
-            var result = await UpdateOrder(order);
-            return result;
-        }
-
-        public async Task<bool> Collected(Guid orderId)
-        {
-            var order = await GetOrderById(orderId);
-            if (order == null)
-                return false;
-
-            order.OrderStatus = OrderStatus.Completed;
-            order.DeliveryStatus = Common.Models.Shipment.DeliveryStatus.Collected;
-            var result = await UpdateOrder(order);
-            return result;
-        }
-
         public async Task<bool> UpdateOrder(Order order)
         {
             var updateResult = await _context

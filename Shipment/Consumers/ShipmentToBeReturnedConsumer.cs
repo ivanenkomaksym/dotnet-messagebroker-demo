@@ -31,7 +31,7 @@ namespace Shipment.Consumers
             delivery.DeliveryStatus = DeliveryStatus.Returning;
             var result = await _shipmentRepository.UpdateDelivery(delivery);
 
-            await AwaitShipmentReturn(shipmentToBeReturned.OrderId);
+            _ = AwaitShipmentReturn(shipmentToBeReturned.OrderId);
         }
 
         private Task AwaitShipmentReturn(Guid orderId)

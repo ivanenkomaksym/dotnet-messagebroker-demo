@@ -1,9 +1,8 @@
 ﻿using Common.Models;
-using Common.Models.Payment;
-using Common.Models.Shipment;
 using Common.Protos;
 using OrderCommon.Repositories;
 using Grpc.Core;
+using System.Diagnostics;
 
 namespace OrderAPI.Services
 {
@@ -30,8 +29,6 @@ namespace OrderAPI.Services
             {
                 OrderId = order.Id.ToString(),
                 OrderStatus = (int)order.OrderStatus,
-                PaymentStatus = (int)order.PaymentStatus,
-                DeliveryStatus = (int)order.DeliveryStatus,
                 CustomerInfo = new Common.Protos.CustomerInfo()
                 {
                     CustomerId = order.CustomerInfo.CustomerId.ToString(),
@@ -67,12 +64,7 @@ namespace OrderAPI.Services
             var order = await _orderRepository.GetOrderById(orderId);
             if (order == null) return new UpdateOrderReply { Success = false };
 
-            if (request.HasOrderStatus)
-                order.OrderStatus = (OrderStatus)request.OrderStatus;
-            if (request.HasPaymentStatus)
-                order.PaymentStatus = (PaymentStatus)request.PaymentStatus;
-            if (request.HasDeliveryStatus)
-                order.DeliveryStatus = (DeliveryStatus)request.DeliveryStatus;
+            order.OrderStatus = (OrderStatus)request.OrderStatus;
 
             var result = await _orderRepository.UpdateOrder(order);
             if (!result) return new UpdateOrderReply { Success = false };
