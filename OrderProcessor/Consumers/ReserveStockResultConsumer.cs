@@ -5,28 +5,35 @@ using System.Text.Json;
 
 namespace OrderProcessor.Consumers
 {
-    internal sealed class StockReservedConsumer : IConsumer<StockReserved>
+    internal sealed class ReserveStockResultConsumer : IConsumer<ReserveStockResult>
     {
         private readonly IGrpcOrderClient _grpcOrderClient;
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<OrderCreatedConsumer> _logger;
 
-        public StockReservedConsumer(IGrpcOrderClient grpcOrderClient, IPublishEndpoint publishEndpoint, ILogger<OrderCreatedConsumer> logger)
+        public ReserveStockResultConsumer(IGrpcOrderClient grpcOrderClient, IPublishEndpoint publishEndpoint, ILogger<OrderCreatedConsumer> logger)
         {
             _grpcOrderClient = grpcOrderClient;
             _publishEndpoint = publishEndpoint;
             _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<StockReserved> context)
+        public async Task Consume(ConsumeContext<ReserveStockResult> context)
         {
             // In
-            var stockReserved = context.Message;
-            var message = JsonSerializer.Serialize(stockReserved);
-            _logger.LogInformation($"Received `StockReserved` event with content: {message}");
+            var reserveStockResult = context.Message;
+            var message = JsonSerializer.Serialize(reserveStockResult);
+            _logger.LogInformation($"Received `ReserveStockResult` event with content: {message}");
 
             // Out
-            var order = await _grpcOrderClient.GetOrder(stockReserved.OrderId);
+            if (reserveStockResult.ReserveResult == Common.Models.Warehouse.ReserveResult.Failed)
+            {
+                // Stock reserve failed, update order status
+                await _grpcOrderClient.UpdateOrder(reserveStockResult.OrderId, orderStatus: Common.Models.OrderStatus.StockReserveFailed);
+                return;
+            }
+
+            var order = await _grpcOrderClient.GetOrder(reserveStockResult.OrderId);
 
             var takePaymentEvent = new TakePayment
             {

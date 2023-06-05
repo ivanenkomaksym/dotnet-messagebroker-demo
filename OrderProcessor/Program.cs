@@ -16,7 +16,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         {
             x.AddConsumer<OrderCreatedConsumer>();
             x.AddConsumer<OrderUpdatedConsumer>();
-            x.AddConsumer<StockReservedConsumer>();
+            x.AddConsumer<ReserveStockResultConsumer>();
             x.AddConsumer<ReserveRemovedConsumer>();
             x.AddConsumer<PaymentResultConsumer>();
             x.AddConsumer<ShipmentResultConsumer>();

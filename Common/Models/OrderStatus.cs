@@ -3,6 +3,7 @@
     public enum OrderStatus
     {
         New,
+        StockReserveFailed,
         PaymentProcessing,
         PaymentFailed,
         Paid,
