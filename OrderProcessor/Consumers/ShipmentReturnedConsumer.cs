@@ -29,6 +29,20 @@ namespace OrderProcessor.Consumers
             var result = await _grpcOrderClient.UpdateOrder(shipmentReturned.OrderId, orderStatus: Common.Models.OrderStatus.Refunding);
 
             var order = await _grpcOrderClient.GetOrder(shipmentReturned.OrderId);
+
+            // First restore the stock level for returned order items
+            var updateStockEvent = new UpdateStock
+            {
+                OrderId = order.Id,
+                Items = order.Items
+            };
+
+            await _publishEndpoint.Publish(updateStockEvent);
+
+            message = JsonSerializer.Serialize(updateStockEvent);
+            _logger.LogInformation($"Sent `UpdateStock` event with content: {message}");
+
+            // Second start refund procedure
             var refundPaymentEvent = new RefundPayment
             {
                 OrderId = order.Id,

@@ -24,6 +24,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         {
             x.AddConsumer<ReserveStockConsumer>();
             x.AddConsumer<RemoveReserveConsumer>();
+            x.AddConsumer<UpdateStockConsumer>();
 
             x.UsingRabbitMq((context, cfg) => { cfg.ConfigureEndpoints(context); });
         });
