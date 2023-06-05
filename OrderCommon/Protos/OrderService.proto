@@ -39,12 +39,22 @@ message PaymentInfo {
     int32 paymentMethod = 5;
 }
 
+message OrderItem {
+    string id = 1;
+    string productId = 2;
+    string productName = 3;
+    double productPrice = 4;
+    int32 quantity = 5;
+    string ImageFile = 6;
+}
+
 message GetOrderReply {
 	string orderId = 1;
     int32 orderStatus = 2;
     CustomerInfo customerInfo = 3;
     Address shippingAddress = 4;
     PaymentInfo paymentInfo = 5;
+    repeated OrderItem Items = 6;
 }
 
 // The request message containing the user's name.

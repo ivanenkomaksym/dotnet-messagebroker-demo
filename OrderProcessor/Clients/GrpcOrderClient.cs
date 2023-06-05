@@ -30,6 +30,22 @@ namespace OrderProcessor.Clients
 
             Guid.TryParse(reply.CustomerInfo.CustomerId, out var customerId);
 
+            var items = new List<Common.Models.OrderItem>();
+            foreach (var item in reply.Items)
+            {
+                Guid.TryParse(item.Id, out var itemId);
+                Guid.TryParse(item.ProductId, out var productId);
+                items.Add(new Common.Models.OrderItem
+                {
+                    Id = itemId,
+                    ProductId = productId,
+                    ProductName = item.ProductName,
+                    ProductPrice = item.ProductPrice,
+                    Quantity = (ushort)item.Quantity,
+                    ImageFile = item.ImageFile
+                });
+            }
+
             return new Order
             {
                 Id = orderId,
@@ -57,7 +73,8 @@ namespace OrderProcessor.Clients
                     Country = reply.ShippingAddress.Country,
                     Email = reply.ShippingAddress.Email,
                     ZipCode = reply.ShippingAddress.ZipCode
-                }
+                },
+                Items = items
             };
         }
 

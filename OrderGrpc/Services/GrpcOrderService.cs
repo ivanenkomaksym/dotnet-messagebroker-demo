@@ -2,7 +2,6 @@
 using Common.Protos;
 using OrderCommon.Repositories;
 using Grpc.Core;
-using System.Diagnostics;
 
 namespace OrderAPI.Services
 {
@@ -25,7 +24,7 @@ namespace OrderAPI.Services
             var order = await _orderRepository.GetOrderById(orderId);
             // TODO: add error handling
 
-            return new GetOrderReply
+            var reply = new GetOrderReply
             {
                 OrderId = order.Id.ToString(),
                 OrderStatus = (int)order.OrderStatus,
@@ -54,6 +53,24 @@ namespace OrderAPI.Services
                     PaymentMethod = (int)order.PaymentInfo.PaymentMethod
                 }
             };
+
+            var items = new List<Common.Protos.OrderItem>();
+            foreach (var item in order.Items)
+            {
+                items.Add(new Common.Protos.OrderItem
+                {
+                    Id = item.Id.ToString(),
+                    ProductId = item.ProductId.ToString(),
+                    ProductName = item.ProductName,
+                    Quantity = item.Quantity,
+                    ImageFile = item.ImageFile,
+                    ProductPrice = item.ProductPrice
+                });
+            }
+
+            reply.Items.AddRange(items);
+
+            return reply;
         }
 
         public override async Task<UpdateOrderReply> UpdateOrder(UpdateOrderRequest request, ServerCallContext context)
