@@ -49,6 +49,13 @@
                 <p>Total Price: @Model.Order.TotalPrice.ToString("C")</p>
             </div>
             <div class="buttons-container">
+                @if (Model.Order.OrderStatus == Common.Models.OrderStatus.StockReserveFailed)
+                {
+                    <form asp-page-handler="Cancel" asp-route-orderId="@Model.Order.Id" method="post" name="cancel">
+                        <button onclick="parentNode.submit();" type="submit" name="handler" value="CancelOrder" class="btn btn-danger">Cancel Order</button>
+                        <input type="hidden" asp-for="@Model.Order.Id" name="orderId" />
+                    </form>
+                }
                 @if (Model.Order.OrderStatus == Common.Models.OrderStatus.PaymentFailed)
                 {
                     <form asp-page-handler="UpdatePayment" method="post" name="updatePayment">

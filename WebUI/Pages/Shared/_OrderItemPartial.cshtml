@@ -47,22 +47,29 @@
                 <p>Total Price: @Model.TotalPrice.ToString("C")</p>
             </div>
             <div class="buttons-container">
+                @if (Model.OrderStatus == OrderStatus.StockReserveFailed)
+                {
+                    <form asp-page-handler="Cancel" asp-route-orderId="@Model.Id" method="post" name="cancel">
+                        <button onclick="parentNode.submit();" type="submit" name="handler" value="CancelOrder" class="btn btn-danger">Cancel Order</button>
+                        <input type="hidden" asp-for="@Model.Id" name="orderId" />
+                    </form>
+                }
                 @if (Model.OrderStatus == OrderStatus.PaymentFailed)
                 {
                     <form asp-page-handler="UpdatePayment" asp-route-orderId="@Model.Id" method="post" name="updatePayment">
                         <button onclick="parentNode.submit();" type="submit" name="handler" value="UpdatePayment" class="btn btn-primary">Update Payment</button>
-                        <input type="hidden" asp-for="@Model.Id" name="productId" />
+                        <input type="hidden" asp-for="@Model.Id" name="orderId" />
                     </form>
                     <form asp-page-handler="Cancel" asp-route-orderId="@Model.Id" method="post" name="cancel">
                         <button onclick="parentNode.submit();" type="submit" name="handler" value="CancelOrder" class="btn btn-danger">Cancel Order</button>
-                        <input type="hidden" asp-for="@Model.Id" name="productId" />
+                        <input type="hidden" asp-for="@Model.Id" name="orderId" />
                     </form>
                 }
                 @if (Model.OrderStatus == OrderStatus.AwaitingCollection)
                 {
                     <form asp-page-handler="ConfirmCollection" asp-route-orderId="@Model.Id" method="post" name="confirmCollection">
                         <button onclick="parentNode.submit();" type="submit" name="handler" value="ConfirmOrderCollection" class="btn btn-success">Confirm Order Collection</button>
-                        <input type="hidden" asp-for="@Model.Id" name="productId" />
+                        <input type="hidden" asp-for="@Model.Id" name="orderId" />
                     </form>
                 }
             </div>
