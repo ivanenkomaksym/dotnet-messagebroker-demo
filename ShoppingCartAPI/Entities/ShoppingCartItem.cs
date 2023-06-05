@@ -16,5 +16,6 @@ namespace ShoppingCartAPI.Entities
         public decimal ProductPrice { get; init; }
         public ushort Quantity { get; init; }
         public string? ImageFile { get; set; }
+        public ushort AvailableOnStock { get; set; }
     }
 }

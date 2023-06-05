@@ -8,5 +8,6 @@
         public double ProductPrice { get; init; }
         public ushort Quantity { get; set; }
         public string? ImageFile { get; set; }
+        public ushort AvailableOnStock { get; set; }
     }
 }

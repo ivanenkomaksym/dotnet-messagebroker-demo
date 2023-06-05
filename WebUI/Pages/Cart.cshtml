@@ -27,8 +27,9 @@
                             <th scope="col"> </th>
                             <th scope="col">Product</th>
                             <th scope="col">Available</th>
-                            <th scope="col" class="text-center">Quantity</th>
                             <th scope="col" class="text-right">Price</th>
+                            <th scope="col" class="text-center">Quantity</th>
+                            <th scope="col" class="text-right">Total</th>
                             <th> </th>
                         </tr>
                     </thead>
@@ -41,9 +42,15 @@
                                     <a asp-page="ProductDetail" asp-route-productId="@cartItem.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@cartItem.ImageFile" alt="Order Item"></a>
                                 </td>
                                 <td>@cartItem.ProductName</td>
-                                <td>In stock</td>
+                                <td>@cartItem.AvailableOnStock</td>
+                                <td class="text-right">@(cartItem.ProductPrice.ToString("C")) $</td>
                                 <td>
-                                    @cartItem.Quantity
+                                    <div class="quantity-spinner">
+                                        <form asp-page-handler="IncreaseQuantity" method="post" class="quantity-form">
+                                            <input type="hidden" asp-for="@cartItem.Id" name="itemId" />
+                                            <input type="number" asp-for="@cartItem.Quantity" class="form-control quantity-input" min="1" max="@cartItem.AvailableOnStock" name="quantity" onkeydown="return false;"/>
+                                        </form>
+                                    </div>
                                 </td>
                                 <td class="text-right">@((cartItem.ProductPrice * cartItem.Quantity).ToString("C")) $</td>
                                 <td class="text-right">
@@ -83,3 +90,15 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Capture the change event of the quantity spinner input
+            $('.quantity-input').change(function () {
+                // Submit the form when the value changes
+                $(this).closest('.quantity-form').submit();
+            });
+        });
+    </script>
+}

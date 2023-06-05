@@ -33,8 +33,6 @@ namespace ShoppingCartAPI.Repositories
                                         .ReplaceOneAsync(filter: c => c.Id == shoppingCart.Id, replacement: shoppingCart);
 
             var updated = updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
-            if (!updated)
-                return null;
 
             return await GetShoppingCart(shoppingCart.CustomerId);
         }

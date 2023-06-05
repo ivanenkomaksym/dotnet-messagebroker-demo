@@ -83,7 +83,8 @@ namespace WebUI.Services
                     ProductName = product.Name,
                     ProductPrice = product.DiscountedPrice,
                     Quantity = quantity,
-                    ImageFile = product.ImageFile
+                    ImageFile = product.ImageFile,
+                    AvailableOnStock = product.AvailableOnStock
                 });
             }
 
