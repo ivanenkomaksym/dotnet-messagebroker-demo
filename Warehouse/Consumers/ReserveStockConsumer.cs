@@ -97,6 +97,7 @@ namespace Warehouse.Consumers
             {
                 OrderReserveId = orderReserve.Id,
                 OrderId = orderReserve.OrderId,
+                CustomerInfo = reserveStock.CustomerInfo,
                 ReserveResult = ReserveResult.Reserved,
                 ReservedStockItems = orderReserve.ReservedStockItems
             };

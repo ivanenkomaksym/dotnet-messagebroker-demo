@@ -1,4 +1,5 @@
-﻿using Common.Models.Warehouse;
+﻿using Common.Models;
+using Common.Models.Warehouse;
 
 namespace Common.Events
 {
@@ -7,6 +8,8 @@ namespace Common.Events
         public Guid OrderReserveId { get; init; }
 
         public Guid OrderId { get; init; }
+
+        public CustomerInfo CustomerInfo { get; init; }
 
         public ReserveResult ReserveResult { get; init; }
 

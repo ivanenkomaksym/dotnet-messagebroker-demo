@@ -6,6 +6,8 @@ namespace Common.Events
     {
         public Guid OrderId { get; init; }
 
+        public CustomerInfo CustomerInfo { get; init; }
+
         public IList<OrderItem> Items { get; init; }
     }
 }

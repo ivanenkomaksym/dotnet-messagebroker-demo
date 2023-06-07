@@ -26,6 +26,7 @@ namespace OrderProcessor.Consumers
             var reserveStockEvent = new ReserveStock
             {
                 OrderId = orderCreated.OrderId,
+                CustomerInfo = orderCreated.CustomerInfo,
                 Items = orderCreated.Items
             };
 
