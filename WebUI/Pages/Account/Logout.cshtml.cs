@@ -1,16 +1,17 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebUI.Users;
 
 namespace WebUI.Pages.Account
 {
     public class LogoutModel : PageModel
     {
+        private readonly IUserProvider _userProvider;
         private readonly ILogger<LoginModel> _logger;
 
-        public LogoutModel(ILogger<LoginModel> logger)
+        public LogoutModel(IUserProvider userProvider, ILogger<LoginModel> logger)
         {
+            _userProvider = userProvider;
             _logger = logger;
         }
 
@@ -18,9 +19,7 @@ namespace WebUI.Pages.Account
         {
             _logger.LogInformation("User {Name} logged out at {Time}.", User.Identity.Name, DateTime.UtcNow);
 
-            #region snippet1
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            #endregion
+            await _userProvider.SignOutAsync(HttpContext);
 
             return RedirectToPage("SignedOut");
         }

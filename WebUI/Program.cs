@@ -4,7 +4,9 @@ using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using NToastNotify;
 using WebUI.Notifications;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using WebUI.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,7 @@ builder.Services.AddRazorPages().AddNToastNotifyToastr(new ToastrOptions
     ProgressBar = true,
     TimeOut = 5000
 });
+builder.Services.AddSignalR();
 
 // Add ToastNotification
 builder.Services.AddNotyf(config =>
@@ -24,6 +27,18 @@ builder.Services.AddNotyf(config =>
 });
 
 builder.Services.AddToastify(config => { config.DurationInSeconds = 1000; config.Position = Position.Right; config.Gravity = Gravity.Bottom; });
+
+builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<UserPaymentResultConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 builder.Services.AddHttpClient<ICustomerService, CustomerService>(options =>
 {
@@ -45,16 +60,19 @@ builder.Services.AddHttpClient<IOrderService, OrderService>(options =>
     options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
 });
 
-builder.Services.AddScoped<INotificationClient, NotificationClient>();
 builder.Services.AddSingleton<IUserProvider, DefaultUserProvider>();
+builder.Services.AddSingleton<IMassTransitConsumersRegistry, MassTransitConsumersRegistry>();
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie();
+    .AddCookie(options =>
+    {
+        options.EventsType = typeof(CustomCookieAuthenticationEvents);
+    });
 
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<CustomCookieAuthenticationEvents>();
 
 var app = builder.Build();
 
@@ -77,6 +95,8 @@ app.UseNToastNotify();
 app.UseNotyf();
 
 app.MapRazorPages();
+app.MapHub<NotificationHub>("/notificationHub");
+
 app.MapDefaultControllerRoute();
 
 app.Run();

@@ -135,7 +135,7 @@ services:
     ports:
       - "8013:80"
 
-  #notifications:
-  #  container_name: notifications
-  #  ports:
-  #    - "8012:80"
+  notifications:
+    container_name: notifications
+    ports:
+      - "8014:80"

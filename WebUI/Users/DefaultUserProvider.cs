@@ -3,16 +3,19 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using WebUI.Data;
 using WebUI.Services;
+using WebUI.Consumers;
 
 namespace WebUI.Users
 {
     public class DefaultUserProvider : IUserProvider
     {
         private readonly ICustomerService _customerService;
+        private readonly IMassTransitConsumersRegistry _massTransitConsumersRegistry;
 
-        public DefaultUserProvider(ICustomerService customerService)
+        public DefaultUserProvider(ICustomerService customerService, IMassTransitConsumersRegistry massTransitConsumersRegistry)
         {
             _customerService = customerService;
+            _massTransitConsumersRegistry = massTransitConsumersRegistry;
         }
 
         public Guid GetCustomerId(HttpContext httpContext)
@@ -83,6 +86,15 @@ namespace WebUI.Users
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
+        }
+
+        public async Task SignOutAsync(HttpContext httpContext)
+        {
+            var customerId = GetCustomerId(httpContext);
+            if (customerId != Guid.Empty)
+                await _massTransitConsumersRegistry.StopListeningForApplicationUser(customerId);
+
+            await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
     }
 }

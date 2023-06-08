@@ -9,5 +9,7 @@ namespace WebUI.Users
         public Task<ApplicationUser> AuthenticateUserAsync(string email, string password);
 
         public Task SignInAsync(HttpContext httpContext, ApplicationUser user);
+
+        public Task SignOutAsync(HttpContext httpContext);
     }
 }
