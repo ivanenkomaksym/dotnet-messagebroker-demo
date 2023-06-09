@@ -20,6 +20,7 @@ namespace WebUI.Consumers
             _hostReceiveEndpoints.Add(customerId, _receiveEndpointConnector.ConnectReceiveEndpoint(customerId.ToString(), (context, cfg) =>
             {
                 cfg.ConfigureConsumer<UserPaymentResultConsumer>(context);
+                cfg.ConfigureConsumer<UserShipmentResultConsumer>(context);
             }));
 
             // wait for the receive endpoint to be ready, throws an exception if a fault occurs

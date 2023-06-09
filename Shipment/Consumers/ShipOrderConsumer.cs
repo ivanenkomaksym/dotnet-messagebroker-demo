@@ -28,7 +28,7 @@ namespace Shipment.Consumers
 
             await ProduceRemoveReserve(shipOrder, RemoveReserveReason.TakeFromStockForShipment);
 
-            var deliveryStatus = DeliveryStatus.Shipping;
+            var deliveryStatus = DeliveryStatus.None;
             var delivery = await _shipmentRepository.CreateDelivery(new Delivery
             {
                 Id = Guid.NewGuid(),
@@ -39,8 +39,6 @@ namespace Shipment.Consumers
             });
 
             // Out
-            await ProduceShipmentResult(shipOrder, deliveryStatus);
-
             _ = ScheduleShipmentUpdate(shipOrder, deliveryStatus);
         }
 
@@ -53,6 +51,9 @@ namespace Shipment.Consumers
                 var newDeliveryStatus = currentDeliveryStatus;
                 switch (currentDeliveryStatus)
                 {
+                    case DeliveryStatus.None:
+                        newDeliveryStatus = DeliveryStatus.Shipping;
+                        break;
                     case DeliveryStatus.Shipping:
                         newDeliveryStatus = DeliveryStatus.Shipped;
                         break;

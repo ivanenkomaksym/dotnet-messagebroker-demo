@@ -7,13 +7,11 @@ namespace Notifications.Consumers
 {
     internal class PaymentResultConsumer : IConsumer<PaymentResult>
     {
-        private readonly IPublishEndpoint _publicEndpoint;
         private readonly ISendEndpointProvider _sendEndpointProvider;
         private readonly ILogger<PaymentResultConsumer> _logger;
 
-        public PaymentResultConsumer(IPublishEndpoint publishEndpoint, ISendEndpointProvider sendEndpointProvider, ILogger<PaymentResultConsumer> logger)
+        public PaymentResultConsumer(ISendEndpointProvider sendEndpointProvider, ILogger<PaymentResultConsumer> logger)
         {
-            _publicEndpoint = publishEndpoint;
             _sendEndpointProvider = sendEndpointProvider;
             _logger = logger;
         }

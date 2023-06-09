@@ -33,6 +33,7 @@ builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<UserPaymentResultConsumer>();
+    x.AddConsumer<UserShipmentResultConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
