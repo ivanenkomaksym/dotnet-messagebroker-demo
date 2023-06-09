@@ -9,6 +9,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
          services.AddMassTransit(x =>
          {
+             x.AddConsumer<ReserveStockResultConsumer>();
              x.AddConsumer<PaymentResultConsumer>();
              x.AddConsumer<ShipmentResultConsumer>();
 
@@ -18,6 +19,7 @@ IHost host = Host.CreateDefaultBuilder(args)
                  // https://masstransit.io/documentation/configuration#receive-endpoints
                  cfg.ReceiveEndpoint(hostContext.HostingEnvironment.ApplicationName, e =>
                  {
+                     e.ConfigureConsumer<ReserveStockResultConsumer>(context);
                      e.ConfigureConsumer<PaymentResultConsumer>(context);
                      e.ConfigureConsumer<ShipmentResultConsumer>(context);
                  });

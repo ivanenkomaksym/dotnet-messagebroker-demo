@@ -19,6 +19,7 @@ namespace WebUI.Consumers
 
             _hostReceiveEndpoints.Add(customerId, _receiveEndpointConnector.ConnectReceiveEndpoint(customerId.ToString(), (context, cfg) =>
             {
+                cfg.ConfigureConsumer<UserReserveStockResultConsumer>(context);
                 cfg.ConfigureConsumer<UserPaymentResultConsumer>(context);
                 cfg.ConfigureConsumer<UserShipmentResultConsumer>(context);
             }));

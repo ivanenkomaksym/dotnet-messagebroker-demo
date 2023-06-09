@@ -26,14 +26,24 @@ namespace Warehouse.Consumers
             var message = JsonSerializer.Serialize(reserveStock);
             _logger.LogInformation($"Received `ReserveStock` event with content: {message}");
 
-            // TODO: Implement rollback in case of failure - remove reserve and restore AvailableOnStock
-            var reserveStockResult = await CreateReserveAndUpdateStock(reserveStock);
+            _ = ScheduleReserveStock(reserveStock);
+        }
 
-            // Out
-            await _publishEndpoint.Publish(reserveStockResult);
+        private Task ScheduleReserveStock(ReserveStock reserveStock)
+        {
+            return Task.Run(async () =>
+            {
+                await Task.Delay(10 * 1000); // wait 10s
 
-            message = JsonSerializer.Serialize(reserveStockResult);
-            _logger.LogInformation($"Sent `ReserveStockResult` event with content: {message}");
+                // TODO: Implement rollback in case of failure - remove reserve and restore AvailableOnStock
+                var reserveStockResult = await CreateReserveAndUpdateStock(reserveStock);
+
+                // Out
+                await _publishEndpoint.Publish(reserveStockResult);
+
+                var message = JsonSerializer.Serialize(reserveStockResult);
+                _logger.LogInformation($"Sent `ReserveStockResult` event with content: {message}");
+            });
         }
 
         private async Task<ReserveStockResult> CreateReserveAndUpdateStock(ReserveStock reserveStock)
@@ -62,6 +72,7 @@ namespace Warehouse.Consumers
                 return new ReserveStockResult
                 {
                     OrderId = reserveStock.OrderId,
+                    CustomerInfo = reserveStock.CustomerInfo,
                     ReserveResult = ReserveResult.Failed,
                     FailedToReserveProducts = failedToReserveProducts
                 };

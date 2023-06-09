@@ -5,6 +5,18 @@ console.log(customerIdStr);
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/notificationHub?customerId=" + customerIdStr).build();
 
+connection.on("ReceiveReserveStockResultNotification", function (orderId, reserveResult, failedProductNames) {
+    console.log("typeof failedProductNames" + typeof failedProductNames);
+    toastr.options.timeOut = 5000;
+    switch (reserveResult) {
+        case 0: // Reserved
+            break;
+        case 1: // Failed
+            toastr.error("Failed to reserve stock items for order `" + orderId + "`! Insufficient stock levels for product names: " + failedProductNames.join());
+            break;
+    }
+});
+
 connection.on("ReceivePaymentResultNotification", function (orderId, paymentStatus) {
     toastr.options.timeOut = 5000;
     switch (paymentStatus) {
