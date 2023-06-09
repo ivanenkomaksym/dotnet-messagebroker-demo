@@ -12,6 +12,8 @@ IHost host = Host.CreateDefaultBuilder(args)
              x.AddConsumer<ReserveStockResultConsumer>();
              x.AddConsumer<PaymentResultConsumer>();
              x.AddConsumer<ShipmentResultConsumer>();
+             x.AddConsumer<ShipmentReturnedConsumer>();
+             x.AddConsumer<PaymentRefundedConsumer>();
 
              x.UsingRabbitMq((context, cfg) =>
              {
@@ -22,6 +24,8 @@ IHost host = Host.CreateDefaultBuilder(args)
                      e.ConfigureConsumer<ReserveStockResultConsumer>(context);
                      e.ConfigureConsumer<PaymentResultConsumer>(context);
                      e.ConfigureConsumer<ShipmentResultConsumer>(context);
+                     e.ConfigureConsumer<ShipmentReturnedConsumer>(context);
+                     e.ConfigureConsumer<PaymentRefundedConsumer>(context);
                  });
                  cfg.ConfigureEndpoints(context);
              });

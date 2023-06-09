@@ -34,6 +34,7 @@ connection.on("ReceivePaymentResultNotification", function (orderId, paymentStat
         case 4: // Refunding
             break;
         case 5: // Refunded
+            toastr.success("Your payment for order `" + orderId + "` was successfully refunded!");
             break;
     }
 });
