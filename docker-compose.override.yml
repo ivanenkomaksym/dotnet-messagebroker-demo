@@ -108,6 +108,7 @@ services:
   warehouseapi:
     container_name: warehouseapi
     environment:
+      - "ApiSettings:GatewayAddress=http://ocelotapigateway"
       - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
     depends_on:
       - shopdb

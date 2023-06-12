@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: orderprocessor-pod
   labels:
-    app: s3
+    app: orderprocessor
 spec:
   replicas: 1
   selector: 
@@ -14,17 +14,12 @@ spec:
       labels:
         app: orderprocessor-app
     spec:
-      volumes:
-        - name: appsettings-volume
-          configMap:
-            name: app-configmap
       containers:
-        - name: orderprocessor-container
-          image: orderprocessor:1.16.0
-          imagePullPolicy: Never
-          volumeMounts:
-            - name: appsettings-volume
-              mountPath: /app/appsettings.k8s.json
-              subPath: appsettings.k8s.json
+        - name: orderprocessor
+          image: ivanenkomak/orderprocessor:1.0
+          env:
+            - name: GrpcSettings__OrderGrpcUrl
+              value: "http://ordergrpc"
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: ocelotapigateway-pod
   labels:
-    app: s3
+    app: ocelotapigateway
 spec:
   replicas: 1
   selector: 
@@ -19,9 +19,12 @@ spec:
           configMap:
             name: ocelot-configmap
       containers:
-        - name: ocelotapigateway-container
-          image: ocelotapigateway:1.16.0
-          imagePullPolicy: Never
+        - name: ocelotapigateway
+          image: ivanenkomak/ocelotapigateway:1.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: k8s
           volumeMounts:
             - name: ocelot-volume
               mountPath: /app/ocelot.k8s.json

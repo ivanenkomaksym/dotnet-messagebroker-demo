@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   name: warehouse-pod
   labels:
-    app: s4
+    app: warehouse
 spec:
-  replicas: 2
+  replicas: 1
   selector: 
     matchLabels:
       app: warehouse-app
@@ -14,17 +14,15 @@ spec:
       labels:
         app: warehouse-app
     spec:
-      volumes:
-        - name: appsettings-volume
-          configMap:
-            name: app-configmap
       containers:
-        - name: warehouse-container
-          image: warehouse:1.16.0
-          imagePullPolicy: Never
-          volumeMounts:
-            - name: appsettings-volume
-              mountPath: /app/appsettings.k8s.json
-              subPath: appsettings.k8s.json
+        - name: warehouse
+          image: ivanenkomak/warehouse:1.0
+          env:
+            - name: DatabaseSettings__ConnectionString
+              value: "mongodb://shopdb:27017"
+          envFrom:
+            - secretRef:
+                name: mongo-secrets
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

@@ -1,11 +1,11 @@
 ﻿apiVersion: v1
 kind: Service
 metadata:
-  name: orderapi-service
+  name: catalogapi
 spec:
   type: NodePort
   selector:
-    app: orderapi-app
+    app: catalogapi-app
   ports:
-    - port: 8000
+    - port: 80
       targetPort: 80

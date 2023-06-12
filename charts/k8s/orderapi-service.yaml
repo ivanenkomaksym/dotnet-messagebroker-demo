@@ -1,0 +1,11 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: orderapi
+spec:
+  type: NodePort
+  selector:
+    app: orderapi-app
+  ports:
+    - port: 80
+      targetPort: 80

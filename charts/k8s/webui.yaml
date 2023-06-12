@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webui-pod
+  labels:
+    app: webui
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: webui-app
+  template:
+    metadata: 
+      labels:
+        app: webui-app
+    spec:
+      containers:
+        - name: webui
+          image: ivanenkomak/webui:1.0
+          env:
+            - name: ApiSettings__GatewayAddress
+              value: "http://ocelotapigateway"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80

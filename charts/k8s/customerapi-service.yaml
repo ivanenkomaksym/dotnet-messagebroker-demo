@@ -1,11 +1,11 @@
 ﻿apiVersion: v1
 kind: Service
 metadata:
-  name: ocelotapigateway-service
+  name: customerapi
 spec:
   type: NodePort
   selector:
-    app: ocelotapigateway-app
+    app: customerapi-app
   ports:
-    - port: 8010
+    - port: 80
       targetPort: 80

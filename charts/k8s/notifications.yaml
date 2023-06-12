@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: notifications-pod
   labels:
-    app: s1
+    app: notifications
 spec:
   replicas: 2
   selector: 
@@ -19,12 +19,8 @@ spec:
           configMap:
             name: app-configmap
       containers:
-        - name: notifications-container
-          image: notifications:1.16.0
-          imagePullPolicy: Never
-          volumeMounts:
-            - name: appsettings-volume
-              mountPath: /app/appsettings.k8s.json
-              subPath: appsettings.k8s.json
+        - name: notifications
+          image: ivanenkomak/notifications:1.0
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

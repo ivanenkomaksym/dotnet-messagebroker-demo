@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webuiaggregatorapi-pod
+  labels:
+    app: webuiaggregatorapi
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: webuiaggregatorapi-app
+  template:
+    metadata: 
+      labels:
+        app: webuiaggregatorapi-app
+    spec:
+      containers:
+        - name: webuiaggregatorapi
+          image: ivanenkomak/webuiaggregatorapi:1.0
+          env:
+            - name: ApiSettings__GatewayAddress
+              value: "http://ocelotapigateway"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80

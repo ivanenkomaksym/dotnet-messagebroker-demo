@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: orderapi-pod
   labels:
-    app: s2
+    app: orderapi
 spec:
   replicas: 1
   selector: 
@@ -14,17 +14,15 @@ spec:
       labels:
         app: orderapi-app
     spec:
-      volumes:
-        - name: appsettings-volume
-          configMap:
-            name: app-configmap
       containers:
-        - name: orderapi-container
-          image: orderapi:1.16.0
-          imagePullPolicy: Never
-          volumeMounts:
-            - name: appsettings-volume
-              mountPath: /app/appsettings.k8s.json
-              subPath: appsettings.k8s.json
+        - name: orderapi
+          image: ivanenkomak/orderapi:1.0
+          env:
+            - name: DatabaseSettings__ConnectionString
+              value: "mongodb://shopdb:27017"
+          envFrom:
+            - secretRef:
+                name: mongo-secrets
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

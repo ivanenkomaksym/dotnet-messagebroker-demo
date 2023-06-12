@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: customerapi-pod
+  name: catalogapi-pod
   labels:
-    app: s2
+    app: catalogapi
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      app: customerapi-app
+      app: catalogapi-app
   template:
     metadata: 
       labels:
-        app: customerapi-app
+        app: catalogapi-app
     spec:
       containers:
-        - name: customerapi
-          image: ivanenkomak/customerapi:1.0
+        - name: catalogapi
+          image: ivanenkomak/catalogapi:1.0
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"

@@ -1,0 +1,11 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: warehouseapi
+spec:
+  type: NodePort
+  selector:
+    app: warehouseapi-app
+  ports:
+    - port: 80
+      targetPort: 80

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: customerapi-pod
+  name: payment-pod
   labels:
-    app: s2
+    app: payment
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      app: customerapi-app
+      app: payment-app
   template:
     metadata: 
       labels:
-        app: customerapi-app
+        app: payment-app
     spec:
       containers:
-        - name: customerapi
-          image: ivanenkomak/customerapi:1.0
+        - name: payment
+          image: ivanenkomak/payment:1.0
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"

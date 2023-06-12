@@ -1,11 +1,11 @@
 ﻿apiVersion: v1
 kind: Service
 metadata:
-  name: customerapi-service
+  name: ordergrpc
 spec:
   type: NodePort
   selector:
-    app: customerapi-app
+    app: ordergrpc-app
   ports:
-    - port: 8001
+    - port: 80
       targetPort: 80

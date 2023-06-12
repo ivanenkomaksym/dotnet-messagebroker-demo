@@ -1,0 +1,11 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: webuiaggregatorapi
+spec:
+  type: NodePort
+  selector:
+    app: webuiaggregatorapi-app
+  ports:
+    - port: 80
+      targetPort: 80

@@ -1,0 +1,273 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ocelot-configmap
+data:
+  ocelot.k8s.json: |-
+    {
+        "Routes": [
+            // Catalog API
+            {
+                "UpstreamPathTemplate": "/gateway/Catalog",
+                "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+                "DownstreamPathTemplate": "/api/Catalog",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "catalogapi",
+                        "Port": 80
+                    }
+                ],
+                "FileCacheOptions": { "TtlSeconds": 30 }
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Catalog/{id}",
+                "UpstreamHttpMethod": [ "GET", "DELETE" ],
+                "DownstreamPathTemplate": "/api/Catalog/{id}",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "catalogapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Catalog/GetProductByCategory/{category}",
+                "UpstreamHttpMethod": [ "GET" ],
+                "DownstreamPathTemplate": "/api/Catalog/GetProductByCategory/{category}",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "catalogapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            // Customer API
+            {
+                "UpstreamPathTemplate": "/gateway/Customer",
+                "UpstreamHttpMethod": [ "GET", "PUT", "POST" ],
+                "DownstreamPathTemplate": "/api/Customer",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "customerapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Customer/{customerId}",
+                "UpstreamHttpMethod": [ "GET" ],
+                "DownstreamPathTemplate": "/api/Customer/{customerId}",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "customerapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Customer/Authenticate",
+                "UpstreamHttpMethod": [ "POST" ],
+                "DownstreamPathTemplate": "/api/Customer/Authenticate",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "customerapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Customer/{id}",
+                "UpstreamHttpMethod": [ "DELETE" ],
+                "DownstreamPathTemplate": "/api/Customer/{id}",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "customerapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            // Order API
+            {
+                "UpstreamPathTemplate": "/gateway/Order",
+                "UpstreamHttpMethod": [ "POST", "PUT" ],
+                "DownstreamPathTemplate": "/api/Order",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "orderapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Order/{orderId}",
+                "UpstreamHttpMethod": [ "GET" ],
+                "DownstreamPathTemplate": "/api/Order/{orderId}",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "orderapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Order/GetOrdersByCustomerId/{customerId}",
+                "UpstreamHttpMethod": [ "GET" ],
+                "DownstreamPathTemplate": "/api/Order/GetOrdersByCustomerId/{customerId}",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "orderapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Order/{orderId}/Payment",
+                "UpstreamHttpMethod": [ "PUT" ],
+                "DownstreamPathTemplate": "/api/Order/{orderId}/Payment",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "orderapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Order/{orderId}/Cancel",
+                "UpstreamHttpMethod": [ "POST" ],
+                "DownstreamPathTemplate": "/api/Order/{orderId}/Cancel",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "orderapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Order/{orderId}/Collected",
+                "UpstreamHttpMethod": [ "POST" ],
+                "DownstreamPathTemplate": "/api/Order/{orderId}/Collected",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "orderapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Order/{orderId}/Return",
+                "UpstreamHttpMethod": [ "POST" ],
+                "DownstreamPathTemplate": "/api/Order/{orderId}/Return",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "orderapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            // ShoppingCart API
+            {
+                "UpstreamPathTemplate": "/gateway/ShoppingCart",
+                "UpstreamHttpMethod": [ "POST", "PUT" ],
+                "DownstreamPathTemplate": "/api/ShoppingCart",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "shoppingcartapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/ShoppingCart/{customerId}",
+                "UpstreamHttpMethod": [ "GET", "DELETE" ],
+                "DownstreamPathTemplate": "/api/ShoppingCart/{customerId}",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "shoppingcartapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/ShoppingCart/Checkout",
+                "UpstreamHttpMethod": [ "POST" ],
+                "DownstreamPathTemplate": "/api/ShoppingCart/Checkout",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "shoppingcartapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            // Warehouse API
+            {
+                "UpstreamPathTemplate": "/gateway/StockItem/GetStockItemByProductId/{productId}",
+                "UpstreamHttpMethod": [ "GET" ],
+                "DownstreamPathTemplate": "/api/StockItem/GetStockItemByProductId/{productId}",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "warehouseapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            // WebUI Aggregator API
+            {
+                "UpstreamPathTemplate": "/gateway/Products",
+                "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+                "DownstreamPathTemplate": "/api/Products",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "webuiaggregatorapi",
+                        "Port": 80
+                    }
+                ],
+                "FileCacheOptions": { "TtlSeconds": 30 }
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Products/{id}",
+                "UpstreamHttpMethod": [ "GET", "DELETE" ],
+                "DownstreamPathTemplate": "/api/Products/{id}",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "webuiaggregatorapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/Products/GetProductByCategory/{category}",
+                "UpstreamHttpMethod": [ "GET" ],
+                "DownstreamPathTemplate": "/api/Products/GetProductByCategory/{category}",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "webuiaggregatorapi",
+                        "Port": 80
+                    }
+                ]
+            }
+        ],
+        "GlobalConfiguration": {
+            "BaseUrl": "http://localhost:5010"
+        }
+    }
