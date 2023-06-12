@@ -3,7 +3,6 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
 using Warehouse;
 using Warehouse.Consumers;
-using Warehouse.Data;
 using WarehouseCommon.Data;
 using WarehouseCommon.Repositories;
 
@@ -12,12 +11,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddHostedService<WarehouseWorker>();
 
-        services.AddHttpClient<IWarehouseContextSeed, WarehouseContextSeed>(options =>
-        {
-            options.BaseAddress = new Uri(hostContext.Configuration["ApiSettings:GatewayAddress"]);
-        });
-
-        services.AddScoped<IWarehouseContext, WarehouseContext>();
+        services.AddScoped<IWarehouseContext, WarehouseContextBase>();
         services.AddScoped<IWarehouseRepository, WarehouseRepository>();
 
         services.AddMassTransit(x =>

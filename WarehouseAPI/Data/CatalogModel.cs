@@ -1,4 +1,4 @@
-﻿namespace Warehouse.Data
+﻿namespace WarehouseAPI.Data
 {
     public record CatalogModel
     {

@@ -6,7 +6,7 @@ namespace Warehouse
     {
         private readonly ILogger<WarehouseWorker> _logger;
 
-        public WarehouseWorker(IWarehouseContext warehouseContext, ILogger<WarehouseWorker> logger)
+        public WarehouseWorker(ILogger<WarehouseWorker> logger)
         {
             _logger = logger;
         }

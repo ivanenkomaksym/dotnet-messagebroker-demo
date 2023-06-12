@@ -8,5 +8,7 @@ namespace WarehouseCommon.Data
         IMongoCollection<StockItem> StockItems { get; }
 
         IMongoCollection<OrderReserve> OrderReserves { get; }
+
+        public abstract Task InitAsync();
     }
 }

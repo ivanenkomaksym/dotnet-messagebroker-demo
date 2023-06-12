@@ -17,5 +17,10 @@ namespace WarehouseCommon.Data
 
         public IMongoCollection<StockItem> StockItems { get; }
         public IMongoCollection<OrderReserve> OrderReserves { get; }
+
+        public virtual Task InitAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

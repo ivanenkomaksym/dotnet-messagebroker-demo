@@ -2,14 +2,20 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
+using WarehouseAPI.Data;
 using WarehouseCommon.Data;
 using WarehouseCommon.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IWarehouseContext, WarehouseContextBase>();
-builder.Services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+builder.Services.AddHttpClient<IWarehouseContextSeed, WarehouseContextSeed>(options =>
+{
+    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+});
+
+builder.Services.AddSingleton<IWarehouseContext, WarehouseContext>();
+builder.Services.AddSingleton<IWarehouseRepository, WarehouseRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

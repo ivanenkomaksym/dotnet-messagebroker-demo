@@ -2,7 +2,7 @@
 using Common.Models.Warehouse;
 using MongoDB.Driver;
 
-namespace Warehouse.Data
+namespace WarehouseAPI.Data
 {
     /// <summary>
     /// This class is at the same time HttpClient in order to get available products from CatalogAPI and seed warehouse data.
@@ -36,7 +36,7 @@ namespace Warehouse.Data
                     Supplier = "ABC LTD",
                     Quantity = quantity,
                     Price = product.Price,
-                    Discount = (rand.NextDouble() * 0.2),
+                    Discount = Math.Round(rand.NextDouble() * 0.2, 2),
                     Sold = sold,
                     AvailableOnStock = availableOnStock
                 });
@@ -45,7 +45,7 @@ namespace Warehouse.Data
             bool existProduct = stockItemCollection.Find(p => true).Any();
             if (!existProduct)
             {
-                stockItemCollection.InsertManyAsync(stockItems);
+                await stockItemCollection.InsertManyAsync(stockItems);
             }
         }
 

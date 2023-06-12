@@ -7,21 +7,34 @@ namespace WarehouseCommon.Repositories
     public class WarehouseRepository : IWarehouseRepository
     {
         private readonly IWarehouseContext _context;
+        private bool _contextInit = false;
 
         public WarehouseRepository(IWarehouseContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public async Task<IWarehouseContext> GetContext()
+        {
+            if (_contextInit)
+                return _context;
+
+            await _context.InitAsync();
+            _contextInit = true;
+            return _context;
+        }
+
         public async Task<StockItem> CreateStockItem(StockItem stockItem)
         {
-            await _context.StockItems.InsertOneAsync(stockItem);
+            var context = await GetContext();
+            await context.StockItems.InsertOneAsync(stockItem);
             return stockItem;
         }
 
         public async Task<bool> UpdateStockItem(StockItem stockItem)
         {
-            var updateResult = await _context
+            var context = await GetContext();
+            var updateResult = await context
                                         .StockItems
                                         .ReplaceOneAsync(filter: s => s.Id == stockItem.Id, replacement: stockItem);
             return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
@@ -29,9 +42,10 @@ namespace WarehouseCommon.Repositories
 
         public async Task<bool> DeleteReserve(Guid orderId)
         {
+            var context = await GetContext();
             var filter = Builders<OrderReserve>.Filter.Eq(o => o.OrderId, orderId);
 
-            DeleteResult deleteResult = await _context
+            DeleteResult deleteResult = await context
                                                 .OrderReserves
                                                 .DeleteOneAsync(filter);
 
@@ -40,9 +54,10 @@ namespace WarehouseCommon.Repositories
 
         public async Task<bool> DeleteStockItem(Guid id)
         {
+            var context = await GetContext();
             var filter = Builders<StockItem>.Filter.Eq(s => s.Id, id);
 
-            DeleteResult deleteResult = await _context
+            DeleteResult deleteResult = await context
                                                 .StockItems
                                                 .DeleteOneAsync(filter);
 
@@ -51,9 +66,10 @@ namespace WarehouseCommon.Repositories
 
         public async Task<StockItem> GetStockItemByProductId(Guid productId)
         {
+            var context = await GetContext();
             var matchProductId = Builders<StockItem>.Filter.Eq(s => s.ProductId, productId);
 
-            return await _context
+            return await context
                             .StockItems
                             .Find(matchProductId)
                             .FirstOrDefaultAsync();
@@ -61,9 +77,10 @@ namespace WarehouseCommon.Repositories
 
         public async Task<StockItem> GetStockItemById(Guid stockItemId)
         {
+            var context = await GetContext();
             var matchStockItemId = Builders<StockItem>.Filter.Eq(s => s.Id, stockItemId);
 
-            return await _context
+            return await context
                             .StockItems
                             .Find(matchStockItemId)
                             .FirstOrDefaultAsync();
@@ -71,7 +88,8 @@ namespace WarehouseCommon.Repositories
 
         public async Task<IEnumerable<StockItem>> GetStockItems()
         {
-            return await _context
+            var context = await GetContext();
+            return await context
                             .StockItems
                             .Find(s => true)
                             .ToListAsync();
@@ -79,15 +97,17 @@ namespace WarehouseCommon.Repositories
 
         public async Task<OrderReserve> CreateOrderReserve(OrderReserve orderReserve)
         {
-            await _context.OrderReserves.InsertOneAsync(orderReserve);
+            var context = await GetContext();
+            await context.OrderReserves.InsertOneAsync(orderReserve);
             return orderReserve;
         }
         
         public async Task<OrderReserve> GetOrderReserveByOrderId(Guid orderId)
         {
+            var context = await GetContext();
             var matchOrderId = Builders<OrderReserve>.Filter.Eq(o => o.OrderId, orderId);
 
-            return await _context
+            return await context
                             .OrderReserves
                             .Find(matchOrderId)
                             .FirstOrDefaultAsync();
