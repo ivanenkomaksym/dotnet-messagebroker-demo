@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Common.Events;
 using Common.Models;
-using Common.Persistence;
 using MassTransit;
 
 namespace OrderAPI
@@ -94,10 +93,5 @@ namespace OrderAPI
             var message = JsonSerializer.Serialize(returnOrderEvent);
             _logger.LogInformation($"Sent `ReturnOrder` event with content: {message}");
         }
-
-        IRabbitMQChannelRegistry RabbitMQChannelRegistry;
-        private readonly ILogger<OrderService> Logger;
-        private readonly string HostName;
-        private readonly ushort Port;
     }
 }
