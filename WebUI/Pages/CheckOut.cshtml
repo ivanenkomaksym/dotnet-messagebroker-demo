@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "CheckOut";
 }
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+<div class="text-danger" asp-validation-summary="All"></div>
 
 <div class="container">
     <div class="row">
@@ -58,7 +61,8 @@
 
                 <h4 class="mb-3">Customer Info</h4>
                 <label asp-for="Order.CustomerInfo.CustomerId" for="customerId">CustomerId</label>
-                <input asp-for="Order.CustomerInfo.CustomerId" type="text" class="form-control" id="customerId" placeholder="" required>
+                <input asp-for="Order.CustomerInfo.CustomerId" type="text" class="form-control" id="customerId" placeholder="" required readonly>
+                <span asp-validation-for="Order.CustomerInfo.CustomerId" class="text-danger"></span>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label asp-for="Order.CustomerInfo.FirstName" for="firstName">First name</label>
@@ -79,13 +83,42 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Order.CustomerInfo.Email" for="email">Email <span class="text-muted">(Optional)</span></label>
-                    <input asp-for="Order.CustomerInfo.Email" type="email" class="form-control" id="email">
+                    <label asp-for="Order.CustomerInfo.Email" for="email">Email</span></label>
+                    <input asp-for="Order.CustomerInfo.Email" type="email" class="form-control" id="email" required>
                     <span asp-validation-for="Order.CustomerInfo.Email" class="text-danger"></span>
                     <div class="invalid-feedback">
                         Please enter a valid email address for shipping updates.
                     </div>
                 </div>
+
+                <div class="custom-control custom-checkbox">
+                    <input asp-for="@Model.SignUp" type="checkbox" class="custom-control-input" id="sign-up">
+                    <label class="custom-control-label" for="sign-up">Sign up</label>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.CustomerPassword" class="control-label"></label>
+                    <input asp-for="@Model.CustomerPassword" class="form-control" id="customer-password" disabled>
+                    <span asp-validation-for="@Model.CustomerPassword" class="text-danger"></span>
+                </div>
+
+                @section Scripts {
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            var signUpCheckbox = document.getElementById("sign-up");
+                            var customerPasswordInput = document.getElementById("customer-password");
+
+                            // Handle the checkbox change event
+                            signUpCheckbox.addEventListener("change", function () {
+                                // Enable/disable the password input based on the checked state of the checkbox
+                                customerPasswordInput.disabled = !signUpCheckbox.checked;
+                            });
+
+                            // Trigger the initial change event to set the initial state of the password input
+                            signUpCheckbox.dispatchEvent(new Event("change"));
+                        });
+                    </script>
+                }
 
                 <h4 class="mb-3">Shipping address</h4>
                 <div class="row">
@@ -108,8 +141,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Order.ShippingAddress.Email" for="email">Email <span class="text-muted">(Optional)</span></label>
-                    <input asp-for="Order.ShippingAddress.Email" type="email" class="form-control" id="email">
+                    <label asp-for="Order.ShippingAddress.Email" for="email">Email</span></label>
+                    <input asp-for="Order.ShippingAddress.Email" type="email" class="form-control" id="email" required>
                     <span asp-validation-for="Order.ShippingAddress.Email" class="text-danger"></span>
                     <div class="invalid-feedback">
                         Please enter a valid email address for shipping updates.
@@ -150,11 +183,14 @@
                 </div>
                 <hr class="mb-4">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="same-address">
-                    <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                    <input asp-for="@Model.SaveShippingAddressAndPayment" type="checkbox" class="custom-control-input" id="save-info">
+                    @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+                    {
+                        <input asp-for="@Model.SaveShippingAddressAndPayment" type="checkbox" class="custom-control-input" id="save-info">
+                    }
+                    else
+                    {
+                        <input asp-for="@Model.SaveShippingAddressAndPayment" type="checkbox" class="custom-control-input" id="save-info" disabled>
+                    }
                     <label class="custom-control-label" for="save-info">Save this information for next time</label>
                 </div>
                 <hr class="mb-4">

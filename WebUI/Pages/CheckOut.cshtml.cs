@@ -1,6 +1,8 @@
 using Common.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
+using WebUI.Data;
 using WebUI.Models;
 using WebUI.Services;
 using WebUI.Users;
@@ -26,26 +28,42 @@ namespace WebUI.Pages
         public Order Order { get; set; } = new Order();
 
         public ShoppingCartModel ShoppingCart { get; set; }
+
+        [BindProperty]
+        public bool SignUp { get; set; }
+
+        [BindProperty]
+        [DataType(DataType.Password)]
+        public string CustomerPassword { get; set; }
+
         [BindProperty]
         public bool SaveShippingAddressAndPayment { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
             var customerId = _userProvider.GetCustomerId(HttpContext);
-            if (customerId == Guid.Empty)
-                return RedirectToPage("/Account/Login", new { returnUrl = "/CheckOut" });
 
             var customer = await _customerService.GetCustomerById(customerId);
-            Order.ShippingAddress = customer.ShippingAddress;
-            Order.PaymentInfo = customer.PaymentInfo;
-
-            Order.CustomerInfo = new CustomerInfo
+            if (customer != null)
             {
-                CustomerId = customerId,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                Email = customer.Email
-            };
+                Order.ShippingAddress = customer.ShippingAddress;
+                Order.PaymentInfo = customer.PaymentInfo;
+
+                Order.CustomerInfo = new CustomerInfo
+                {
+                    CustomerId = customerId,
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
+                    Email = customer.Email
+                };
+            }
+            else
+            {
+                Order.CustomerInfo = new CustomerInfo
+                {
+                    CustomerId = customerId
+                };
+            }
 
             ShoppingCart = await _cartService.GetShoppingCart(customerId);
 
@@ -55,17 +73,51 @@ namespace WebUI.Pages
         public async Task<IActionResult> OnPostCheckOutAsync()
         {
             var customerId = _userProvider.GetCustomerId(HttpContext);
-            var customer = await _customerService.GetCustomerById(customerId);
 
             if (!ModelState.IsValid)
-                return Page();
+                return await OnGet();
 
             try
             {
                 ShoppingCart = await _cartService.GetShoppingCart(customerId);
 
+                if (SignUp)
+                {
+                    var customer = new Customer
+                    {
+                        Id = customerId,
+                        Email = Order.CustomerInfo.Email,
+                        FirstName = Order.CustomerInfo.FirstName,
+                        LastName = Order.CustomerInfo.LastName,
+                        Password = CustomerPassword,
+                        ShippingAddress = Order.ShippingAddress,
+                        PaymentInfo = Order.PaymentInfo
+                    };
+
+                    try
+                    {
+                        await _customerService.CreateCustomer(customer);
+
+                        var user = new ApplicationUser
+                        {
+                            CustomerId = customer.Id,
+                            Email = customer.Email,
+                            FullName = $"{customer.FirstName} {customer.LastName}"
+                        };
+
+                        await _userProvider.SignInAsync(HttpContext, user);
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError(nameof(Customer.Email), "User with this email already exists.");
+                        return await OnGet();
+                    }
+                }
+
                 if (SaveShippingAddressAndPayment)
                 {
+                    var customer = await _customerService.GetCustomerById(customerId);
+
                     customer.ShippingAddress = Order.ShippingAddress;
                     customer.PaymentInfo = Order.PaymentInfo;
 
@@ -95,6 +147,7 @@ namespace WebUI.Pages
             catch (Exception ex)
             {
                 ModelState.AddModelError(nameof(Order.Id), "Problem creating order.");
+                return await OnGet();
             }
 
             return Page();

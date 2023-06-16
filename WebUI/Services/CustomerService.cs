@@ -24,7 +24,7 @@ namespace WebUI.Services
             if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<Customer>();
             else
-                throw new Exception(response.StatusCode.ToString());
+                return null;
         }
 
         public async Task<Customer> Authenticate(string email, string password)

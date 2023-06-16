@@ -21,7 +21,22 @@ namespace WebUI.Users
         public Guid GetCustomerId(HttpContext httpContext)
         {
             if (!httpContext.User.Identity.IsAuthenticated)
-                return Guid.Empty;
+            {
+                Guid sessionId = Guid.Empty;
+
+                var hasSessionId = httpContext.Request.Cookies.TryGetValue("sessionId", out var sessionIdStr);
+                if (hasSessionId)
+                {
+                    var result = Guid.TryParse(sessionIdStr, out sessionId);
+                    if (result)
+                        return sessionId;
+                }
+
+                sessionId = Guid.NewGuid();
+                httpContext.Response.Cookies.Append("sessionId", sessionId.ToString());
+
+                return sessionId;
+            }
 
             Guid.TryParse(httpContext.User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value!, out var customerId);
             return customerId;
