@@ -37,7 +37,7 @@ spec:
             - name: DatabaseSettings__ConnectionString
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-secrets
+                  name: mongo-secrets
                   key:  connectionString
           ports:
             - name: http

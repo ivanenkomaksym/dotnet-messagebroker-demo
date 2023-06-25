@@ -39,7 +39,7 @@ spec:
               value: {{ .Values.env.connectionString }}
           envFrom:
             - secretRef:
-                  name: {{ .Release.Name }}-secrets
+                  name: mongo-secrets
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
