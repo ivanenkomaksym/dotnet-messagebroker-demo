@@ -20,11 +20,6 @@ spec:
       labels:
         {{- include "orderprocessor.selectorLabels" . | nindent 8 }}
     spec:
-      # Define appsettings-volume
-      volumes:
-        - name: appsettings-volume
-          configMap:
-            name: orderapi-cfg
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -38,11 +33,10 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # Mount appsettings-volume with appsettings.k8s.json
-          volumeMounts:
-            - name: appsettings-volume
-              mountPath: /app/appsettings.k8s.json
-              subPath: appsettings.k8s.json
+          # Get environment variables from values.yaml
+          env:
+            - name: GrpcSettings__OrderGrpcUrl
+              value: {{ .Values.env.orderGrpcUrl }}
           ports:
             - name: http
               containerPort: {{ .Values.service.containerPort }}
