@@ -1,6 +1,18 @@
 # dotnet-messagebroker-demo
 
-This sample demonstrates how to integrate .NET microservices with RabbitMQ. Worker queues and exchanges are used for asynchronous communication. It also includes deploying apps to Kubernetes and using Helm charts.
+This repository showcases a sample implementation of a message broker using .NET technologies. It provides a demonstration of how to build a distributed messaging system using popular message broker patterns, along with Docker images, Kubernetes deployment, and Helm charts.
+
+## Features
+
+* Demonstrates the use of a message broker for decoupling and asynchronous communication between microservices.
+* Implements common messaging patterns such as publish-subscribe, request-reply, and event-driven architecture.
+* Utilizes popular message broker technologies, including RabbitMQ or Apache Kafka, to showcase different options and configurations.
+* Provides example code and documentation for setting up message producers, consumers, and message handlers.
+* Includes sample microservices that communicate through the message broker, highlighting the benefits of loose coupling and scalability.
+* Offers insights and best practices for building resilient, scalable, and fault-tolerant distributed systems.
+* Includes Dockerfiles and Docker Compose configuration for containerizing the sample microservices.
+* Provides Kubernetes deployment manifests and Helm charts for deploying the microservices to a Kubernetes cluster.
+* Demonstrates how to scale and manage the message broker infrastructure using Kubernetes and Helm.
 
 ![Alt text](docs/architecture.png?raw=true "Application architecture")
 
@@ -16,19 +28,20 @@ This sample demonstrates how to integrate .NET microservices with RabbitMQ. Work
 ## Application structure
 
 Application consists of several .NET microservices all communicating with RabbitMQ:
-1. **OrderAPI** provides basic API for managing orders and pushes messages to **queue.order** worker queue.
-2. **OrderProcessor** reads messages from **queue.order** worker queue, processes them and pushes results to **exchange.order.status** fanout exchange.
-3. **Warehouse** reads messages from **queue.order.status.warehouse** worker queue and processes them.
-4. **Notifications** reads messages from **queue.order.status.notifications** worker queue and processes them.
-
-![Alt text](docs/rabbitmq_integration.png?raw=true "Application structure")
-
-**OrderAPI** pushes messages to a worker queue so they are distribued in round-robin way to all registered consumers in sequence. If **OrderProcessor** is scaled out, only one instance will process the message.
-Messages pushed to **exchange.order.status** exchange will be distributed to all bind worker queues. Both Warehouse and Notifications microservices create additional worker queues and bind them to that single **exchange.order.status** exchange. This is done so that if microservice is scaled out, only one instance will process the message.
-
-## Data model
-
-![Alt text](docs/datamodel.png?raw=true "Data model")
+1. **CatalogAPI** provides basic API for querying products. Data persisted in mongo **CatalogDb**.
+2. **CustomerAPI** basic authentication microservice that allows to register, log in and delete users. Data persisted in mongo **CustomerDb**.
+3. **Notifications** observes events on the message broker and sends user specific events to clients.
+4. **OcelotAPIGateway** basic Gateway microservice that stands in front of all microservices.
+5. **OrderAPI** provides basic API for managing orders. Data persisted in mongo **OrderDb**.
+6. **OrderGrpc** internal microservice for managing orders via GRPC instead of REST API, used by **OrderProcessor**.
+7. **OrderProcessor** main ordering business logic, uses message broker to produce and consume messages to and from other services.
+8. **PaymentService** basic payment microservice, consumes and produces message from the message broker. Data persisted in mongo **PaymentDb**.
+9. **Shipment** basic shipment microservice, consumes and produces message from the message broker. Data persisted in mongo **ShipmentDb**.
+10. **ShoppingCartAPI** manages user shopping carts via REST API. Data persisted in mongo **ShoppingCartDb**.
+11. **Warehouse** basic warehouse microservice, consumes and produces message from the message broker.
+12. **WarehouseAPI** provides REST API to get products stock levels. Used by **WebUI**. Data persisted in mongo **WarehouseDb**.
+13. **WebUI** main UI application built with .NET Razor pages. Uses **WebUIAggregator** and **OcelotAPIGateway**. Supports SignalR notifications to browser clients.
+14. **WebUIAggregator** aggregates requests to multiple microservices. Used by **WebUI**.
 
 ## Sagas
 
@@ -36,36 +49,34 @@ Messages pushed to **exchange.order.status** exchange will be distributed to all
 
 ![Alt text](docs/saga_create_order.png?raw=true "Create order saga")
 
+You can check the data model and other sagas in ![solution diagrams](docs/DotNetRabbitMQIntegration.drawio "solution diagrams").
+
 ## How to run this sample
 
 You can run this sample in 3 different ways:
-1. Run .NET apps locally with RabbitMQ in docker.
-2. Multi-Container .NET apps and RabbitMQ running in Kubernetes.
-3. Using [a Helm chart](https://github.com/helm/helm) for deploying .NET apps and RabbitMQ to Kubernetes.
+1. Run .NET apps locally with RabbitMQ and Mongo running in docker.
+2. Multi-Container .NET apps, RabbitMQ and Mongo running in Kubernetes.
+3. Using [a Helm chart](https://github.com/helm/helm).
 
 ### Run local
 
 **Run with Powershell** script **01_run_local.ps1**. This will start:
-1. RabbitMQ in Docker.
-2. All .NET microservices in separate windows.
-3. Navigate to https://localhost:7137/swagger to access **OrderAPI**.
-4. Navigate to http://localhost:15672/ to access **RabbitMQ Management** UI (login: **guest**, password: **guest**).
-5. Execute **POST /api/Order**.
-6. Observe logs in other microservices.
-7. Observe bindings in http://localhost:15672/#/exchanges/%2F/exchange.order.status
-8. Close windows manually.
+1. RabbitMQ and Mongo in Docker.
+2. All .NET microservices will get started in separate windows.
+3. [http://localhost:8011/](http://localhost:8011/) will be opened in your browser's window.
+4. Wait for all the services to start up and hit Refresh. You should see the main page.
 
 ![Alt text](docs/run_local.png?raw=true "Run local")
+
+![Index page](docs/index_page.png?raw=true "Index page")
 
 ### Run in Kubernetes
 
 1. **Run with Powershell** script **02_docker_build.ps1** to build docker images of all microservices. Wait for the script to complete.
 2. **Run with Powershell** script **03_start_minikube.ps1** to start **minikube**. Wait for the script to complete.
-3. **Run with Powershell** script **04_run_k8s.ps1** to deploy docker images to Kubernetes and start **orderapi-service** with **rabbitmq-service**.
+3. **Run with Powershell** script **04_run_k8s.ps1** to deploy docker images to Kubernetes.
 4. Observe the deployment in opened Kubernetes dashboard. Wait for all the pods change the status to **Running**.
-5. Link to **orderapi-service** service will get opened in your browser (e.g. http://127.0.0.1:57611/).
-6. Append **/swagger** to access **OrderAPI** swagger page.
-7. In another command prompt **rabbitmq-service** is exposed with URLs to access it.
+5. 
 8. Navigate to second URL (e.g. http://127.0.0.1:57613) to access **RabbitMQ Management** UI (login: **guest**, password: **guest**).
 
 ```
@@ -78,7 +89,6 @@ You can run this sample in 3 different ways:
 |-----------|------------------|-------------|------------------------|
 ```
 
-9. Execute **POST /api/Order** on **OrderAPI** swagger page from step 6.
 10. Observe logs in pods in Kubernetes dashboard from step 4.
 11. **Run with Powershell** script **04_stop_k8s.ps1** to delete the deployment.
 
@@ -86,13 +96,9 @@ You can run this sample in 3 different ways:
 
 ### Using Helm chart
 
-1. **Run with Powershell** script **02_docker_build.ps1** to build docker images of all microservices. Wait for the script to complete.
-2. **Run with Powershell** script **03_start_minikube.ps1** to start **minikube**. Wait for the script to complete.
-3. **Run with Powershell** script **05_run_helm.ps1** to install helm chart and start **helmapp-orderapi** with **helmapp-rabbitmq**.
-4. Observe the deployment in opened Kubernetes dashboard. Wait for all the pods change the status to **Running**.
-5. Link to **helmapp-orderapi** service will get opened in your browser (e.g. http://127.0.0.1:58021/).
-6. Append **/swagger** to access **OrderAPI** swagger page.
-7. In another command prompt **helmapp-rabbitmq** is exposed with URLs to access it.
+1. **Run with Powershell** script **03_start_minikube.ps1** to start **minikube**. Wait for the script to complete.
+2. **Run with Powershell** script **05_run_helm.ps1** to install helm chart and start **helmapp-orderapi** with **helmapp-rabbitmq**.
+3. Observe the deployment in opened Kubernetes dashboard. Wait for all the pods change the status to **Running**.
 8. Navigate to second URL (e.g. http://127.0.0.1:58024) to access **RabbitMQ Management** UI (login: **guest**, password: **guest**).
 
 ```
@@ -105,8 +111,6 @@ You can run this sample in 3 different ways:
 |-----------|------------------|-------------|------------------------|
 ```
 
-9. Execute **POST /api/Order** on **OrderAPI** swagger page from step 6.
-10. Observe logs in pods in Kubernetes dashboard from step 4.
 11. **Run with Powershell** script **05_stop_helm.ps1** to uninstall the helm chart.
 
 ![Alt text](docs/helmchart_structure.png?raw=true "Helm chart structure")
