@@ -11,8 +11,7 @@
                     "Host": "localhost",
                     "Port": 8001
                 }
-            ],
-            "FileCacheOptions": { "TtlSeconds": 30 }
+            ]
         },
         {
             "UpstreamPathTemplate": "/gateway/Catalog/{id}",
@@ -233,8 +232,7 @@
                     "Host": "localhost",
                     "Port": 8013
                 }
-            ],
-            "FileCacheOptions": { "TtlSeconds": 30 }
+            ]
         },
         {
             "UpstreamPathTemplate": "/gateway/Products/{id}",
