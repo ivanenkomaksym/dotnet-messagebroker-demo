@@ -18,9 +18,9 @@ jobs:
       matrix:
         include:
           - image: ivanenkomak/catalogapi
-            dockerfile: CatalogAPI/DockerFile
+            dockerfile: CatalogAPI/Dockerfile
           - image: ivanenkomak/customerapi
-            dockerfile: CustomerAPI/DockerFile
+            dockerfile: CustomerAPI/Dockerfile
     
     steps:
       - name: Checkout Repository
