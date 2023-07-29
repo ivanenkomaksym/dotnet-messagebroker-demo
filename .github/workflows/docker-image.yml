@@ -9,25 +9,19 @@ on:
 env:
   DOCKER_USER: ${{ secrets.DOCKER_USER }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  IMAGES: |
-    - "ivanenkomak/catalogapi:latest"
-    - "ivanenkomak/customerapi:latest"
-    - "ivanenkomak/notifications:latest"
-    - "ivanenkomak/ocelotapigateway:latest"
-    - "ivanenkomak/orderapi:latest"
-    - "ivanenkomak/ordergrpc:latest"
-    - "ivanenkomak/orderprocessor:latest"
-    - "ivanenkomak/payment:latest"
-    - "ivanenkomak/shipment:latest"
-    - "ivanenkomak/shoppingcartapi:latest"
-    - "ivanenkomak/warehouse:latest"
-    - "ivanenkomak/warehouseapi:latest"
-    - "ivanenkomak/webui:latest"
-    - "ivanenkomak/webuiaggregator:latest"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        include:
+          - image: ivanenkomak/catalogapi
+            dockerfile: CatalogAPI/DockerFile
+          - image: ivanenkomak/customerapi
+            dockerfile: CustomerAPI/DockerFile
+    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -40,9 +34,17 @@ jobs:
         with:
           username: ${{ env.DOCKER_USER }}
           password: ${{ env.DOCKER_PASSWORD }}
-
-      - name: Build and Push Docker Images
-        run: |
-          for image in $IMAGES; do
-            docker buildx build --tag $image .
-          done
+          
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ matrix.image }}
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: ${{ matrix.image }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
