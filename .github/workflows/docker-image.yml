@@ -44,6 +44,5 @@ jobs:
       - name: Build and Push Docker Images
         run: |
           for image in $IMAGES; do
-            image_tag=${image}:latest
-            docker buildx build --tag ${image_tag}-${{ github.sha }} .
+            docker buildx build --tag $image .
           done
