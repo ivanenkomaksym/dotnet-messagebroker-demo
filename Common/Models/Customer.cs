@@ -27,6 +27,8 @@ namespace Common.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        public UserRole UserRole { get; set; } = UserRole.User;
+
         public Address? ShippingAddress { get; set; }
 
         public PaymentInfo? PaymentInfo { get; set; }

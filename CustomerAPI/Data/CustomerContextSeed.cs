@@ -67,7 +67,8 @@ namespace CustomerAPI.Data
                         Country = "England",
                         AddressLine = "London",
                         ZipCode = "12345"
-                    }
+                    },
+                    UserRole = UserRole.Admin
                 }
             };
         }
