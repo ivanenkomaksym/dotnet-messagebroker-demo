@@ -1,9 +1,10 @@
-name: Docker Images
+name: Docker Image CI
 
 on:
+  push:
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 env:
   DOCKER_USER: ${{ secrets.DOCKER_USER }}
@@ -25,7 +26,7 @@ env:
     - "ivanenkomak/webuiaggregator:latest"
 
 jobs:
-  build-and-push-images:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
