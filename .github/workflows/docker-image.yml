@@ -12,9 +12,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: ivanenkomak/catalogapi
+          - image: ivanenkomak/catalogapi:latest
             dockerfile: ./CatalogAPI/Dockerfile
-          - image: ivanenkomak/customerapi
+          - image: ivanenkomak/customerapi:latest
             dockerfile: ./CustomerAPI/Dockerfile
     steps:
     - 
