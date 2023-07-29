@@ -32,6 +32,7 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
       - 
         name: Extract metadata (tags, labels) for Docker
+        id: meta
         uses: docker/metadata-action@v4
         with:
           images: ${{ matrix.image }}
