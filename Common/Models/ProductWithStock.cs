@@ -30,6 +30,7 @@
         }
 
         // StockItem properties
+        public Guid StockItemId { get; set; }
         public ushort Quantity { get; set; }
         public double Discount { get; set; }
         public ushort Sold { get; set; }
