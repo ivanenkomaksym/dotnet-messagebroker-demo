@@ -1,6 +1,7 @@
 ﻿using Common.Models.Warehouse;
 using WarehouseCommon.Data;
 using MongoDB.Driver;
+using Microsoft.Extensions.Logging;
 
 namespace WarehouseCommon.Repositories
 {
@@ -8,10 +9,12 @@ namespace WarehouseCommon.Repositories
     {
         private readonly IWarehouseContext _context;
         private bool _contextInit = false;
+        private readonly ILogger<WarehouseRepository> _logger;
 
-        public WarehouseRepository(IWarehouseContext context)
+        public WarehouseRepository(IWarehouseContext context, ILogger<WarehouseRepository> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _logger = logger;
         }
 
         public async Task<IWarehouseContext> GetContext()
@@ -21,6 +24,8 @@ namespace WarehouseCommon.Repositories
 
             await _context.InitAsync();
             _contextInit = true;
+
+            _logger.LogInformation($"Context initialized");
             return _context;
         }
 

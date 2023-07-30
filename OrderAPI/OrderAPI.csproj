@@ -7,6 +7,7 @@
     <UserSecretsId>3c565111-cd05-4465-9d54-5aad8b0b3dbc</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>D:\repos\dotnet-messagebroker-demo\OrderAPI\obj\Debug\net7.0\OrderAPI.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

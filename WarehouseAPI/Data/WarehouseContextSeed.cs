@@ -10,16 +10,20 @@ namespace WarehouseAPI.Data
     internal sealed class WarehouseContextSeed : IWarehouseContextSeed
     {
         private readonly HttpClient _client;
+        private readonly ILogger<WarehouseContextSeed> _logger;
 
-        public WarehouseContextSeed(HttpClient client)
+        public WarehouseContextSeed(HttpClient client, ILogger<WarehouseContextSeed> logger)
         {
             _client = client;
+            _logger = logger;
         }
 
         public async Task SeedData(IMongoCollection<StockItem> stockItemCollection)
         {
+            _logger.LogInformation("SeedData started.");
             var stockItems = new List<StockItem>();
             var products = await GetCatalog();
+            _logger.LogInformation($"Received `{products.Count()}` products.");
             var rand = new Random();
 
             foreach (var product in products)
@@ -47,6 +51,7 @@ namespace WarehouseAPI.Data
             {
                 await stockItemCollection.InsertManyAsync(stockItems);
             }
+            _logger.LogInformation("SeedData ended.");
         }
 
         public async Task<IEnumerable<CatalogModel>> GetCatalog()
