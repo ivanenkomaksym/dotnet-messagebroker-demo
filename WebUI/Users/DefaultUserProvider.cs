@@ -51,7 +51,8 @@ namespace WebUI.Users
                 {
                     CustomerId = customer.Id,
                     Email = customer.Email,
-                    FullName = $"{customer.FirstName} {customer.LastName}"
+                    FullName = $"{customer.FirstName} {customer.LastName}",
+                    UserRole = customer.UserRole
                 };
             }
             else
@@ -67,7 +68,7 @@ namespace WebUI.Users
                     new Claim(ClaimTypes.Name, user.Email),
                     new Claim("CustomerId", user.CustomerId.ToString()),
                     new Claim("FullName", user.FullName),
-                    new Claim(ClaimTypes.Role, "User"),
+                    new Claim(ClaimTypes.Role, user.UserRole.ToString()),
                 };
 
             var claimsIdentity = new ClaimsIdentity(

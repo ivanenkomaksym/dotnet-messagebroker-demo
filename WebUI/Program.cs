@@ -15,7 +15,16 @@ builder.Services.AddRazorPages().AddNToastNotifyToastr(new ToastrOptions
 {
     ProgressBar = true,
     TimeOut = 5000
+}).AddRazorPagesOptions(ops =>
+{
+    ops.Conventions.AuthorizeFolder("/Admin", "RequireAdmins");
 });
+
+builder.Services.AddAuthorization(opts =>
+{
+    opts.AddPolicy("RequireAdmins", policy => policy.RequireRole("Admin"));
+});
+
 builder.Services.AddSignalR();
 
 // Add ToastNotification
