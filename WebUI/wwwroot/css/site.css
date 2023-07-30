@@ -216,7 +216,7 @@ body {
 }
 
 
-// Quantity spin box
+/* Quantity spin box */
 .quantity-spinner {
     display: flex;
     align-items: center;
@@ -259,4 +259,36 @@ body {
 
 .quantity-spinner input:focus {
     outline: none;
+}
+
+/* _ProductTable */
+.truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px; /* Adjust this value to your preference */
+}
+
+/* Add tooltip for truncated text */
+.truncate-text[title] {
+    position: relative;
+    cursor: pointer;
+}
+
+.truncate-text[title]:hover:after {
+    content: attr(title);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    white-space: nowrap;
+    background-color: #f9f9f9;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.table input[type="text"],
+.table input[type="number"] {
+    width: 100%;
+    box-sizing: border-box;
 }

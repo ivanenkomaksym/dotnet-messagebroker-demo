@@ -1,0 +1,62 @@
+﻿@page
+@model WebUI.Pages.Admin.Products.AddRemoveProductModel
+@{
+    ViewData["Title"] = "Add or Remove Product";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="text-danger" asp-validation-summary="All"></div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Summary</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Discount</th>
+            <th>Sold</th>
+            <th>Available On Stock</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Add row for adding a new product -->
+        <form method="post">
+            <tr>
+                <td class="truncate-text"><input type="hidden" asp-for="NewProduct.Id" />@Model.NewProduct.Id</td>
+                <td><input type="text" asp-for="NewProduct.Name" /></td>
+                <td><input type="text" asp-for="NewProduct.Category" /></td>
+                <td><input type="text" asp-for="NewProduct.Summary" /></td>
+                <td><input type="number" asp-for="NewProduct.Price" step="0.01" /></td>
+                <td><input type="number" asp-for="NewProduct.Quantity" /></td>
+                <td><input type="number" asp-for="NewProduct.Discount" step="0.01" /></td>
+                <td><input type="number" asp-for="NewProduct.Sold" /></td>
+                <td><input type="number" asp-for="NewProduct.AvailableOnStock" /></td>
+                <td>
+                <button asp-page-handler="AddProduct" class="btn btn-primary">Add</button>
+                </td>
+            </tr>
+        </form>
+        @foreach (var product in Model.Products)
+        {
+            <tr>
+                <td class="truncate-text" title="@product.Id">@product.Id</td>
+                <td class="truncate-text" title="@product.Name">@product.Name</td>
+                <td>@product.Category</td>
+                <td class="truncate-text" title="@product.Summary">@product.Summary</td>
+                <td>@product.Price</td>
+                <td>@product.Quantity</td>
+                <td>@product.Discount</td>
+                <td>@product.Sold</td>
+                <td>@product.AvailableOnStock</td>
+                <td>
+                    <form method="post">
+                        <button class="btn btn-danger" asp-page-handler="DeleteProduct" asp-route-productId="@product.Id">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

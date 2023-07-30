@@ -11,6 +11,12 @@
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-page="/Order">My Orders</a>
     </li>
+    @if (HttpContextAccessor.HttpContext.User.IsInRole("Admin"))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Index">Admin Dashboard</a>
+        </li>
+    }
 }
 else
 {
