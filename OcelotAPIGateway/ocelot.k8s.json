@@ -230,7 +230,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "warehouseapi",
-                    "Port": 8012
+                    "Port": 80
                 }
             ]
         },
@@ -242,7 +242,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "warehouseapi",
-                    "Port": 8012
+                    "Port": 80
                 }
             ]
         },
