@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: shoppingcartapi
-          image: ivanenkomak/shoppingcartapi:1.0
+          image: ivanenkomak/shoppingcartapi:latest
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"

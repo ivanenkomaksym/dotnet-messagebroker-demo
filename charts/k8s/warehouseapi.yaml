@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: warehouseapi
-          image: ivanenkomak/warehouseapi:1.1
+          image: ivanenkomak/warehouseapi:latest
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"

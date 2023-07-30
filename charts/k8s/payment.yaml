@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: payment
-          image: ivanenkomak/payment:1.0
+          image: ivanenkomak/payment:latest
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"

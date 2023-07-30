@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ordergrpc
-          image: ivanenkomak/ordergrpc:1.0
+          image: ivanenkomak/ordergrpc:latest
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"

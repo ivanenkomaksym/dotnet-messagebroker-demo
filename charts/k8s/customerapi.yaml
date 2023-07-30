@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: customerapi
-          image: ivanenkomak/customerapi:1.0
+          image: ivanenkomak/customerapi:latest
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"

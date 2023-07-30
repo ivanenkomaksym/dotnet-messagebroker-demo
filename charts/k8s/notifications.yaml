@@ -20,7 +20,7 @@ spec:
             name: app-configmap
       containers:
         - name: notifications
-          image: ivanenkomak/notifications:1.0
+          image: ivanenkomak/notifications:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

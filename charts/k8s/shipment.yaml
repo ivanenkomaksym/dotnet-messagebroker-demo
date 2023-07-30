@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: shipment
-          image: ivanenkomak/shipment:1.0
+          image: ivanenkomak/shipment:latest
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"

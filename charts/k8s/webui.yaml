@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: webui
-          image: ivanenkomak/webui:1.0
+          image: ivanenkomak/webui:latest
           env:
             - name: ApiSettings__GatewayAddress
               value: "http://ocelotapigateway"

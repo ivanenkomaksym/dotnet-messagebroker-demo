@@ -20,7 +20,7 @@ spec:
             name: ocelot-configmap
       containers:
         - name: ocelotapigateway
-          image: ivanenkomak/ocelotapigateway:1.0
+          image: ivanenkomak/ocelotapigateway:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: ASPNETCORE_ENVIRONMENT

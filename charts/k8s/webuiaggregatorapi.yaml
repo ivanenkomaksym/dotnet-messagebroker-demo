@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: webuiaggregatorapi
-          image: ivanenkomak/webuiaggregatorapi:1.0
+          image: ivanenkomak/webuiaggregatorapi:latest
           env:
             - name: ApiSettings__GatewayAddress
               value: "http://ocelotapigateway"
