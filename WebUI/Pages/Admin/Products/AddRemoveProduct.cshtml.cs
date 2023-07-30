@@ -41,7 +41,7 @@ namespace WebUI.Pages.Admin.Products
                 return Page();
             }
 
-            // #TODO: Implement insertion
+            await _productService.CreateProductWithStock(NewProduct);
 
             // Refresh the page with the updated product list.
             return RedirectToPage();
@@ -49,7 +49,7 @@ namespace WebUI.Pages.Admin.Products
 
         public async Task<IActionResult> OnPostDeleteProduct(Guid productId)
         {
-            // #TODO: Implement deletion
+            await _productService.DeleteProduct(productId);
 
             // Refresh the page with the updated product list.
             return RedirectToPage();
