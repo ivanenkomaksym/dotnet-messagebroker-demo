@@ -222,6 +222,30 @@
                 }
             ]
         },
+        {
+            "UpstreamPathTemplate": "/gateway/StockItem",
+            "UpstreamHttpMethod": [ "POST" ],
+            "DownstreamPathTemplate": "/api/StockItem",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8012
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/StockItem/DeleteStockItemByProductId/{productId}",
+            "UpstreamHttpMethod": [ "DELETE" ],
+            "DownstreamPathTemplate": "/api/StockItem/DeleteStockItemByProductId/{productId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8012
+                }
+            ]
+        },
         // WebUI Aggregator API
         {
             "UpstreamPathTemplate": "/gateway/Products",
