@@ -21,6 +21,30 @@ jobs:
             dockerfile: CatalogAPI/Dockerfile
           - image: ivanenkomak/customerapi
             dockerfile: CustomerAPI/Dockerfile
+          - image: ivanenkomak/notifications
+            dockerfile: Notifications/Dockerfile
+          - image: ivanenkomak/ocelotapigateway
+            dockerfile: OcelotAPIGateway/Dockerfile
+          - image: ivanenkomak/orderapi
+            dockerfile: OrderAPI/Dockerfile
+          - image: ivanenkomak/ordergrpc
+            dockerfile: OrderGrpc/Dockerfile
+          - image: ivanenkomak/orderprocessor
+            dockerfile: OrderProcessor/Dockerfile
+          - image: ivanenkomak/payment
+            dockerfile: Payment/Dockerfile
+          - image: ivanenkomak/shipment
+            dockerfile: Shipment/Dockerfile
+          - image: ivanenkomak/shoppingcartapi
+            dockerfile: ShoppingCartAPI/Dockerfile
+          - image: ivanenkomak/warehouse
+            dockerfile: Warehouse/Dockerfile
+          - image: ivanenkomak/warehouseapi
+            dockerfile: WarehouseAPI/Dockerfile
+          - image: ivanenkomak/webui
+            dockerfile: WebUI/Dockerfile
+          - image: ivanenkomak/webuiaggregatorapi
+            dockerfile: WebUIAggregatorAPI/Dockerfile
     
     steps:
       - name: Checkout Repository
