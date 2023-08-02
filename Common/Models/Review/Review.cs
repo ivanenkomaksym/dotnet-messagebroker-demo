@@ -23,10 +23,13 @@ namespace Common.Models.Review
         [Range(1, 5, ErrorMessage = "Only numbers from 1 to 5 are supported.")]
         public int Rating { get; set; }
 
-        public bool Anonymous { get; set; } = false;
+        [BsonDefaultValue(false)]
+        public bool? Anonymous { get; set; } = false;
 
-        public ReviewDetails ReviewDetails { get; set; }
+        [BsonDefaultValue(null)]
+        public ReviewDetails? ReviewDetails { get; set; }
 
-        public DateTime CreationDateTime { get; set; }
+        [BsonDefaultValue(null)]
+        public DateTime? CreationDateTime { get; set; } = DateTime.Now;
     }
 }

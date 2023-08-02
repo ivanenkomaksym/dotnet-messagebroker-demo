@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<IFeedbackContext, FeedbackContext>();
 builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
-builder.Services.AddGraphQLServer().AddQueryType<Query>().AddType<ReviewType>();
+builder.Services.AddGraphQLServer().AddQueryType<Query>().AddMutationType<Mutation>().AddType<ReviewType>();
 
 // Add services to the container.
 
