@@ -62,6 +62,10 @@ kubectl apply -f webui-service.yaml
 kubectl apply -f webuiaggregatorapi.yaml
 kubectl apply -f webuiaggregatorapi-service.yaml
 
+# FeedbackAPI
+kubectl apply -f feedbackapi.yaml
+kubectl apply -f feedbackapi-service.yaml
+
 minikube dashboard
 Start-Process -FilePath "cmd" -ArgumentList "/c minikube service shopdb" -WorkingDirectory ".\"
 Start-Process -FilePath "cmd" -ArgumentList "/c minikube service webui" -WorkingDirectory ".\"

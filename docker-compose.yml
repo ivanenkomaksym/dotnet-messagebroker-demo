@@ -88,6 +88,12 @@ services:
       context: .
       dockerfile: OcelotAPIGateway/Dockerfile
 
+  feedbackapi:
+    image: ${DOCKER_REGISTRY-}feedbackapi
+    build:
+      context: .
+      dockerfile: FeedbackAPI/Dockerfile
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
 

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feedbackapi-pod
+  labels:
+    app: feedbackapi
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: feedbackapi-app
+  template:
+    metadata: 
+      labels:
+        app: feedbackapi-app
+    spec:
+      containers:
+        - name: feedbackapi
+          image: ivanenkomak/feedbackapi:latest
+          env:
+            - name: DatabaseSettings__ConnectionString
+              value: "mongodb://shopdb:27017"
+          envFrom:
+            - secretRef:
+                name: mongo-secrets
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80

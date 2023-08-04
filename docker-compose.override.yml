@@ -140,3 +140,12 @@ services:
     container_name: notifications
     ports:
       - "8014:80"
+
+  feedbackapi:
+    container_name: feedbackapi
+    environment:
+      - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    depends_on:
+      - shopdb
+    ports:
+      - "8015:80"

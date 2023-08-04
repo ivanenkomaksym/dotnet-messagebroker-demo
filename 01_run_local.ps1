@@ -15,4 +15,5 @@ Start-Process -FilePath "cmd" -ArgumentList "/c dotnet run" -WorkingDirectory ".
 Start-Process -FilePath "cmd" -ArgumentList "/c dotnet run" -WorkingDirectory ".\WarehouseAPI"
 Start-Process -FilePath "cmd" -ArgumentList "/c dotnet run" -WorkingDirectory ".\WebUI"
 Start-Process -FilePath "cmd" -ArgumentList "/c dotnet run" -WorkingDirectory ".\WebUIAggregatorAPI"
+Start-Process -FilePath "cmd" -ArgumentList "/c dotnet run" -WorkingDirectory ".\FeedbackAPI"
 Start-Process "http://localhost:8011/"

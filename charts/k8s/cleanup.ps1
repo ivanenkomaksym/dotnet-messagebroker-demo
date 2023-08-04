@@ -58,3 +58,7 @@ kubectl delete -f webui-service.yaml
 # WebUIAggregatorAPI
 kubectl delete -f webuiaggregatorapi.yaml
 kubectl delete -f webuiaggregatorapi-service.yaml
+
+# FeedbackAPI
+kubectl delete -f feedbackapi.yaml
+kubectl delete -f feedbackapi-service.yaml
