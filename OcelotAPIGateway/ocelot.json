@@ -281,6 +281,19 @@
                     "Port": 8013
                 }
             ]
+        },
+        // Feedback API
+        {
+            "UpstreamPathTemplate": "/gateway/graphql",
+            "UpstreamHttpMethod": [ "GET", "POST" ],
+            "DownstreamPathTemplate": "/api/graphql",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8015
+                }
+            ]
         }
     ],
     "GlobalConfiguration": {

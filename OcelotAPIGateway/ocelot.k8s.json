@@ -283,6 +283,19 @@
                     "Port": 80
                 }
             ]
+        },
+        // Feedback API
+        {
+            "UpstreamPathTemplate": "/gateway/graphql",
+            "UpstreamHttpMethod": [ "GET", "POST" ],
+            "DownstreamPathTemplate": "/api/graphql",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "feedbackapi",
+                    "Port": 80
+                }
+            ]
         }
     ],
     "GlobalConfiguration": {

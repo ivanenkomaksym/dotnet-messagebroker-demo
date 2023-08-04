@@ -228,6 +228,30 @@ data:
                     }
                 ]
             },
+            {
+                "UpstreamPathTemplate": "/gateway/StockItem",
+                "UpstreamHttpMethod": [ "POST" ],
+                "DownstreamPathTemplate": "/api/StockItem",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "warehouseapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            {
+                "UpstreamPathTemplate": "/gateway/StockItem/DeleteStockItemByProductId/{productId}",
+                "UpstreamHttpMethod": [ "DELETE" ],
+                "DownstreamPathTemplate": "/api/StockItem/DeleteStockItemByProductId/{productId}",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "warehouseapi",
+                        "Port": 80
+                    }
+                ]
+            },
             // WebUI Aggregator API
             {
                 "UpstreamPathTemplate": "/gateway/Products",
@@ -262,6 +286,19 @@ data:
                 "DownstreamHostAndPorts": [
                     {
                         "Host": "webuiaggregatorapi",
+                        "Port": 80
+                    }
+                ]
+            },
+            // Feedback API
+            {
+                "UpstreamPathTemplate": "/gateway/graphql",
+                "UpstreamHttpMethod": [ "GET", "POST" ],
+                "DownstreamPathTemplate": "/api/graphql",
+                "DownstreamScheme": "http",
+                "DownstreamHostAndPorts": [
+                    {
+                        "Host": "feedbackapi",
                         "Port": 80
                     }
                 ]

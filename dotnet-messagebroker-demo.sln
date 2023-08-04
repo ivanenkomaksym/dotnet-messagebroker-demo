@@ -31,11 +31,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderCommon", "OrderCommon\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderGrpc", "OrderGrpc\OrderGrpc.csproj", "{6D734573-2815-434B-90DB-0898E571973B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseCommon", "WarehouseCommon\WarehouseCommon.csproj", "{5641DC08-63CB-4876-809C-ABF65EF9C922}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarehouseCommon", "WarehouseCommon\WarehouseCommon.csproj", "{5641DC08-63CB-4876-809C-ABF65EF9C922}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseAPI", "WarehouseAPI\WarehouseAPI.csproj", "{1761D277-E843-4B77-94CA-D626AE7B1023}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarehouseAPI", "WarehouseAPI\WarehouseAPI.csproj", "{1761D277-E843-4B77-94CA-D626AE7B1023}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUIAggregatorAPI", "WebUIAggregatorAPI\WebUIAggregatorAPI.csproj", "{1831911C-318F-49E3-B990-8D583F9B67F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebUIAggregatorAPI", "WebUIAggregatorAPI\WebUIAggregatorAPI.csproj", "{1831911C-318F-49E3-B990-8D583F9B67F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4822EBE7-A89A-4B3A-BF60-9B21C720EC83}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedbackAPI", "FeedbackAPI\FeedbackAPI.csproj", "{9506EAB2-9FB8-4803-956B-04010F056A3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +118,10 @@ Global
 		{1831911C-318F-49E3-B990-8D583F9B67F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1831911C-318F-49E3-B990-8D583F9B67F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1831911C-318F-49E3-B990-8D583F9B67F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9506EAB2-9FB8-4803-956B-04010F056A3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9506EAB2-9FB8-4803-956B-04010F056A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9506EAB2-9FB8-4803-956B-04010F056A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9506EAB2-9FB8-4803-956B-04010F056A3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
