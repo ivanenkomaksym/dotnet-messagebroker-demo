@@ -1,12 +1,15 @@
-using WebUI.Services;
-using WebUI.Users;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
-using NToastNotify;
-using WebUI.Notifications;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.Newtonsoft;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using NToastNotify;
 using WebUI.Consumers;
+using WebUI.Notifications;
+using WebUI.Services;
+using WebUI.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,24 +54,26 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+var gatewayAddress = builder.Configuration["ApiSettings:GatewayAddress"];
+
 builder.Services.AddHttpClient<ICustomerService, CustomerService>(options =>
 {
-    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+    options.BaseAddress = new Uri(gatewayAddress);
 });
 
 builder.Services.AddHttpClient<IProductService, ProductService>(options =>
 {
-    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+    options.BaseAddress = new Uri(gatewayAddress);
 });
 
 builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>(options =>
 {
-    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+    options.BaseAddress = new Uri(gatewayAddress);
 });
 
 builder.Services.AddHttpClient<IOrderService, OrderService>(options =>
 {
-    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+    options.BaseAddress = new Uri(gatewayAddress);
 });
 
 builder.Services.AddSingleton<IUserProvider, DefaultUserProvider>();
@@ -76,6 +81,9 @@ builder.Services.AddSingleton<IMassTransitConsumersRegistry, MassTransitConsumer
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
+
+builder.Services.AddScoped<IGraphQLClient>(s => new GraphQLHttpClient(gatewayAddress + "/api/graphql", new NewtonsoftJsonSerializer()));
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

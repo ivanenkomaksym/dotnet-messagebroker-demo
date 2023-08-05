@@ -20,7 +20,10 @@ namespace FeedbackAPI.Repositories
             var foundReviewedProduct = await _context
                             .ReviewedProducts
                             .Find(filter)
-                            .FirstAsync();
+                            .FirstOrDefaultAsync();
+
+            if (foundReviewedProduct == null)
+                return new List<Review> { };
 
             return foundReviewedProduct.Reviews;
         }
@@ -32,7 +35,7 @@ namespace FeedbackAPI.Repositories
             var foundReviewedProduct = await _context
                             .ReviewedProducts
                             .Find(filter)
-                            .FirstAsync();
+                            .FirstOrDefaultAsync();
 
             if (foundReviewedProduct != null)
             {
