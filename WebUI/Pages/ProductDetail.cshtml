@@ -186,7 +186,11 @@
                             </div>
                             <div class="review-content">
                                 <div class="review-customer-info">
-                                    @if (!review.Anonymous.HasValue || !review.Anonymous.Value)
+                                    @if (!review.Anonymous.HasValue || review.Anonymous.Value)
+                                    {
+                                        <span class="customer-name">@Model.ObfuscateString(@review.CustomerInfo.FirstName)</span>
+                                    }
+                                    else
                                     {
                                         <span class="customer-name">@review.CustomerInfo.FirstName</span>
                                     }

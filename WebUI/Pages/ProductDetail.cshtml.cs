@@ -78,5 +78,19 @@ namespace WebUI.Pages
 
             return RedirectToPage("Cart");
         }
+
+        public string ObfuscateString(string input)
+        {
+            if (string.IsNullOrEmpty(input) || input.Length <= 2)
+            {
+                return input;
+            }
+
+            char firstChar = input[0];
+            char lastChar = input[input.Length - 1];
+            string middleAsterisks = new string('*', input.Length - 2);
+
+            return firstChar + middleAsterisks + lastChar;
+        }
     }
 }

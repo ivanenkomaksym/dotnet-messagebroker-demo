@@ -82,7 +82,7 @@ builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
 
-builder.Services.AddScoped<IGraphQLClient>(s => new GraphQLHttpClient(gatewayAddress + "/api/graphql", new NewtonsoftJsonSerializer()));
+builder.Services.AddScoped<IGraphQLClient>(s => new GraphQLHttpClient(gatewayAddress + "/gateway/graphql", new NewtonsoftJsonSerializer()));
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

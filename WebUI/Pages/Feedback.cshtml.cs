@@ -55,23 +55,32 @@ namespace WebUI.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(Guid productId)
+        public async Task<IActionResult> OnPostAsync(Guid orderId, Guid productId)
         {
             Review.Anonymous = Anonymous;
 
             if (!ModelState.IsValid)
             {
-                return Page();
+                return await OnGetAsync(orderId);
             }
 
             await _feedbackService.PostReview(productId, Review);
 
-            return Page();
+            return RedirectToPage(new { orderId = orderId });
         }
 
         public async Task<IActionResult> OnPostSkipAsync()
         {
             return RedirectToPage("/Index");
+        }
+
+        public async Task<bool> IsFeedbackProvided(Guid orderId, Guid productId)
+        {
+            var customerId = _userProvider.GetCustomerId(HttpContext);
+            var customer = await _customerService.GetCustomerById(customerId);
+
+            var reviews = await _feedbackService.GetReviews(productId);
+            return reviews.Where(r => r.CustomerInfo.Email == customer.Email).Any();
         }
     }
 }

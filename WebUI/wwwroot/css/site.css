@@ -349,17 +349,18 @@ body {
     width: auto;
     overflow: auto;
     font-size: 24px;
-    /*line-height: 1;*/ /* Set line-height to 1 to match the font size */
+    line-height: 1; /* Set line-height to 1 to match the font size */
 }
 
 .star-partial:after {
     content: '\2605'; /* Unicode character for a solid star */
-    display: flex;
+    display: inherit;
     position: relative;
     color: #FFD700;
     width: var(--partial-width, 0);
+    height: 17px;
     overflow: auto;
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .star-count {

@@ -49,7 +49,7 @@ namespace WebUI.Pages
             {
                 return NotFound();
             }
-            return RedirectToPage("/Order");
+            return RedirectToPage($"/Order/{orderId}/Feedback");
         }
 
         public async Task<IActionResult> OnPostReturnOrderAsync(Guid orderId)
