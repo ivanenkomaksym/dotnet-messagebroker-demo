@@ -1,0 +1,160 @@
+﻿@page
+@model WebUI.Pages.FeedbackModel
+@{
+    ViewData["Title"] = "Feedback";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-page="Index">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Feedback</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="text-danger" asp-validation-summary="All"></div>
+
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <tbody>
+                    @foreach (var orderItem in Model.Order.Items)
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col"> </th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col" class="text-right">Price</th>
+                                    <th scope="col" class="text-center">Quantity</th>
+                                    <th scope="col" class="text-right">Total</th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td>
+                                    <a asp-page="ProductDetail" asp-route-productId="@orderItem.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@orderItem.ImageFile" alt="Order Item"></a>
+                                </td>
+                                <td>@orderItem.ProductName</td>
+                                <td class="text-right">@(orderItem.ProductPrice.ToString("C"))</td>
+                                <td>@orderItem.Quantity</td>
+                                <td class="text-right">@((orderItem.ProductPrice * orderItem.Quantity).ToString("C"))</td>
+                            </tr>
+                        </table>
+
+                        <form method="post" class="needs-validation" novalidate>
+                            <div class="form-group">
+                                <label for="rating">Please rate this product:</label>
+                                <div class="star-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="far fa-star star" data-value="@i"></i>
+                                    }
+                                    <input asp-for="Review.Rating" type="hidden" class="form-control" id="rating" value="0">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="reviewText">Write your review (1000 characters max):</label>
+                                @*<textarea asp-for="Review.Description" class="form-control" id="reviewText" name="reviewText" rows="4" maxlength="1000"></textarea>*@
+                                @*<input asp-for="Review.Description" type="hidden" class="form-control" id="description" name="description" value="0">*@
+                                <textarea input class="form-control" id="abc" rows="4" maxlength="1000" asp-for="Review.Description"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <span>Accuracy:</span>
+                                    <div class="star-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="far fa-star star" data-value="@i"></i>
+                                        }
+                                        <input asp-for="Review.ReviewDetails.Accuracy" type="hidden" class="form-control" id="Accuracy">
+                                    </div>
+                                </div>
+                                <div>
+                                    <span>Communication:</span>
+                                    <div class="star-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="far fa-star star" data-value="@i"></i>
+                                        }
+                                        <input asp-for="Review.ReviewDetails.Communication" type="hidden" class="form-control" id="Communication">
+                                    </div>
+                                </div>
+                                <div>
+                                    <span>Speed of Delivery:</span>
+                                    <div class="star-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="far fa-star star" data-value="@i"></i>
+                                        }
+                                        <input asp-for="Review.ReviewDetails.DeliverySpeed" type="hidden" class="form-control" id="DeliverySpeed">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group form-check">
+                                @Html.CheckBoxFor(model => model.Anonymous, new { @class = "form-check-input", id = "Anonymous" })
+                                <label class="form-check-label" for="anonymous">4. Submit Anonymously</label>
+                            </div>
+
+                            <input asp-for="Review.CustomerInfo.CustomerId" type="hidden" class="form-control" id="CustomerId" value="@Model.Review.CustomerInfo.CustomerId">
+                            <input asp-for="Review.CustomerInfo.FirstName" type="hidden" class="form-control" id="FirstName" value="@Model.Review.CustomerInfo.FirstName">
+                            <input asp-for="Review.CustomerInfo.LastName" type="hidden" class="form-control" id="LastName" value="@Model.Review.CustomerInfo.LastName">
+                            <input asp-for="Review.CustomerInfo.Email" type="hidden" class="form-control" id="Email" value="@Model.Review.CustomerInfo.Email">
+                            <input type="hidden" asp-for="@orderItem.ProductId" name="productId" />
+
+                            <div class="form-group">
+                                <input type="submit" value="Submit" class="btn btn-primary" asp-for="@orderItem.ProductId" />
+                            </div>
+                        </form>
+                    }
+                </tbody>
+            </div>
+        </div>
+        <div class="col mb-2">
+            <div class="row">
+                <div class="col-sm-12  col-md-6">
+                    <form method="post">
+                        <button class="btn btn-danger" asp-page-handler="Skip">Skip</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/css/all.min.css" rel="stylesheet">
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('.star').click(function () {
+                var value = $(this).data('value');
+                console.log('Value:', value); // Add this line
+                var container = $(this).parent();
+
+                // Reset all stars in the container
+                container.find('.star').removeClass('fas').addClass('far');
+
+                // Fill in the clicked star and all previous stars
+                for (var i = 1; i <= value; i++) {
+                    container.find('.star[data-value="' + i + '"]').removeClass('far').addClass('fas');
+                }
+
+                // Update the hidden input value
+                console.log('Before:', container.find('input[type="hidden"]').val());
+                container.find('input[type="hidden"]').val(value);
+                console.log('After:', container.find('input[type="hidden"]').val());
+            });
+        });
+    </script>
+}

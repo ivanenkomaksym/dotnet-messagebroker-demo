@@ -63,7 +63,7 @@ namespace WebUI.Pages
             {
                 return NotFound();
             }
-            return RedirectToPage("/Order");
+            return RedirectToPage("/Feedback", new { orderId = orderId });
         }
     }
 }
