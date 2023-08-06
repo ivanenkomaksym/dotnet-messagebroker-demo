@@ -32,7 +32,6 @@ namespace WebUI.Pages
         [BindProperty]
         public bool SignUp { get; set; }
 
-        [BindProperty]
         [DataType(DataType.Password)]
         public string CustomerPassword { get; set; }
 

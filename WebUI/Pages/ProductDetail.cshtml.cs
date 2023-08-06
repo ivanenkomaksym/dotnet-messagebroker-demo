@@ -62,7 +62,8 @@ namespace WebUI.Pages
 
             Reviews = await _feedbackService.GetReviews(productId);
             var ratings = Reviews.Select(r => r.Rating);
-            AverageRating = ratings.Average();
+            if (ratings.Any())
+                AverageRating = ratings.Average();
 
             return Page();
         }

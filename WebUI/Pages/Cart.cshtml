@@ -43,7 +43,7 @@
                                 </td>
                                 <td>@cartItem.ProductName</td>
                                 <td>@cartItem.AvailableOnStock</td>
-                                <td class="text-right">@(cartItem.ProductPrice.ToString("C")) $</td>
+                                <td class="text-right">@(cartItem.ProductPrice.ToString("C"))</td>
                                 <td>
                                     <div class="quantity-spinner">
                                         <form asp-page-handler="IncreaseQuantity" method="post" class="quantity-form">
@@ -52,7 +52,7 @@
                                         </form>
                                     </div>
                                 </td>
-                                <td class="text-right">@((cartItem.ProductPrice * cartItem.Quantity).ToString("C")) $</td>
+                                <td class="text-right">@((cartItem.ProductPrice * cartItem.Quantity).ToString("C"))</td>
                                 <td class="text-right">
 
                                     <form asp-page-handler="removetocart" method="post">

@@ -14,6 +14,7 @@
             <th>Name</th>
             <th>Category</th>
             <th>Summary</th>
+            <th>ImageFile</th>
             <th>Price</th>
             <th>Quantity</th>
             <th>Discount</th>
@@ -29,6 +30,7 @@
                 <td><input type="text" asp-for="NewProduct.Name" /></td>
                 <td><input type="text" asp-for="NewProduct.Category" /></td>
                 <td><input type="text" asp-for="NewProduct.Summary" /></td>
+                <td><input type="text" asp-for="NewProduct.ImageFile" /></td>
                 <td><input type="number" asp-for="NewProduct.Price" step="0.01" /></td>
                 <td><input type="number" asp-for="NewProduct.Quantity" /></td>
                 <td><input type="number" asp-for="NewProduct.Discount" step="0.01" /></td>
@@ -46,6 +48,7 @@
                 <td class="truncate-text" title="@product.Name">@product.Name</td>
                 <td>@product.Category</td>
                 <td class="truncate-text" title="@product.Summary">@product.Summary</td>
+                <td class="truncate-text" title="@product.Summary">@product.ImageFile</td>
                 <td>@product.Price</td>
                 <td>@product.Quantity</td>
                 <td>@product.Discount</td>

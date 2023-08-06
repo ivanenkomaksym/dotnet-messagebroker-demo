@@ -102,7 +102,7 @@
                 <div class="card-header bg-primary text-white text-uppercase"><i class="fa fa-align-justify"></i> Description</div>
                 <div class="card-body">
                     <p class="card-text">
-                        @Model.Product.Summary                        
+                        @Model.Product.Summary
                     </p>
                 </div>
             </div>
@@ -111,96 +111,102 @@
     </div>
 
     <div class="customer-reviews">
-        <h2 class="review-header">Customer Reviews (@Model.Reviews.Count())</h2>
-        <div class="average-rating">
-            <span class="average-rating-label">Average Rating:</span>
-            <span class="average-rating-value">@Math.Round(@Model.AverageRating, 1)</span>
-            <span class="average-rating-stars">
-                @for (int i = 0; i < 5; i++)
-                {
-                    if (i < Math.Floor(@Model.AverageRating))
+        @if (!@Model.Reviews.Any())
+        {
+            <h2 class="review-header">No Reviews yet</h2>
+        }
+        else
+        {
+            <h2 class="review-header">Customer Reviews (@Model.Reviews.Count())</h2>
+            <div class="average-rating">
+                <span class="average-rating-label">Average Rating:</span>
+                <span class="average-rating-value">@Math.Round(@Model.AverageRating, 1)</span>
+                <span class="average-rating-stars">
+                    @for (int i = 0; i < 5; i++)
                     {
-                        <i class="fa fa-star star-filled"></i>
+                        if (i < Math.Floor(@Model.AverageRating))
+                        {
+                            <i class="fa fa-star star-filled"></i>
+                        }
+                        else if (i == Math.Floor(@Model.AverageRating) && @Model.AverageRating != Math.Floor(@Model.AverageRating))
+                        {
+                            <i class="fa fa-star star-partial" style="--partial-width: @Math.Round(((@Model.AverageRating - Math.Floor(@Model.AverageRating)) * 100))%;"></i>
+                        }
                     }
-                    else if (i == Math.Floor(@Model.AverageRating) && @Model.AverageRating != Math.Floor(@Model.AverageRating))
+                </span>
+            </div>
+            <div class="review-grid">
+                <div class="star-count">5 stars</div>
+                <div class="star-bar">
+                    <div class="filled-stars" style="width: @(Model.StarRatio(5) * 100)%;"></div>
+                    <div class="empty-stars" style="width: @(100 - Model.StarRatio(5) * 100)%;"></div>
+                </div>
+
+                <div class="star-count">4 stars</div>
+                <div class="star-bar">
+                    <div class="filled-stars" style="width: @(Model.StarRatio(4) * 100)%;"></div>
+                    <div class="empty-stars" style="width: @(100 - Model.StarRatio(4) * 100)%;"></div>
+                </div>
+
+                <div class="star-count">3 stars</div>
+                <div class="star-bar">
+                    <div class="filled-stars" style="width: @(Model.StarRatio(3) * 100)%;"></div>
+                    <div class="empty-stars" style="width: @(100 - Model.StarRatio(3) * 100)%;"></div>
+                </div>
+
+                <div class="star-count">2 stars</div>
+                <div class="star-bar">
+                    <div class="filled-stars" style="width: @(Model.StarRatio(2) * 100)%;"></div>
+                    <div class="empty-stars" style="width: @(100 - Model.StarRatio(2) * 100)%;"></div>
+                </div>
+
+                <div class="star-count">1 stars</div>
+                <div class="star-bar">
+                    <div class="filled-stars" style="width: @(Model.StarRatio(1) * 100)%;"></div>
+                    <div class="empty-stars" style="width: @(100 - Model.StarRatio(1) * 100)%;"></div>
+                </div>
+
+                <!-- Repeat the above pattern for 4, 3, 2, and 1 stars -->
+                <!-- Make sure to adjust the widths of filled and empty stars based on the number of ratings -->
+            </div>
+
+            <div class="review-list">
+                <ul class="reviews">
+                    @foreach (var review in Model.Reviews)
                     {
-                        <i class="fa fa-star star-partial" style="--partial-width: @Math.Round(((@Model.AverageRating - Math.Floor(@Model.AverageRating)) * 100))%;"></i>
+                        <li class="review">
+                            <div class="review-header">
+                                <span class="review-rating">
+                                    @for (int i = 0; i < review.Rating; i++)
+                                    {
+                                        <i class="fa fa-star"></i>
+                                    }
+                                </span>
+                                <span class="review-date">@review.CreationDateTime?.ToString("MMMM dd, yyyy")</span>
+                            </div>
+                            <div class="review-content">
+                                <div class="review-customer-info">
+                                    @if (!review.Anonymous.HasValue || !review.Anonymous.Value)
+                                    {
+                                        <span class="customer-name">@review.CustomerInfo.FirstName</span>
+                                    }
+                                </div>
+                                <p class="review-description">@review.Description</p>
+                                <div class="review-details">
+                                    <!-- Display review details such as likes, helpfulness, etc. -->
+                                </div>
+                            </div>
+                        </li>
                     }
-                }
-            </span>
-        </div>
-        <div class="review-grid">
-            <div class="star-count">5 stars</div>
-            <div class="star-bar">
-                <div class="filled-stars" style="width: @(Model.StarRatio(5) * 100)%;"></div>
-                <div class="empty-stars" style="width: @(100 - Model.StarRatio(5) * 100)%;"></div>
+                </ul>
             </div>
-            
-            <div class="star-count">4 stars</div>
-            <div class="star-bar">
-                <div class="filled-stars" style="width: @(Model.StarRatio(4) * 100)%;"></div>
-                <div class="empty-stars" style="width: @(100 - Model.StarRatio(4) * 100)%;"></div>
-            </div>
-            
-            <div class="star-count">3 stars</div>
-            <div class="star-bar">
-                <div class="filled-stars" style="width: @(Model.StarRatio(3) * 100)%;"></div>
-                <div class="empty-stars" style="width: @(100 - Model.StarRatio(3) * 100)%;"></div>
-            </div>
-
-            <div class="star-count">2 stars</div>
-            <div class="star-bar">
-                <div class="filled-stars" style="width: @(Model.StarRatio(2) * 100)%;"></div>
-                <div class="empty-stars" style="width: @(100 - Model.StarRatio(2) * 100)%;"></div>
-            </div>
-
-            <div class="star-count">1 stars</div>
-            <div class="star-bar">
-                <div class="filled-stars" style="width: @(Model.StarRatio(1) * 100)%;"></div>
-                <div class="empty-stars" style="width: @(100 - Model.StarRatio(1) * 100)%;"></div>
-            </div>
-
-            <!-- Repeat the above pattern for 4, 3, 2, and 1 stars -->
-            <!-- Make sure to adjust the widths of filled and empty stars based on the number of ratings -->
-        </div>
-
-        <div class="review-list">
-            <ul class="reviews">
-                @foreach (var review in Model.Reviews)
-                {
-                    <li class="review">
-                        <div class="review-header">
-                            <span class="review-rating">
-                                @for (int i = 0; i < review.Rating; i++)
-                                {
-                                    <i class="fa fa-star"></i>
-                                }
-                            </span>
-                            <span class="review-date">@review.CreationDateTime?.ToString("MMMM dd, yyyy")</span>
-                        </div>
-                        <div class="review-content">
-                            <div class="review-customer-info">
-                                @if (!review.Anonymous.HasValue || !review.Anonymous.Value)
-                                {
-                                    <span class="customer-name">@review.CustomerInfo.FirstName</span>
-                                }
-                                @*<span class="customer-location">@review.CustomerInfo.Location</span>*@
-                            </div>
-                            <p class="review-description">@review.Description</p>
-                            <div class="review-details">
-                                <!-- Display review details such as likes, helpfulness, etc. -->
-                            </div>
-                        </div>
-                    </li>
-                }
-            </ul>
-        </div>
+        }
     </div>
 
 </div>
 
 <script>
     function increment() {
-        @Model.Quantity++;
-     }
+    @Model.Quantity++;
+    }
 </script>
