@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"context"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -13,8 +15,7 @@ func main() {
 	ctx, client := CreateClient(configuration)
 
 	defer func() {
-		var err error
-		if err = client.Disconnect(context.TODO()); err != nil {
+		if err := client.Disconnect(context.TODO()); err != nil {
 			panic(err)
 		}
 	}()
@@ -22,6 +23,14 @@ func main() {
 	collection := client.Database(configuration.DatabaseSettings.DatabaseName).Collection(configuration.DatabaseSettings.CollectionName)
 
 	SeedData(configuration, ctx, collection)
+
+	router := gin.Default()
+	router.GET("/api/discounts", getDiscounts(ctx, collection))
+	router.GET("/api/discounts/:productId", getDiscountByProductId(ctx, collection))
+
+	if err := router.Run(configuration.ServerSettings.ApplicationUrl); err != nil {
+		panic(err)
+	}
 }
 
 func readConfiguration() Configuration {

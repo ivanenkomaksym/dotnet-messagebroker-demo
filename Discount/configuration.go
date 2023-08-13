@@ -10,7 +10,12 @@ type DatabaseSettings struct {
 	CollectionName   string
 }
 
+type ServerSettings struct {
+	ApplicationUrl string
+}
+
 type Configuration struct {
 	ApiSettings      ApiSettings
 	DatabaseSettings DatabaseSettings
+	ServerSettings   ServerSettings
 }
