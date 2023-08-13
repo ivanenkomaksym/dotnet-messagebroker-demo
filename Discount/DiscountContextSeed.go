@@ -5,41 +5,22 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"time"
 
 	"github.com/google/uuid"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func SeedData(configuration Configuration) {
-
-	client, err := mongo.NewClient(options.Client().ApplyURI(configuration.DatabaseSettings.ConnectionString))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Set up a connection to the MongoDB server
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	err = client.Connect(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	db := client.Database(configuration.DatabaseSettings.DatabaseName)
-
-	// Create a collection
-	collection := db.Collection(configuration.DatabaseSettings.CollectionName)
-
+func SeedData(configuration Configuration, ctx context.Context, collection *mongo.Collection) {
 	// Check if the collection is empty
-	count, _ := collection.CountDocuments(ctx, nil)
+	opts := options.Count().SetHint("_id_")
+	count, _ := collection.CountDocuments(ctx, bson.D{}, opts)
 	if count > 0 {
 		return
 	}
 
-	fmt.Println("SeedData started")
+	fmt.Println("SeedData started.")
 
 	var discounts []Discount
 	products := getProducts(configuration)
@@ -57,8 +38,11 @@ func SeedData(configuration Configuration) {
 		interfaceStmts = append(interfaceStmts, d)
 	}
 
+	var err error
 	_, err = collection.InsertMany(ctx, interfaceStmts)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Println("SeedData finished.")
 }

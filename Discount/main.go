@@ -4,9 +4,27 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+
+	"context"
 )
 
 func main() {
+	configuration := readConfiguration()
+	ctx, client := CreateClient(configuration)
+
+	defer func() {
+		var err error
+		if err = client.Disconnect(context.TODO()); err != nil {
+			panic(err)
+		}
+	}()
+
+	collection := client.Database(configuration.DatabaseSettings.DatabaseName).Collection(configuration.DatabaseSettings.CollectionName)
+
+	SeedData(configuration, ctx, collection)
+}
+
+func readConfiguration() Configuration {
 	f, err := os.ReadFile("appsettings.json")
 	if err != nil {
 		log.Println(err)
@@ -14,24 +32,5 @@ func main() {
 	configuration := Configuration{}
 	json.Unmarshal([]byte(f), &configuration)
 
-	// ctx, client := CreateClient(configuration)
-
-	// db := client.Database(configuration.DatabaseSettings.DatabaseName)
-	// err = db.CreateCollection(ctx, configuration.DatabaseSettings.CollectionName)
-	// if err == nil {
-	// 	log.Println(err)
-	// 	return
-	// }
-	// coll := db.Collection(configuration.DatabaseSettings.CollectionName)
-
-	// SeedData(configuration, ctx, coll)
-
-	// defer func() {
-	// 	err := client.Disconnect(ctx)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// }()
-
-	SeedData(configuration)
+	return configuration
 }
