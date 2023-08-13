@@ -19,6 +19,7 @@ func getDiscounts(ctx context.Context, collection *mongo.Collection) gin.Handler
 
 		var results []Discount
 		if err = cursor.All(ctx, &results); err != nil {
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "InternalServerError. Details: " + err.Error()})
 			panic(err)
 		}
 
@@ -38,6 +39,7 @@ func getDiscountByProductId(ctx context.Context, collection *mongo.Collection) g
 		var result Discount
 		err := collection.FindOne(ctx, filter, opts).Decode(&result)
 		if err != nil {
+			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "NotFound. Details: " + err.Error()})
 			panic(err)
 		}
 

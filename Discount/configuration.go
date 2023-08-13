@@ -5,9 +5,10 @@ type ApiSettings struct {
 }
 
 type DatabaseSettings struct {
-	ConnectionString string
-	DatabaseName     string
-	CollectionName   string
+	ConnectionString         string
+	DatabaseName             string
+	DiscountsCollectionName  string
+	UserPromosCollectionName string
 }
 
 type ServerSettings struct {

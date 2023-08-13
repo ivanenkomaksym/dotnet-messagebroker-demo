@@ -20,13 +20,18 @@ func main() {
 		}
 	}()
 
-	collection := client.Database(configuration.DatabaseSettings.DatabaseName).Collection(configuration.DatabaseSettings.CollectionName)
+	discountsCollection := client.Database(configuration.DatabaseSettings.DatabaseName).Collection(configuration.DatabaseSettings.DiscountsCollectionName)
+	userPromosCollection := client.Database(configuration.DatabaseSettings.DatabaseName).Collection(configuration.DatabaseSettings.UserPromosCollectionName)
 
-	SeedData(configuration, ctx, collection)
+	SeedData(configuration, ctx, discountsCollection)
 
 	router := gin.Default()
-	router.GET("/api/discounts", getDiscounts(ctx, collection))
-	router.GET("/api/discounts/:productId", getDiscountByProductId(ctx, collection))
+	router.GET("/api/discounts", getDiscounts(ctx, discountsCollection))
+	router.GET("/api/discounts/:productId", getDiscountByProductId(ctx, discountsCollection))
+
+	router.GET("/api/userpromos", getUserPromos(ctx, userPromosCollection))
+	router.GET("/api/userpromos/:customerId", getUserPromoForCustomerId(ctx, userPromosCollection))
+	router.POST("/api/userpromos", createUserPromo(ctx, userPromosCollection))
 
 	if err := router.Run(configuration.ServerSettings.ApplicationUrl); err != nil {
 		panic(err)
