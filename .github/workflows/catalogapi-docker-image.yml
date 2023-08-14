@@ -41,7 +41,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ matrix.image }}
+          images: ivanenkomak/catalogapi
       - name: Build and push
         run: |
           TIMESTAMP="${{ steps.timestamp.outputs.timestamp }}"
