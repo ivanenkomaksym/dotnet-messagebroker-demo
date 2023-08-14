@@ -1,6 +1,8 @@
 name: Docker Image CI - CatalogAPI
 
 on:
+  workflow_dispatch:
+
   push:
     branches: [ "main" ]
     paths:
