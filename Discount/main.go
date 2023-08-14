@@ -33,7 +33,7 @@ func main() {
 	router.GET("/api/userpromos/:customerId", getUserPromoForCustomerId(ctx, userPromosCollection))
 	router.POST("/api/userpromos", createUserPromo(ctx, userPromosCollection))
 
-	if err := router.Run(configuration.ServerSettings.ApplicationUrl); err != nil {
+	if err := router.Run(":80"); err != nil {
 		panic(err)
 	}
 }
@@ -45,6 +45,14 @@ func readConfiguration() Configuration {
 	}
 	configuration := Configuration{}
 	json.Unmarshal([]byte(f), &configuration)
+
+	if databaseSettingsConnectionStringEnvVar := os.Getenv("DatabaseSettings__ConnectionString"); databaseSettingsConnectionStringEnvVar != "" {
+		configuration.DatabaseSettings.ConnectionString = databaseSettingsConnectionStringEnvVar
+	}
+
+	if apiSettingsGatewayAddressEnvVar := os.Getenv("ApiSettings__GatewayAddress"); apiSettingsGatewayAddressEnvVar != "" {
+		configuration.ApiSettings.GatewayAddress = apiSettingsGatewayAddressEnvVar
+	}
 
 	return configuration
 }

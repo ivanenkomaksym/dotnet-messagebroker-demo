@@ -6,7 +6,7 @@ import (
 )
 
 func getProducts(config Configuration) []Product {
-	resp, err := http.Get(config.ApiSettings.GatewayAddress + "gateway/Catalog")
+	resp, err := http.Get(config.ApiSettings.GatewayAddress + "/gateway/Catalog")
 	if err != nil {
 		panic(err)
 	}
