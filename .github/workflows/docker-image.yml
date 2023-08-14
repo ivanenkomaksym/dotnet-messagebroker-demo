@@ -47,6 +47,8 @@ jobs:
             dockerfile: WebUIAggregatorAPI/Dockerfile
           - image: ivanenkomak/feedbackapi
             dockerfile: FeedbackAPI/Dockerfile
+          - image: ivanenkomak/discountapi
+            dockerfile: Discount/Dockerfile
     
     steps:
       - name: Checkout Repository
