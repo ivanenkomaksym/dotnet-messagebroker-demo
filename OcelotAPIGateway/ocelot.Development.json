@@ -296,6 +296,31 @@
                     "Port": 8015
                 }
             ]
+        },
+        // Discount API
+        {
+            "UpstreamPathTemplate": "/gateway/discounts",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/discounts",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8016
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/userpromos",
+            "UpstreamHttpMethod": [ "GET", "POST" ],
+            "DownstreamPathTemplate": "/api/userpromos",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8016
+                }
+            ]
         }
     ],
     "GlobalConfiguration": {
