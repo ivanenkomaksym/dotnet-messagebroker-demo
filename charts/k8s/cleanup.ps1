@@ -62,3 +62,7 @@ kubectl delete -f webuiaggregatorapi-service.yaml
 # FeedbackAPI
 kubectl delete -f feedbackapi.yaml
 kubectl delete -f feedbackapi-service.yaml
+
+# DiscountAPI
+kubectl delete -f discountapi.yaml
+kubectl delete -f discountapi-service.yaml

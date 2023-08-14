@@ -149,3 +149,13 @@ services:
       - shopdb
     ports:
       - "8015:80"
+
+  discountapi:
+    container_name: discountapi
+    environment:
+      - "ApiSettings:GatewayAddress=http://ocelotapigateway"
+      - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
+    depends_on:
+      - shopdb
+    ports:
+      - "8016:80"

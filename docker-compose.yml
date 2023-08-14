@@ -94,6 +94,12 @@ services:
       context: .
       dockerfile: FeedbackAPI/Dockerfile
 
+  discountapi:
+    image: ${DOCKER_REGISTRY-}discountapi
+    build:
+      context: .
+      dockerfile: Discount/Dockerfile
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
 
