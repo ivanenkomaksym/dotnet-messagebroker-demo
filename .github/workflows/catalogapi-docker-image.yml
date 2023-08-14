@@ -3,10 +3,12 @@ name: Docker Image CI - CatalogAPI
 on:
   push:
     branches: [ "main" ]
-    paths: [ "CatalogAPI" ]
+    paths:
+      - 'CatalogAPI/**'
   pull_request:
     branches: [ "main" ]
-    paths: [ "CatalogAPI" ]
+    paths:
+      - 'CatalogAPI/**'
 
 env:
   DOCKER_USER: ${{ secrets.DOCKER_USER }}
