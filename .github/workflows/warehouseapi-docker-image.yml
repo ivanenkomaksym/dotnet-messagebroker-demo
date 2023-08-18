@@ -1,4 +1,4 @@
-name: Docker Image CI - CatalogAPI
+name: Docker Image CI - WarehouseAPI
 
 on:
   workflow_dispatch:
@@ -6,11 +6,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'CatalogAPI/**'
+      - 'WarehouseAPI/**'
   pull_request:
     branches: [ "main" ]
     paths:
-      - 'CatalogAPI/**'
+      - 'WarehouseAPI/**'
       - 'Common/**'
 
 env:
@@ -42,11 +42,11 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ivanenkomak/catalogapi
+          images: ivanenkomak/warehouseapi
       - name: Build and push
         run: |
           TIMESTAMP="${{ steps.timestamp.outputs.timestamp }}"
-          IMAGE_TAG="ivanenkomak/catalogapi:${TIMESTAMP}"
-          DOCKERFILE="CatalogAPI/Dockerfile"
+          IMAGE_TAG="ivanenkomak/warehouseapi:${TIMESTAMP}"
+          DOCKERFILE="WarehouseAPI/Dockerfile"
           echo "Building Docker image with timestamp tag: ${IMAGE_TAG}"
           docker buildx build -t "${IMAGE_TAG}" --file "${DOCKERFILE}" . --push

@@ -1,4 +1,4 @@
-name: Docker Image CI - CatalogAPI
+name: Docker Image CI - OcelotAPIGateway
 
 on:
   workflow_dispatch:
@@ -6,12 +6,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'CatalogAPI/**'
+      - 'OcelotAPIGateway/**'
   pull_request:
     branches: [ "main" ]
     paths:
-      - 'CatalogAPI/**'
-      - 'Common/**'
+      - 'OcelotAPIGateway/**'
 
 env:
   DOCKER_USER: ${{ secrets.DOCKER_USER }}
@@ -42,11 +41,11 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ivanenkomak/catalogapi
+          images: ivanenkomak/ocelotapigateway
       - name: Build and push
         run: |
           TIMESTAMP="${{ steps.timestamp.outputs.timestamp }}"
-          IMAGE_TAG="ivanenkomak/catalogapi:${TIMESTAMP}"
-          DOCKERFILE="CatalogAPI/Dockerfile"
+          IMAGE_TAG="ivanenkomak/ocelotapigateway:${TIMESTAMP}"
+          DOCKERFILE="OcelotAPIGateway/Dockerfile"
           echo "Building Docker image with timestamp tag: ${IMAGE_TAG}"
           docker buildx build -t "${IMAGE_TAG}" --file "${DOCKERFILE}" . --push
