@@ -25,6 +25,8 @@ func main() {
 
 	SeedData(configuration, ctx, discountsCollection)
 
+	go consumeAddUserPromo(userPromosCollection)
+
 	router := gin.Default()
 	router.GET("/api/discounts", getDiscounts(ctx, discountsCollection))
 	router.GET("/api/discounts/:productId", getDiscountByProductId(ctx, discountsCollection))
