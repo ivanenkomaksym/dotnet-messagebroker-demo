@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: discount
-          image: discount:latest
+          image: ivanenkomak/discount:latest
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"
