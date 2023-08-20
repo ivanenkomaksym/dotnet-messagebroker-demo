@@ -21,5 +21,9 @@ func ReadConfiguration() Configuration {
 		configuration.ApiSettings.GatewayAddress = apiSettingsGatewayAddressEnvVar
 	}
 
+	if rabbitMQSettingsAMQPConnectionStringEnvVar := os.Getenv("RabbitMQSettings__AMQPConnectionString"); rabbitMQSettingsAMQPConnectionStringEnvVar != "" {
+		configuration.RabbitMQSettings.AMQPConnectionString = rabbitMQSettingsAMQPConnectionStringEnvVar
+	}
+
 	return configuration
 }

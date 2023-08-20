@@ -15,8 +15,13 @@ type ServerSettings struct {
 	ApplicationUrl string
 }
 
+type RabbitMQSettings struct {
+	AMQPConnectionString string
+}
+
 type Configuration struct {
 	ApiSettings      ApiSettings
 	DatabaseSettings DatabaseSettings
 	ServerSettings   ServerSettings
+	RabbitMQSettings RabbitMQSettings
 }

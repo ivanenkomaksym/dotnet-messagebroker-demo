@@ -8,6 +8,7 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 	"go.mongodb.org/mongo-driver/mongo"
 
+	"discount/internal/config"
 	"discount/internal/data"
 	"discount/internal/models"
 )
@@ -22,9 +23,9 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func ConsumeAddUserPromo(collection *mongo.Collection) {
+func ConsumeAddUserPromo(configuration config.Configuration, collection *mongo.Collection) {
 	// TODO: extract this to a configuration file
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672")
+	conn, err := amqp.Dial(configuration.RabbitMQSettings.AMQPConnectionString)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
