@@ -94,8 +94,8 @@ services:
       context: .
       dockerfile: FeedbackAPI/Dockerfile
 
-  discountapi:
-    image: ${DOCKER_REGISTRY-}discountapi
+  discount:
+    image: ${DOCKER_REGISTRY-}discount
     build:
       context: .
       dockerfile: Discount/Dockerfile

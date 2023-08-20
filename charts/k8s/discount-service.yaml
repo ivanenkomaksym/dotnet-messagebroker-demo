@@ -1,11 +1,11 @@
 ﻿apiVersion: v1
 kind: Service
 metadata:
-  name: discountapi
+  name: discount
 spec:
   type: NodePort
   selector:
-    app: discountapi-app
+    app: discount-app
   ports:
     - port: 80
       targetPort: 80

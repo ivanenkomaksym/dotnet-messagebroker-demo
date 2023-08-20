@@ -150,8 +150,8 @@ services:
     ports:
       - "8015:80"
 
-  discountapi:
-    container_name: discountapi
+  discount:
+    container_name: discount
     environment:
       - "ApiSettings:GatewayAddress=http://ocelotapigateway"
       - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"

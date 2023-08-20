@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: discountapi-pod
+  name: discount-pod
   labels:
-    app: discountapi
+    app: discount
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      app: discountapi-app
+      app: discount-app
   template:
     metadata: 
       labels:
-        app: discountapi-app
+        app: discount-app
     spec:
       containers:
-        - name: discountapi
-          image: ivanenkomak/discountapi:latest
+        - name: discount
+          image: discount:latest
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"
