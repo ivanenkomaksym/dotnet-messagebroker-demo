@@ -5,6 +5,9 @@
     Layout = "_Layout";
 }
 
-<h1>@ViewData["Title"]</h1>
-<p>Welcome to your Overview page.</p>
-<!-- Add detailed information here... -->
+<div class="user-profile">
+    <div class="user-info">
+        <div class="user-name">@Model.Customer.FirstName @Model.Customer.LastName</div>
+        <div class="user-email">@Model.Customer.Email</div>
+    </div>
+</div>
