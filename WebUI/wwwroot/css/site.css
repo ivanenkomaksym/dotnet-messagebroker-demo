@@ -478,13 +478,10 @@ body {
     display: flex;
     align-items: center;
     padding: 20px;
+    background-color: #f8f9fa;
     border: 1px solid #e9ecef;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.user-info {
-    padding-left: 20px;
 }
 
 .user-name {
@@ -495,4 +492,67 @@ body {
 .user-email {
     font-size: 16px;
     color: #777;
+}
+
+.shipping-address {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.shipping-info {
+    margin-top: 10px;
+}
+
+.shipping-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.shipping-email {
+    font-size: 16px;
+    color: #777;
+}
+
+.shipping-address-line,
+.shipping-country,
+.shipping-zip {
+    font-size: 14px;
+    margin-top: 3px;
+    color: #555;
+}
+
+.payment-info {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.payment-details {
+    margin-top: 10px;
+}
+
+.card-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.card-number {
+    font-size: 16px;
+    color: #777;
+}
+
+.expiration,
+.payment-method {
+    font-size: 14px;
+    margin-top: 3px;
+    color: #555;
 }

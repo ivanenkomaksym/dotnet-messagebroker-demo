@@ -11,3 +11,29 @@
         <div class="user-email">@Model.Customer.Email</div>
     </div>
 </div>
+
+<div class="row equal-height-row">
+    <div class="col-md-6">
+        <div class="shipping-address">
+            <h2>Shipping Address</h2>
+            <div class="shipping-info">
+                <div class="shipping-name">@Model.Customer.ShippingAddress.FirstName @Model.Customer.ShippingAddress.LastName</div>
+                <div class="shipping-email">@Model.Customer.ShippingAddress.Email</div>
+                <div class="shipping-address-line">@Model.Customer.ShippingAddress.AddressLine</div>
+                <div class="shipping-country">@Model.Customer.ShippingAddress.Country</div>
+                <div class="shipping-zip">@Model.Customer.ShippingAddress.ZipCode</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="payment-info">
+            <h2>Payment Information</h2>
+            <div class="payment-details">
+                <div class="card-name">@Model.Customer.PaymentInfo.CardName</div>
+                <div class="card-number">@Model.Customer.PaymentInfo.CardNumber</div>
+                <div class="expiration">@Model.Customer.PaymentInfo.Expiration</div>
+                <div class="payment-method">@Model.Customer.PaymentInfo.PaymentMethod</div>
+            </div>
+        </div>
+    </div>
+</div>
