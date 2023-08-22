@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Head content... -->
+</head>
+<body>
+    <header>
+        <!-- Header content... -->
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-3">
+                <div class="card bg-light mb-3">
+                    <!-- Vertical Menu Partial View -->
+                    @await Html.PartialAsync("_VerticalMenu")
+                </div>
+                <div class="col-md-9">
+                    <!-- Main content -->
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Footer content... -->
+    </footer>
+
+    <!-- Scripts... -->
+</body>
+</html>

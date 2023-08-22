@@ -3,7 +3,7 @@
 @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
 {
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="">Welcome, @HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value!</a>
+        <a class="nav-link text-dark" asp-area="" asp-page="/MyAccount/Overview">Welcome, @HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value!</a>
     </li>
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-page="/Account/Logout">Sign out</a>
