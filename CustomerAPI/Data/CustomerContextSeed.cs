@@ -42,7 +42,8 @@ namespace CustomerAPI.Data
                         Country = "England",
                         AddressLine = "London",
                         ZipCode = "12345"
-                    }
+                    },
+                    CreationDateTime = DateTime.Now,
                 },
                 new Customer
                 {
@@ -68,6 +69,7 @@ namespace CustomerAPI.Data
                         AddressLine = "London",
                         ZipCode = "12345"
                     },
+                    CreationDateTime = DateTime.Now,
                     UserRole = UserRole.Admin
                 }
             };

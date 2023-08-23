@@ -32,5 +32,7 @@ namespace Common.Models
         public Address? ShippingAddress { get; set; }
 
         public PaymentInfo? PaymentInfo { get; set; }
+
+        public DateTime CreationDateTime { get; set; } = DateTime.Now;
     }
 }

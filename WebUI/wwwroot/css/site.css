@@ -494,6 +494,11 @@ body {
     color: #777;
 }
 
+.user-creationdatetime {
+    font-size: 16px;
+    color: #777;
+}
+
 .shipping-address {
     margin-top: 20px;
     padding: 20px;
