@@ -2,12 +2,13 @@ package api
 
 import (
 	"context"
+	"discount/internal/config"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func StartHttpServer(ctx context.Context, discountsCollection *mongo.Collection, userPromosCollection *mongo.Collection) {
+func StartHttpServer(configuration config.Configuration, ctx context.Context, discountsCollection *mongo.Collection, userPromosCollection *mongo.Collection) {
 	router := gin.Default()
 	router.GET("/api/discounts", getDiscounts(ctx, discountsCollection))
 	router.GET("/api/discounts/:productId", getDiscountByProductId(ctx, discountsCollection))
@@ -16,7 +17,7 @@ func StartHttpServer(ctx context.Context, discountsCollection *mongo.Collection,
 	router.GET("/api/userpromos/:customerId", getUserPromoForCustomerId(ctx, userPromosCollection))
 	router.POST("/api/userpromos", createUserPromo(ctx, userPromosCollection))
 
-	if err := router.Run(":80"); err != nil {
+	if err := router.Run(configuration.ServerSettings.ApplicationUrl); err != nil {
 		panic(err)
 	}
 }

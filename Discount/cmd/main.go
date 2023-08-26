@@ -25,5 +25,5 @@ func main() {
 
 	go rabbitmq.ConsumeAddUserPromo(configuration, userPromosCollection)
 
-	api.StartHttpServer(ctx, discountsCollection, userPromosCollection)
+	api.StartHttpServer(configuration, ctx, discountsCollection, userPromosCollection)
 }
