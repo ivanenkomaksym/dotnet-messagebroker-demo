@@ -16,12 +16,14 @@ spec:
     spec:
       containers:
         - name: discount
-          image: ivanenkomak/discount:latest
+          image: ivanenkomak/discount:20230826151307
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"
             - name: ApiSettings__GatewayAddress
               value: "http://ocelotapigateway"
+            - name: RabbitMQSettings__AMQPConnectionString
+              value: "amqp://guest:guest@rabbitmq:5672"
           envFrom:
             - secretRef:
                 name: mongo-secrets
