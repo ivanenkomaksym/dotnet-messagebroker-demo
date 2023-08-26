@@ -52,7 +52,7 @@ func FindUserPromoForCustomerId(customerId string, collection *mongo.Collection)
 
 	var result models.UserPromo
 	var foundResult = collection.FindOne(context.Background(), filter)
-	if foundResult.Err() != nil {
+	if foundResult.Err() == nil {
 		foundResult.Decode(&result)
 
 		return &result
