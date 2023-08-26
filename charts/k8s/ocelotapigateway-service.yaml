@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: ocelotapigateway
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: ocelotapigateway-app
   ports:

@@ -311,7 +311,7 @@ data:
                 "DownstreamScheme": "http",
                 "DownstreamHostAndPorts": [
                     {
-                        "Host": "discountapi",
+                        "Host": "discount",
                         "Port": 80
                     }
                 ]
@@ -323,7 +323,7 @@ data:
                 "DownstreamScheme": "http",
                 "DownstreamHostAndPorts": [
                     {
-                        "Host": "discountapi",
+                        "Host": "discount",
                         "Port": 80
                     }
                 ]

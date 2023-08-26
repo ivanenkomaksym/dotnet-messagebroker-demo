@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: rabbitmq
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: rabbitmq-app
   ports:
