@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <span class="vertical-line"></span>
-                <a asp-page="OrderDetail" asp-route-orderId="@Model.Id"><p class="order-title">Order Details</p></a>
+                <a asp-page="/MyAccount/OrderDetail" asp-route-orderId="@Model.Id"><p class="order-title">Order Details</p></a>
             </div>
         </div>
 
@@ -35,7 +35,7 @@
                     @foreach (var item in Model.Items)
                     {
                         <div class="col-4 mb-3">
-                            <a asp-page="ProductDetail" asp-route-productId="@item.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@item.ImageFile" alt="Order Item"></a>
+                            <a asp-page="/ProductDetail" asp-route-productId="@item.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@item.ImageFile" alt="Order Item"></a>
                         </div>
                     }
                 </div>

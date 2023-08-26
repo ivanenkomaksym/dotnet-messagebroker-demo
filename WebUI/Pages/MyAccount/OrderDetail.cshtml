@@ -1,8 +1,21 @@
-﻿@page "/Order/{orderId}"
-@model WebUI.Pages.OrderDetailModel
+﻿@page
+@model WebUI.Pages.MyAccount.OrderDetailModel
 @{
     ViewData["Title"] = "OrderDetail";
 }
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-page="Index">MyAccount</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">OrderDetail</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
 
 <html>
 <head>
@@ -26,7 +39,6 @@
                     </div>
                 </div>
                 <span class="vertical-line"></span>
-                <a asp-page="OrderDetail" asp-route-orderId="@Model.Order.Id"><p class="order-title">Order Details</p></a>
             </div>
         </div>
 
@@ -37,7 +49,7 @@
                     @foreach (var item in Model.Order.Items)
                     {
                         <div class="col-4 mb-3">
-                            <a asp-page="ProductDetail" asp-route-productId="@item.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@item.ImageFile" alt="Order Item"></a>
+                            <a asp-page="/ProductDetail" asp-route-productId="@item.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@item.ImageFile" alt="Order Item"></a>
                         </div>
                     }
                 </div>
@@ -58,7 +70,7 @@
                 }
                 @if (Model.Order.OrderStatus == Common.Models.OrderStatus.PaymentFailed)
                 {
-                    <form asp-page-handler="UpdatePayment" method="post" name="updatePayment">
+                    <form asp-page-handler="UpdatePayment" asp-route-orderId="@Model.Order.Id" method="post" name="updatePayment">
                         <button type="submit" name="handler" value="UpdatePayment" class="btn btn-primary">Update Payment</button>
                     </form>
                     <form asp-page-handler="Cancel" method="post" name="cancel">
@@ -67,13 +79,13 @@
                 }
                 @if (Model.Order.OrderStatus == Common.Models.OrderStatus.AwaitingCollection)
                 {
-                    <form asp-page-handler="ConfirmCollection" method="post" name="confirmCollection">
+                    <form asp-page-handler="ConfirmCollection" asp-route-orderId="@Model.Order.Id" method="post" name="confirmCollection">
                         <button type="submit" name="handler" value="ConfirmOrderCollection" class="btn btn-success">Confirm Order Collection</button>
                     </form>
                 }
                 @if (Model.Order.OrderStatus == Common.Models.OrderStatus.Completed)
                 {
-                    <form asp-page-handler="ReturnOrder" method="post" name="ReturnOrder">
+                    <form asp-page-handler="ReturnOrder" asp-route-orderId="@Model.Order.Id" method="post" name="ReturnOrder">
                         <button type="submit" name="handler" value="ReturnOrder" class="btn btn-warning">Return</button>
                     </form>
                 }

@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebUI.Services;
 using WebUI.Users;
 
-namespace WebUI.Pages
+namespace WebUI.Pages.MyAccount
 {
     [Authorize]
-    public class OrderModel : PageModel
+    public class OrdersModel : PageModel
     {
         private readonly IOrderService _orderService;
         private readonly IUserProvider _userProvider;
 
-        public OrderModel(IOrderService orderService, IUserProvider userProvider)
+        public OrdersModel(IOrderService orderService, IUserProvider userProvider)
         {
             _orderService = orderService;
             _userProvider = userProvider;
@@ -43,7 +43,7 @@ namespace WebUI.Pages
 
         public IActionResult OnPostUpdatePayment(Guid orderId)
         {
-            return RedirectToPage("/UpdatePayment", new { orderId = orderId, returnUrl = "/Order" });
+            return RedirectToPage("UpdatePayment", new { orderId = orderId, returnUrl = "Orders" });
         }
 
         public async Task<IActionResult> OnPostCancelAsync(Guid orderId)
@@ -53,7 +53,7 @@ namespace WebUI.Pages
             {
                 return NotFound();
             }
-            return RedirectToPage("/Order");
+            return RedirectToPage("Orders");
         }
 
         public async Task<IActionResult> OnPostConfirmCollectionAsync(Guid orderId)
@@ -63,7 +63,7 @@ namespace WebUI.Pages
             {
                 return NotFound();
             }
-            return RedirectToPage("/Feedback", new { orderId = orderId });
+            return RedirectToPage("Feedback", new { orderId = orderId });
         }
     }
 }

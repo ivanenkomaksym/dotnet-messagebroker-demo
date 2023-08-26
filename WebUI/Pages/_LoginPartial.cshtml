@@ -3,13 +3,10 @@
 @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
 {
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-page="/MyAccount/Overview">Welcome, @HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value!</a>
+        <a class="nav-link text-dark" asp-area="" asp-page="/MyAccount/Index">Welcome, @HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value!</a>
     </li>
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-page="/Account/Logout">Sign out</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-page="/Order">My Orders</a>
     </li>
     @if (HttpContextAccessor.HttpContext.User.IsInRole("Admin"))
     {

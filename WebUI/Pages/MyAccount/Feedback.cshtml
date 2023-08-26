@@ -1,5 +1,5 @@
-﻿@page "/Order/{orderId}/Feedback"
-@model WebUI.Pages.FeedbackModel
+﻿@page "/MyAccount/Orders/{orderId}/Feedback"
+@model WebUI.Pages.MyAccount.FeedbackModel
 @{
     ViewData["Title"] = "Feedback";
 }
@@ -9,7 +9,8 @@
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-page="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-page="MyAccount">MyAccount</a></li>
+                    <li class="breadcrumb-item"><a asp-page="Orders">Orders</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Feedback</li>
                 </ol>
             </nav>

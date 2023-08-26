@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebUI.Services;
 using WebUI.Users;
 
-namespace WebUI.Pages
+namespace WebUI.Pages.MyAccount
 {
     public class UpdatePaymentModel : PageModel
     {
@@ -49,7 +49,7 @@ namespace WebUI.Pages
             {
                 await _orderService.UpdatePayment(orderId, PaymentInfo);
 
-                return LocalRedirect(Helpers.GetLocalUrl(Url, returnUrl));
+                return RedirectToPage(returnUrl);
             }
             catch (Exception ex)
             {

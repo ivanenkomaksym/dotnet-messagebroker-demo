@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebUI.Services;
 using WebUI.Users;
 
-namespace WebUI.Pages
+namespace WebUI.Pages.MyAccount
 {
     public class FeedbackModel : PageModel
     {

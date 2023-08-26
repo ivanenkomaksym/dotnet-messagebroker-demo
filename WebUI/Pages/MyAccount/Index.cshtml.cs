@@ -6,7 +6,7 @@ using WebUI.Users;
 
 namespace WebUI.Pages.MyAccount
 {
-    public class Overview : PageModel
+    public class IndexModel : PageModel
     {
         private readonly ICustomerService _customerService;
         private readonly IUserProvider _userProvider;
@@ -14,7 +14,7 @@ namespace WebUI.Pages.MyAccount
         [BindProperty]
         public Customer Customer { get; set; }
 
-        public Overview(ICustomerService customerService, IUserProvider userProvider)
+        public IndexModel(ICustomerService customerService, IUserProvider userProvider)
         {
             _customerService = customerService;
             _userProvider = userProvider;

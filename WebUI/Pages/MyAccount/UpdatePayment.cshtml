@@ -1,5 +1,5 @@
-﻿@page "/Order/{orderId}/Payment"
-@model WebUI.Pages.UpdatePaymentModel
+﻿@page
+@model WebUI.Pages.MyAccount.UpdatePaymentModel
 @{
 }
 
@@ -8,8 +8,8 @@
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-page="Index">Home</a></li>
-                    <li class="breadcrumb-item"><a asp-page="Order">Order</a></li>
+                    <li class="breadcrumb-item"><a asp-page="Index">MyAccount</a></li>
+                    <li class="breadcrumb-item"><a asp-page="Index">Orders</a></li>
                     <li class="breadcrumb-item"><a asp-page="OrderDetail" asp-route-orderId="@Model.OrderId" class="color-main">@Model.OrderId</a></li>
                     <li class="breadcrumb-item">UpdatePayment</li>
                 </ol>
@@ -21,7 +21,7 @@
 <div class="text-danger" asp-validation-summary="All"></div>
 
 <div class="container mb-4">
-    <form asp-page-handler="UpdatePayment" asp-route-returnUrl = "@Model.ReturnUrl" method="post" class="needs-validation" novalidate>
+    <form asp-page-handler="UpdatePayment" asp-route-orderId="@Model.OrderId" asp-route-returnUrl = "@Model.ReturnUrl" method="post" class="needs-validation" novalidate>
 
         <h4 class="mb-3">Payment</h4>
 
