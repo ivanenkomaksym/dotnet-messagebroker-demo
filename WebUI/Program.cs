@@ -76,6 +76,11 @@ builder.Services.AddHttpClient<IOrderService, OrderService>(options =>
     options.BaseAddress = new Uri(gatewayAddress);
 });
 
+builder.Services.AddHttpClient<IDiscountService, DiscountService>(options =>
+{
+    options.BaseAddress = new Uri(gatewayAddress);
+});
+
 builder.Services.AddSingleton<IUserProvider, DefaultUserProvider>();
 builder.Services.AddSingleton<IMassTransitConsumersRegistry, MassTransitConsumersRegistry>();
 builder.Services.AddSession(options => {
