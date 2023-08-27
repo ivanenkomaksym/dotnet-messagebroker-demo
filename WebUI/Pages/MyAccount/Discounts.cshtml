@@ -1,0 +1,22 @@
+﻿@page
+@model WebUI.Pages.MyAccount.DiscountsModel
+@{
+    ViewData["Title"] = "DiscountsModel";
+    Layout = "_Layout";
+}
+@{
+
+    @if (@Model.UserPromo != null)
+    {
+        <div class="userpromo">
+            <div class="userpromo-info">
+                <div class="userpromo-info-promo">Discount for next purchase: @(@Model.UserPromo.Promo * 100) %</div>
+                <div class="userpromo-info-validuntil">Valid until: @Model.UserPromo.ValidUntil</div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>No promotions yet</div>
+    }
+}

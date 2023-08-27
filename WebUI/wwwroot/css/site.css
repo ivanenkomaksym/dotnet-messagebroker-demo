@@ -474,7 +474,8 @@ body {
 }
 
 /* MyAccount/Overview */
-.user-profile {
+.user-profile,
+.userpromo {
     display: flex;
     align-items: center;
     padding: 20px;
@@ -484,7 +485,8 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.user-name {
+.user-name,
+.userpromo-info-promo {
     font-size: 24px;
     font-weight: bold;
 }
@@ -494,7 +496,8 @@ body {
     color: #777;
 }
 
-.user-creationdatetime {
+.user-creationdatetime,
+.userpromo-info-validuntil {
     font-size: 16px;
     color: #777;
 }
