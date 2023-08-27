@@ -297,7 +297,7 @@
                 }
             ]
         },
-        // Discount API
+        // Discount
         {
             "UpstreamPathTemplate": "/gateway/discounts",
             "UpstreamHttpMethod": [ "GET" ],
@@ -305,7 +305,7 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "discountapi",
+                    "Host": "discount",
                     "Port": 80
                 }
             ]
@@ -317,7 +317,19 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "discountapi",
+                    "Host": "discount",
+                    "Port": 80
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/userpromos/{customerId}",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/userpromos/{customerId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "discount",
                     "Port": 80
                 }
             ]

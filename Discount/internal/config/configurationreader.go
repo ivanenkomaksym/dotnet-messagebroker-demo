@@ -25,5 +25,9 @@ func ReadConfiguration() Configuration {
 		configuration.RabbitMQSettings.AMQPConnectionString = rabbitMQSettingsAMQPConnectionStringEnvVar
 	}
 
+	if serverSettingsApplicationUrlStringEnvVar := os.Getenv("ServerSettings__ApplicationUrl"); serverSettingsApplicationUrlStringEnvVar != "" {
+		configuration.ServerSettings.ApplicationUrl = serverSettingsApplicationUrlStringEnvVar
+	}
+
 	return configuration
 }

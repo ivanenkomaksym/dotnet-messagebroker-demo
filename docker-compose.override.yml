@@ -156,6 +156,7 @@ services:
       - "ApiSettings:GatewayAddress=http://ocelotapigateway"
       - "DatabaseSettings:ConnectionString=mongodb://shopdb:27017"
       - "RabbitMQSettings:AMQPConnectionString=amqp://guest:guest@rabbitmq:5672"
+      - "ServerSettings:ApplicationUrl=localhost:80"
     depends_on:
       - shopdb
     ports:

@@ -319,6 +319,18 @@
                     "Port": 8016
                 }
             ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/userpromos/{customerId}",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/userpromos/{customerId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8016
+                }
+            ]
         }
     ],
     "GlobalConfiguration": {
