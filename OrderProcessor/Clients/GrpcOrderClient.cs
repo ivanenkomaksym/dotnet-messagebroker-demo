@@ -74,7 +74,8 @@ namespace OrderProcessor.Clients
                     Email = reply.ShippingAddress.Email,
                     ZipCode = reply.ShippingAddress.ZipCode
                 },
-                Items = items
+                Items = items,
+                TotalPrice = reply.TotalPrice
             };
         }
 

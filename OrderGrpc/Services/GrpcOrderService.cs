@@ -51,7 +51,8 @@ namespace OrderAPI.Services
                     Cvv = order.PaymentInfo.CVV,
                     Expiration = order.PaymentInfo.Expiration,
                     PaymentMethod = (int)order.PaymentInfo.PaymentMethod
-                }
+                },
+                TotalPrice = order.TotalPrice
             };
 
             var items = new List<Common.Protos.OrderItem>();
