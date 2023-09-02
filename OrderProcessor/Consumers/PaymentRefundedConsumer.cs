@@ -1,6 +1,7 @@
 ﻿using Common.Events;
 using MassTransit;
 using OrderProcessor.Clients;
+using OrderProcessor.Discount;
 using System.Text.Json;
 
 namespace OrderProcessor.Consumers
@@ -28,6 +29,11 @@ namespace OrderProcessor.Consumers
             // Out
             var order = await _grpcOrderClient.GetOrder(paymentResult.OrderId);
             var result = await _grpcOrderClient.UpdateOrder(paymentResult.OrderId, Common.Models.OrderStatus.Refunded);
+
+            // Revert previously added cashback for this order
+            // TODO: to be revised, for now just calculate this the same way as it was after OrderCollected event
+            var addedCashback = DiscountMessages.GetCashbackPercentageForUser(order.TotalPrice) * order.TotalPrice;
+            await _publishEndpoint.SendSubUserCashback(_logger, order, addedCashback);
         }
     }
 }

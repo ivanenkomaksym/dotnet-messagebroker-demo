@@ -2,11 +2,11 @@
 
 namespace Common.Events
 {
-    public record AddUserPromo
+    public record AddUserCashback
     {
         public CustomerInfo CustomerInfo { get; init; }
 
-        public double Promo { get; init; }
+        public double Cashback { get; init; }
 
         public DateTime ValidUntil { get; init; }
     }

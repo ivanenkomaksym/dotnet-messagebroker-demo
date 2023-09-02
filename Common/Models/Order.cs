@@ -29,6 +29,8 @@ namespace Common.Models
         [Required]
         public PaymentInfo PaymentInfo { get; set; }
 
+        public double UseCashback { get; set; }
+
         public DateTime CreationDateTime { get; set; }
     }
 }

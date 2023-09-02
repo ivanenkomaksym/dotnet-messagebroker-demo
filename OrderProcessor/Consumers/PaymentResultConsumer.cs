@@ -2,6 +2,7 @@
 using Common.Models;
 using MassTransit;
 using OrderProcessor.Clients;
+using OrderProcessor.Discount;
 using System.Text.Json;
 
 namespace OrderProcessor.Consumers
@@ -44,6 +45,7 @@ namespace OrderProcessor.Consumers
                 case Common.Models.Payment.PaymentStatus.Paid:
                     // Payment succeded, update order status
                     await _grpcOrderClient.UpdateOrder(paymentResult.OrderId, orderStatus: OrderStatus.Paid);
+                    await SubUserCashbackIfUsed(order);
                     await ProduceShipOrder(order);
                     // Shipment scheduled, update order status
                     await _grpcOrderClient.UpdateOrder(paymentResult.OrderId, orderStatus: OrderStatus.AwaitingShipment);
@@ -51,6 +53,14 @@ namespace OrderProcessor.Consumers
                 default:
                     break;
             }
+        }
+
+        private async Task SubUserCashbackIfUsed(Order order)
+        {
+            if (Math.Abs(order.UseCashback) < 0.0000001)
+                return;
+
+            await _publishEndpoint.SendSubUserCashback(_logger, order, order.UseCashback);
         }
 
         private async Task ProduceRemoveReserve(Guid orderId, RemoveReserveReason reason)

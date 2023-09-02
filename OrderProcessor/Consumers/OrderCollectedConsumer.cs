@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Common.Events;
 using OrderProcessor.Clients;
+using OrderProcessor.Discount;
 using MassTransit;
 
 namespace OrderProcessor.Consumers
@@ -28,32 +29,12 @@ namespace OrderProcessor.Consumers
             // Out
             await _grpcOrderClient.UpdateOrder(orderCollected.OrderId, orderStatus: Common.Models.OrderStatus.Completed);
 
-            // AddUserPromo
+            // AddUserCashback
             var order = await _grpcOrderClient.GetOrder(orderCollected.OrderId);
+            var cashback = DiscountMessages.GetCashbackPercentageForUser(order.TotalPrice) * order.TotalPrice;
             var promoValidUntil = DateTime.Now + TimeSpan.FromDays(30);
 
-            var addUserPromo = new AddUserPromo
-            {
-                CustomerInfo = order.CustomerInfo,
-                Promo = GetPromoForUser(order.TotalPrice),
-                ValidUntil = promoValidUntil
-            };
-
-            await _publishEndpoint.Publish(addUserPromo);
-
-            message = JsonSerializer.Serialize(addUserPromo);
-            _logger.LogInformation($"Sent `AddUserPromo` event with content: {message}");
-        }
-
-        // To be moved to Discount microservice
-        public static double GetPromoForUser(double totalPrice)
-        {
-            if (totalPrice < 50.0)
-                return 0.05;
-            if (totalPrice < 100.0)
-                return 0.1;
-
-            return 0.15;
+            await _publishEndpoint.SendAddUserCashback(_logger, order, cashback, promoValidUntil);
         }
     }
 }
