@@ -9,6 +9,52 @@ import (
 	"discount/internal/models"
 )
 
+type base int
+
+const (
+	Add base = iota
+	Sub
+)
+
+func CreateOrUpdateUserPromo(userPromo models.UserPromo, collection *mongo.Collection, cashbackOperation base) *models.UserPromo {
+	foundUserPromo := FindUserPromoForCustomerId(userPromo.CustomerId, collection)
+	if foundUserPromo == nil {
+		if cashbackOperation == Sub {
+			return nil
+		}
+
+		CreateUserPromo(userPromo, collection)
+		return &userPromo
+	}
+
+	calculatedCashback := foundUserPromo.Cashback
+	calculatedValidUntil := foundUserPromo.ValidUntil
+	if cashbackOperation == Add {
+		calculatedCashback += userPromo.Cashback
+		calculatedValidUntil = userPromo.ValidUntil
+	} else {
+		calculatedCashback -= userPromo.Cashback
+	}
+
+	update := bson.D{
+		{Key: "$set", Value: bson.D{
+			{Key: "cashback", Value: calculatedCashback},
+			{Key: "validUntil", Value: calculatedValidUntil},
+		}},
+	}
+
+	updateResult, err := collection.UpdateByID(context.Background(), foundUserPromo.ID, update)
+	if err != nil {
+		panic(err)
+	}
+
+	if updateResult.UpsertedID == nil {
+		return nil
+	}
+
+	return &userPromo
+}
+
 func CreateUserPromo(userPromo models.UserPromo, collection *mongo.Collection) *models.UserPromo {
 	insertOneResult, err := collection.InsertOne(context.Background(), userPromo)
 	if err != nil {

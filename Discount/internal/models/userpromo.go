@@ -6,6 +6,6 @@ type UserPromo struct {
 	ID            string    `bson:"id"`
 	CustomerId    string    `bson:"customerId"`
 	CustomerEmail string    `bson:"customerEmail"`
-	Promo         float64   `bson:"promo"`
+	Cashback      float64   `bson:"cashback"`
 	ValidUntil    time.Time `bson:"validUntil"`
 }

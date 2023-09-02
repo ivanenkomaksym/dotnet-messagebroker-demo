@@ -23,7 +23,7 @@ func main() {
 
 	data.SeedData(configuration, ctx, discountsCollection)
 
-	go rabbitmq.ConsumeAddUserPromo(configuration, userPromosCollection)
+	go rabbitmq.StartListening(configuration, userPromosCollection)
 
 	api.StartHttpServer(configuration, ctx, discountsCollection, userPromosCollection)
 }

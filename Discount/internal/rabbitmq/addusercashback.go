@@ -4,8 +4,8 @@ import (
 	"discount/internal/models"
 )
 
-type AddUserPromo struct {
+type AddUserCashback struct {
 	CustomerInfo models.CustomerInfo `json:"customerInfo"`
-	Promo        float64             `json:"promo"`
+	Cashback     float64             `json:"cashback"`
 	ValidUntil   CustomTime          `json:"validUntil"`
 }
