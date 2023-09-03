@@ -123,7 +123,7 @@ namespace WebUI.Pages
                     await _customerService.UpdateCustomer(customer);
                 }
 
-                Order.TotalPrice = ShoppingCart.TotalPrice;
+                Order.TotalPrice = (decimal)ShoppingCart.TotalPrice;
 
                 foreach (var item in ShoppingCart.Items)
                 {

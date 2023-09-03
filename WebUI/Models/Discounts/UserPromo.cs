@@ -8,7 +8,7 @@
 
         public string CustomerEmail { get; set; }
 
-        public double Promo { get; set; }
+        public decimal Cashback { get; set; }
 
         public DateTime ValidUntil { get; set; }
     }
