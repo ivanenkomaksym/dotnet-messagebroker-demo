@@ -27,7 +27,7 @@ namespace OrderProcessor.Discount
             var subUserCashback = new SubUserCashback
             {
                 CustomerInfo = order.CustomerInfo,
-                Cashback = order.UseCashback
+                Cashback = cashback
             };
 
             await publishEndpoint.Publish(subUserCashback);

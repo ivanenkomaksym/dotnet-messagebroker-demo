@@ -42,13 +42,13 @@ func CreateOrUpdateUserPromo(userPromo models.UserPromo, collection *mongo.Colle
 			{Key: "validUntil", Value: calculatedValidUntil},
 		}},
 	}
-
-	updateResult, err := collection.UpdateByID(context.Background(), foundUserPromo.ID, update)
+	filter := bson.D{{"id", foundUserPromo.ID}}
+	updateResult, err := collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		panic(err)
 	}
 
-	if updateResult.UpsertedID == nil {
+	if updateResult.ModifiedCount == 0 {
 		return nil
 	}
 
