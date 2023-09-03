@@ -7,6 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"discount/internal/models"
+
+	"github.com/shopspring/decimal"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type base int
@@ -27,18 +30,25 @@ func CreateOrUpdateUserPromo(userPromo models.UserPromo, collection *mongo.Colle
 		return &userPromo
 	}
 
-	calculatedCashback := foundUserPromo.Cashback
+	// Convert mongo primitive.Decimal128 to decimal.Decimal, calculate cashback and convert back to primitive.Decimal128
+	calculatedCashback, _ := decimal.NewFromString(foundUserPromo.Cashback.String())
+	currentCashback, _ := decimal.NewFromString(userPromo.Cashback.String())
 	calculatedValidUntil := foundUserPromo.ValidUntil
 	if cashbackOperation == Add {
-		calculatedCashback += userPromo.Cashback
+		calculatedCashback = calculatedCashback.Add(currentCashback)
 		calculatedValidUntil = userPromo.ValidUntil
 	} else {
-		calculatedCashback -= userPromo.Cashback
+		calculatedCashback = calculatedCashback.Sub(currentCashback)
+	}
+
+	parsedCashback, err := primitive.ParseDecimal128(calculatedCashback.String())
+	if err != nil {
+		panic(err)
 	}
 
 	update := bson.D{
 		{Key: "$set", Value: bson.D{
-			{Key: "cashback", Value: calculatedCashback},
+			{Key: "cashback", Value: parsedCashback},
 			{Key: "validUntil", Value: calculatedValidUntil},
 		}},
 	}

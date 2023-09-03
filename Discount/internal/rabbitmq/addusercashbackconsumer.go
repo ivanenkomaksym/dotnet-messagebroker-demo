@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/rabbitmq/amqp091-go"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"discount/internal/data"
@@ -68,11 +69,16 @@ func ConsumeAddUserCashback(channel *amqp091.Channel, collection *mongo.Collecti
 
 			var addUserCashback = rabbitmqMessage.AddUserCashback
 
+			var cashbackValue, err = primitive.ParseDecimal128(addUserCashback.Cashback)
+			if err != nil {
+				panic(err)
+			}
+
 			var newUserPromo = models.UserPromo{
 				ID:            uuid.New().String(),
 				CustomerId:    addUserCashback.CustomerInfo.CustomerId,
 				CustomerEmail: addUserCashback.CustomerInfo.Email,
-				Cashback:      addUserCashback.Cashback,
+				Cashback:      cashbackValue,
 				ValidUntil:    addUserCashback.ValidUntil.Time,
 			}
 

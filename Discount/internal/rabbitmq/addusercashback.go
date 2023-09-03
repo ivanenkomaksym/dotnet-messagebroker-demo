@@ -6,6 +6,6 @@ import (
 
 type AddUserCashback struct {
 	CustomerInfo models.CustomerInfo `json:"customerInfo"`
-	Cashback     float64             `json:"cashback"`
+	Cashback     string              `json:"cashback"`
 	ValidUntil   CustomTime          `json:"validUntil"`
 }

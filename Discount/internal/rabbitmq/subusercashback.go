@@ -6,5 +6,5 @@ import (
 
 type SubUserCashback struct {
 	CustomerInfo models.CustomerInfo `json:"customerInfo"`
-	Cashback     float64             `json:"cashback"`
+	Cashback     string              `json:"cashback"`
 }
