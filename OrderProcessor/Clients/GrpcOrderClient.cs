@@ -46,6 +46,8 @@ namespace OrderProcessor.Clients
                 });
             }
 
+            decimal.TryParse(reply.TotalPrice, out var totalPrice);
+
             return new Order
             {
                 Id = orderId,
@@ -75,7 +77,7 @@ namespace OrderProcessor.Clients
                     ZipCode = reply.ShippingAddress.ZipCode
                 },
                 Items = items,
-                TotalPrice = reply.TotalPrice
+                TotalPrice = totalPrice
             };
         }
 

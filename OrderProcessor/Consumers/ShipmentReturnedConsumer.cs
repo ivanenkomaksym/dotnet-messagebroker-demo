@@ -48,7 +48,7 @@ namespace OrderProcessor.Consumers
                 OrderId = order.Id,
                 CustomerInfo = order.CustomerInfo,
                 PaymentInfo = order.PaymentInfo,
-                TotalPrice = order.TotalPrice
+                TotalPrice = (double)order.TotalPrice
             };
 
             await _publishEndpoint.Publish(refundPaymentEvent);

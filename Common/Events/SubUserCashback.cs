@@ -6,6 +6,6 @@ namespace Common.Events
     {
         public CustomerInfo CustomerInfo { get; init; }
 
-        public double Cashback { get; init; }
+        public string Cashback { get; init; }
     }
 }

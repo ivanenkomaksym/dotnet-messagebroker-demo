@@ -52,7 +52,7 @@ namespace OrderAPI.Services
                     Expiration = order.PaymentInfo.Expiration,
                     PaymentMethod = (int)order.PaymentInfo.PaymentMethod
                 },
-                TotalPrice = order.TotalPrice
+                TotalPrice = order.TotalPrice.ToString()
             };
 
             var items = new List<Common.Protos.OrderItem>();

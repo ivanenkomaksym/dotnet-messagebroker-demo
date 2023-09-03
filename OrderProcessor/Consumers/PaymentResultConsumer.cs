@@ -57,7 +57,7 @@ namespace OrderProcessor.Consumers
 
         private async Task SubUserCashbackIfUsed(Order order)
         {
-            if (Math.Abs(order.UseCashback) < 0.0000001)
+            if (order.UseCashback.Equals(0.0m))
                 return;
 
             await _publishEndpoint.SendSubUserCashback(_logger, order, order.UseCashback);

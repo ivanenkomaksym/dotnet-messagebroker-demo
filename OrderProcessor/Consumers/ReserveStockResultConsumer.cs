@@ -40,7 +40,7 @@ namespace OrderProcessor.Consumers
                 OrderId = order.Id,
                 CustomerInfo = order.CustomerInfo,
                 PaymentInfo = order.PaymentInfo,
-                ToBePaidAmount = order.TotalPrice
+                ToBePaidAmount = ((double)order.TotalPrice)
             };
 
             await _publishEndpoint.Publish(takePaymentEvent);

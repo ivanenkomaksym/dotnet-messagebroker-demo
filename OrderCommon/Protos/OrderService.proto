@@ -55,7 +55,7 @@ message GetOrderReply {
     Address shippingAddress = 4;
     PaymentInfo paymentInfo = 5;
     repeated OrderItem Items = 6;
-    double totalPrice = 7;
+    string totalPrice = 7;
 }
 
 // The request message containing the user's name.

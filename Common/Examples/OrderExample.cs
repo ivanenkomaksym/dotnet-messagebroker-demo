@@ -29,7 +29,7 @@ namespace Common.Examples
                         ProductPrice = 10.0
                     }
                 },
-                TotalPrice = 10.0,
+                TotalPrice = 10.0m,
                 ShippingAddress = new Address
                 {
                     FirstName = "Alice",

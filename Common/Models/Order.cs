@@ -21,7 +21,7 @@ namespace Common.Models
         public IList<OrderItem> Items { get; set; } = new List<OrderItem>();
 
         [Required]
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
 
         [Required]
         public Address ShippingAddress { get; set; }
@@ -29,7 +29,7 @@ namespace Common.Models
         [Required]
         public PaymentInfo PaymentInfo { get; set; }
 
-        public double UseCashback { get; set; }
+        public decimal UseCashback { get; set; }
 
         public DateTime CreationDateTime { get; set; }
     }
