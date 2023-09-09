@@ -51,7 +51,7 @@ namespace WebUI.Pages
             return Page();
         }
 
-        private double CalculateTotalPrice()
+        private decimal CalculateTotalPrice()
         {        
             // Calculate the total price based on the items in the shopping cart
             return Cart.Items.Sum(item => item.ProductPrice * item.Quantity);

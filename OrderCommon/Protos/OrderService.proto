@@ -43,7 +43,7 @@ message OrderItem {
     string id = 1;
     string productId = 2;
     string productName = 3;
-    double productPrice = 4;
+    string productPrice = 4;
     int32 quantity = 5;
     string ImageFile = 6;
 }

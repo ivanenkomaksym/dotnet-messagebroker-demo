@@ -20,7 +20,7 @@ namespace Common.Models.Payment
         [Required]
         public PaymentInfo PaymentInfo { get; set; }
 
-        public double PaidAmount;
+        public decimal PaidAmount;
 
         [Required]
         public DateTime CreatedOn { get;set; }

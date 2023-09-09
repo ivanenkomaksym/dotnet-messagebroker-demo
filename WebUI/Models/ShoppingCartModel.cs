@@ -6,6 +6,6 @@
         public Guid CustomerId { get; init; }
         public string? CustomerName { get; init; }
         public List<ShoppingCartItemModel> Items { get; set; } = new List<ShoppingCartItemModel>();
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

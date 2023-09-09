@@ -65,7 +65,7 @@ namespace OrderAPI.Services
                     ProductName = item.ProductName,
                     Quantity = item.Quantity,
                     ImageFile = item.ImageFile,
-                    ProductPrice = item.ProductPrice
+                    ProductPrice = item.ProductPrice.ToString()
                 });
             }
 

@@ -43,7 +43,7 @@ namespace PaymentService.Consumers
         private async Task HandlePayment(TakePayment takePayment)
         {
             var paymentStatus = PaymentStatus.Unpaid;
-            var paidAmount = 0.0;
+            var paidAmount = 0.0m;
             switch (takePayment.PaymentInfo.PaymentMethod)
             {
                 case PaymentMethod.CreditCard_AlwaysExpire:
@@ -51,7 +51,7 @@ namespace PaymentService.Consumers
                     break;
                 case PaymentMethod.Crypto:
                     paymentStatus = PaymentStatus.Paid;
-                    paidAmount = takePayment.ToBePaidAmount;
+                    paidAmount = decimal.Parse(takePayment.ToBePaidAmount);
                     break;
                 case PaymentMethod.PayPal_AlwaysFail:
                     paymentStatus = PaymentStatus.Failed;

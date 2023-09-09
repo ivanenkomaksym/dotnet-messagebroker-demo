@@ -26,7 +26,7 @@ namespace Common.Examples
                         ProductId = Guid.NewGuid(),
                         ProductName = "Product 1",
                         Quantity = 1,
-                        ProductPrice = 10.0
+                        ProductPrice = 10.0m
                     }
                 },
                 TotalPrice = 10.0m,

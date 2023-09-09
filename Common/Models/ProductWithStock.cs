@@ -8,9 +8,9 @@
         public string? Category { get; set; }
         public string? Summary { get; set; }
         public string? ImageFile { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
-        public double DiscountedPrice
+        public decimal DiscountedPrice
         {
             get
             {
@@ -19,12 +19,12 @@
             init { }
         }
 
-        public double Rating
+        public decimal Rating
         {
             get
             {
                 var rand = new Random();
-                return 5.0 - rand.NextDouble();
+                return decimal.Round((decimal)(5.0 - rand.NextDouble()), 1);
             }
             init { }
         }
@@ -32,7 +32,7 @@
         // StockItem properties
         public Guid StockItemId { get; set; }
         public ushort Quantity { get; set; }
-        public double Discount { get; set; }
+        public decimal Discount { get; set; }
         public ushort Sold { get; set; }
         public ushort AvailableOnStock { get; set; }
     }

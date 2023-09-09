@@ -11,6 +11,6 @@ namespace Common.Events
 
         public PaymentInfo PaymentInfo { get; init; }
 
-        public double TotalPrice { get; set; }
+        public string TotalPrice { get; set; }
     }
 }

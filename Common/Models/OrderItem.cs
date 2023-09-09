@@ -18,7 +18,7 @@ namespace Common.Models
         public string? ProductName { get; init; }
 
         [Required]
-        public double ProductPrice { get; init; }
+        public decimal ProductPrice { get; init; }
 
         [Required]
         public ushort Quantity { get; set; }

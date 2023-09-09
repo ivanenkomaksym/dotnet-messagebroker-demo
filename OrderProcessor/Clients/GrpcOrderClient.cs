@@ -40,13 +40,11 @@ namespace OrderProcessor.Clients
                     Id = itemId,
                     ProductId = productId,
                     ProductName = item.ProductName,
-                    ProductPrice = item.ProductPrice,
+                    ProductPrice = decimal.Parse(item.ProductPrice),
                     Quantity = (ushort)item.Quantity,
                     ImageFile = item.ImageFile
                 });
             }
-
-            decimal.TryParse(reply.TotalPrice, out var totalPrice);
 
             return new Order
             {
@@ -77,7 +75,7 @@ namespace OrderProcessor.Clients
                     ZipCode = reply.ShippingAddress.ZipCode
                 },
                 Items = items,
-                TotalPrice = totalPrice
+                TotalPrice = decimal.Parse(reply.TotalPrice)
             };
         }
 
