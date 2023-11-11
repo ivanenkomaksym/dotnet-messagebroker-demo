@@ -89,7 +89,7 @@
         // Order API
         {
             "UpstreamPathTemplate": "/gateway/Order",
-            "UpstreamHttpMethod": [ "POST", "PUT" ],
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
             "DownstreamPathTemplate": "/api/Order",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
