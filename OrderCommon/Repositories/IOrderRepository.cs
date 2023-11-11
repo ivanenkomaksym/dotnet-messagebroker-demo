@@ -5,6 +5,7 @@ namespace OrderCommon.Repositories
 {
     public interface IOrderRepository
     {
+        Task<IEnumerable<Order>> GetAllOrders();
         Task<Order> GetOrderById(Guid orderId);
         Task<IEnumerable<Order>> GetOrdersByCustomerId(Guid customerId);
 

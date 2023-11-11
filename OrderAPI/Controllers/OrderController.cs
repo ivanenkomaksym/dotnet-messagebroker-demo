@@ -19,6 +19,16 @@ namespace OrderAPI.Controllers
             Logger = logger;
         }
 
+        [HttpGet(Name = "GetOrders")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(IEnumerable<Order>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        {
+            var orders = await OrderRepository.GetAllOrders();
+
+            return Ok(orders);
+        }
+
         [HttpGet("{orderId}", Name = "GetOrder")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
@@ -42,7 +52,7 @@ namespace OrderAPI.Controllers
             return Ok(await OrderRepository.GetOrdersByCustomerId(customerId));
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateOrder")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [SwaggerRequestExample(typeof(OrderExample), typeof(OrderExample))]
         public async Task<IActionResult> CreateOrder([FromBody] Order order)

@@ -14,6 +14,14 @@ namespace OrderCommon.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public async Task<IEnumerable<Order>> GetAllOrders()
+        {
+            return await _context
+                            .Orders
+                            .Find(p => true)
+                            .ToListAsync();
+        }
+
         public async Task<Order> GetOrderById(Guid orderId)
         {
             var matchId = Builders<Order>.Filter.Eq(o => o.Id, orderId);
