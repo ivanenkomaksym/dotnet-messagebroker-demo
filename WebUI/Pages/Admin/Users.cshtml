@@ -1,0 +1,36 @@
+﻿@page
+@model WebUI.Pages.Admin.UsersModel
+@{
+    ViewData["Title"] = "View Users";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="text-danger" asp-validation-summary="All"></div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User role</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Shipping Address</th>
+            <th>Payment Method</th>
+            <th>Joined</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.UserRole</td>
+                <td class="truncate-text" title="@user.LastName @user.FirstName">@user.LastName @user.FirstName</td>
+                <td>@user.Email</td>
+                <td class="truncate-text" title="@user.ShippingAddress.AddressLine">@user.ShippingAddress.AddressLine</td>
+                <td class="truncate-text" title="@user.PaymentInfo.PaymentMethod">@user.PaymentInfo.PaymentMethod</td>
+                <td class="order-date">@user.CreationDateTime</td>
+            </tr>
+        }
+    </tbody>
+</table>
