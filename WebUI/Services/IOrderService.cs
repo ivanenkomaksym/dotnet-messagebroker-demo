@@ -5,6 +5,7 @@ namespace WebUI.Services
 {
     public interface IOrderService
     {
+        Task<IEnumerable<Order>> GetAllOrders();
         Task<IEnumerable<Order>> GetOrders(Guid customerId);
 
         Task<Order> GetOrder(Guid orderId);
