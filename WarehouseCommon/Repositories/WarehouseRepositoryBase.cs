@@ -1,32 +1,21 @@
 ﻿using Common.Models.Warehouse;
-using WarehouseCommon.Data;
 using MongoDB.Driver;
-using Microsoft.Extensions.Logging;
+using WarehouseCommon.Data;
 
 namespace WarehouseCommon.Repositories
 {
-    public class WarehouseRepository : IWarehouseRepository
+    public class WarehouseRepositoryBase : IWarehouseRepository
     {
-        private readonly IWarehouseContext _context;
-        private bool _contextInit = false;
-        private readonly ILogger<WarehouseRepository> _logger;
+        protected readonly IWarehouseContext _context;
 
-        public WarehouseRepository(IWarehouseContext context, ILogger<WarehouseRepository> logger)
+        public WarehouseRepositoryBase(IWarehouseContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _logger = logger;
         }
 
-        public async Task<IWarehouseContext> GetContext()
+        public virtual Task<IWarehouseContext> GetContext()
         {
-            if (_contextInit)
-                return _context;
-
-            await _context.InitAsync();
-            _contextInit = true;
-
-            _logger.LogInformation($"Context initialized");
-            return _context;
+            return Task.FromResult(_context);
         }
 
         public async Task<StockItem> CreateStockItem(StockItem stockItem)
@@ -106,7 +95,7 @@ namespace WarehouseCommon.Repositories
             await context.OrderReserves.InsertOneAsync(orderReserve);
             return orderReserve;
         }
-        
+
         public async Task<OrderReserve> GetOrderReserveByOrderId(Guid orderId)
         {
             var context = await GetContext();

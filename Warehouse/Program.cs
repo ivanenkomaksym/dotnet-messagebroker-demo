@@ -11,8 +11,8 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddHostedService<WarehouseWorker>();
 
-        services.AddScoped<IWarehouseContext, WarehouseContextBase>();
-        services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+        services.AddSingleton<IWarehouseContext, WarehouseContextBase>();
+        services.AddSingleton<IWarehouseRepository, WarehouseRepositoryBase>();
 
         services.AddMassTransit(x =>
         {

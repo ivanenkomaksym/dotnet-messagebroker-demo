@@ -1,9 +1,12 @@
 ﻿using Common.Models.Warehouse;
+using WarehouseCommon.Data;
 
 namespace WarehouseCommon.Repositories
 {
     public interface IWarehouseRepository
     {
+        Task<IWarehouseContext> GetContext();
+
         Task<IEnumerable<StockItem>> GetStockItems();
         Task<StockItem> GetStockItemByProductId(Guid productId);
         Task<StockItem> GetStockItemById(Guid stockItemId);
