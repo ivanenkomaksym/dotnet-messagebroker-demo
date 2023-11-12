@@ -4,9 +4,9 @@ using MongoDB.Driver;
 
 namespace OrderCommon.Data
 {
-    public class OrderContext : IOrderContext
+    public class OrderContextBase : IOrderContext
     {
-        public OrderContext(IConfiguration configuration)
+        public OrderContextBase(IConfiguration configuration)
         {
             var client = new MongoClient(configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
             var database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
@@ -15,5 +15,10 @@ namespace OrderCommon.Data
         }
 
         public IMongoCollection<Order> Orders { get; }
+
+        public virtual Task InitAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

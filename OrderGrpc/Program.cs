@@ -24,8 +24,8 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddHostedService<Worker>();
 
-        services.AddScoped<IOrderContext, OrderContext>();
-        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderContext, OrderContextBase>();
+        services.AddScoped<IOrderRepository, OrderRepositoryBase>();
 
         services.AddGrpc();
 

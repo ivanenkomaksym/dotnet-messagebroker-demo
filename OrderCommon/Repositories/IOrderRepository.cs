@@ -1,10 +1,13 @@
 ﻿using Common.Models;
 using Common.Models.Payment;
+using OrderCommon.Data;
 
 namespace OrderCommon.Repositories
 {
     public interface IOrderRepository
     {
+        Task<IOrderContext> GetContext();
+
         Task<IEnumerable<Order>> GetAllOrders();
         Task<Order> GetOrderById(Guid orderId);
         Task<IEnumerable<Order>> GetOrdersByCustomerId(Guid customerId);

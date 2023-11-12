@@ -1,19 +1,25 @@
-using System.Reflection;
-using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Common.Examples;
+using MassTransit;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.OpenApi.Models;
+using MongoDB.Bson;
 using OrderAPI;
+using OrderAPI.Data;
 using OrderCommon.Data;
 using OrderCommon.Repositories;
-using MongoDB.Bson;
 using Swashbuckle.AspNetCore.Filters;
-using MassTransit;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IOrderContext, OrderContext>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddHttpClient<IOrderContextSeed, OrderContextSeed>(options =>
+{
+    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+});
+
+builder.Services.AddSingleton<IOrderContext, OrderContext>();
+builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 
 builder.Services.AddScoped<IOrderService, OrderService>();
 
