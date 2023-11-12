@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using Common.Models;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -36,6 +37,18 @@ namespace Common.Extensions
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             return httpClient.PutAsync(url, content);
+        }
+
+        public static async Task<IEnumerable<Customer>> GetUsers(this HttpClient httpClient)
+        {
+            var response = await httpClient.GetAsync("/gateway/Customer");
+            return await response.ReadContentAs<List<Customer>>();
+        }
+
+        public static async Task<IEnumerable<Product>> GetProducts(this HttpClient httpClient)
+        {
+            var response = await httpClient.GetAsync("/gateway/Catalog");
+            return await response.ReadContentAs<List<Product>>();
         }
     }
 }

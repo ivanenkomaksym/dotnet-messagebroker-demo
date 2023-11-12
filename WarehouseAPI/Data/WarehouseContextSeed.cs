@@ -22,7 +22,7 @@ namespace WarehouseAPI.Data
         {
             _logger.LogInformation("SeedData started.");
             var stockItems = new List<StockItem>();
-            var products = await GetCatalog();
+            var products = await _client.GetProducts();
             _logger.LogInformation($"Received `{products.Count()}` products.");
             var rand = new Random();
 
@@ -52,12 +52,6 @@ namespace WarehouseAPI.Data
                 await stockItemCollection.InsertManyAsync(stockItems);
             }
             _logger.LogInformation("SeedData ended.");
-        }
-
-        public async Task<IEnumerable<CatalogModel>> GetCatalog()
-        {
-            var response = await _client.GetAsync("/gateway/Catalog");
-            return await response.ReadContentAs<List<CatalogModel>>();
         }
     }
 }
