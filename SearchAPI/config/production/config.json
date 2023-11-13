@@ -1,0 +1,11 @@
+{
+    "ApiSettings": {
+        "GatewayAddress": "http://ocelotapigateway"
+    },
+    "ServerSettings": {
+        "Port": 80
+    },
+    "ElasticSearch": {
+        "ClientURL": "http://elasticsearch"
+    }
+}
