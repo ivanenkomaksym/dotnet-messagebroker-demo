@@ -1,0 +1,29 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: elasticsearch
+spec:
+  version: 7.10.0
+  nodeSets:
+    - name: default
+      count: 1
+      config:
+        node.master: true
+        node.data: true
+        node.ingest: true
+      podTemplate:
+        spec:
+          containers:
+            - name: elasticsearch
+              volumeMounts:
+                - name: elasticsearch-data
+                  mountPath: /usr/share/elasticsearch/data
+              resources:
+                requests:
+                  memory: "1Gi"
+                limits:
+                  memory: "2Gi"
+          volumes:
+            - name: elasticsearch-data
+              persistentVolumeClaim:
+                claimName: elasticsearch-data
