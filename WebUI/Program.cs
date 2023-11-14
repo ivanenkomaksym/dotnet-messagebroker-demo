@@ -80,9 +80,19 @@ builder.Services.AddHttpClient<IOrderService, OrderService>(options =>
     options.BaseAddress = new Uri(gatewayAddress);
 });
 
-builder.Services.AddHttpClient<IDiscountService, DiscountService>(options =>
+builder.Services.AddTransient<IDiscountService>(provider =>
 {
-    options.BaseAddress = new Uri(gatewayAddress);
+    var featureManager = provider.GetRequiredService<IFeatureManager>();
+
+    if (featureManager.IsEnabledAsync(FeatureFlags.Discount).GetAwaiter().GetResult())
+    {
+        var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+        var httpClient = httpClientFactory.CreateClient(typeof(IDiscountService).FullName);
+        httpClient.BaseAddress = new Uri(gatewayAddress);
+        return new DiscountService(httpClient);
+    }
+
+    return new EmptyDiscountService();
 });
 
 builder.Services.AddSingleton<IUserProvider, DefaultUserProvider>();

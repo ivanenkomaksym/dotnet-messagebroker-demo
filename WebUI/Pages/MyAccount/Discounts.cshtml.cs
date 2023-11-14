@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.FeatureManagement.Mvc;
 using WebUI.Models.Discounts;
 using WebUI.Services;
 using WebUI.Users;
 
 namespace WebUI.Pages.MyAccount
 {
+    [FeatureGate(FeatureFlags.Discount)]
     public class DiscountsModel : PageModel
     {
         private readonly IDiscountService _discountService;
