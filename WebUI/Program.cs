@@ -5,7 +5,9 @@ using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.FeatureManagement;
 using NToastNotify;
+using WebUI;
 using WebUI.Consumers;
 using WebUI.Notifications;
 using WebUI.Services;
@@ -22,6 +24,8 @@ builder.Services.AddRazorPages().AddNToastNotifyToastr(new ToastrOptions
 {
     ops.Conventions.AuthorizeFolder("/Admin", "RequireAdmins");
 });
+
+builder.Services.AddFeatureManagement();
 
 builder.Services.AddAuthorization(opts =>
 {
@@ -87,8 +91,19 @@ builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
 
-builder.Services.AddScoped<IGraphQLClient>(s => new GraphQLHttpClient(gatewayAddress + "/gateway/graphql", new NewtonsoftJsonSerializer()));
-builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+builder.Services.AddSingleton<IGraphQLClient>(s => new GraphQLHttpClient(gatewayAddress + "/gateway/graphql", new NewtonsoftJsonSerializer()));
+builder.Services.AddSingleton<IFeedbackService>(services =>
+{
+    var featureManager = services.GetRequiredService<IFeatureManager>();
+
+    if (featureManager.IsEnabledAsync(FeatureFlags.Feedback).GetAwaiter().GetResult())
+    {
+        var graphClient = services.GetRequiredService<IGraphQLClient>();
+        return new FeedbackService(graphClient);
+    }
+
+    return new EmptyFeedbackService();
+});
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

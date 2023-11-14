@@ -2,11 +2,13 @@ using Common.Models;
 using Common.Models.Review;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.FeatureManagement.Mvc;
 using WebUI.Services;
 using WebUI.Users;
 
 namespace WebUI.Pages.MyAccount
 {
+    [FeatureGate(FeatureFlags.Feedback)]
     public class FeedbackModel : PageModel
     {
         private readonly IOrderService _orderService;
