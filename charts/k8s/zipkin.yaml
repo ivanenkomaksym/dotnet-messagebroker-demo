@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zipkin-pod
+  labels:
+    app: zipkin
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: zipkin-app
+  template:
+    metadata: 
+      labels:
+        app: zipkin-app
+    spec:
+      containers:
+        - name: zipkin
+          image: openzipkin/zipkin:latest
+          ports:
+            - containerPort: 9411
