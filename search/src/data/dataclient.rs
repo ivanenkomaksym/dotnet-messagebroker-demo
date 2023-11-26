@@ -1,8 +1,8 @@
-use mongodb::{Client, bson::doc};
+use mongodb::{Client, Database, bson::doc};
 
 use crate::settings::Settings;
 
-pub async fn create_client(settings: &Settings) -> mongodb::error::Result<()> {
+pub async fn create_client(settings: &Settings) -> mongodb::error::Result<Database> {
     // Create a new client and connect to the server
     let client = Client::with_uri_str(&settings.database.connection_string).await?;
 
@@ -13,5 +13,5 @@ pub async fn create_client(settings: &Settings) -> mongodb::error::Result<()> {
 
     println!("You successfully connected to MongoDB!");
 
-    Ok(())
+    return Ok(database);
 }
