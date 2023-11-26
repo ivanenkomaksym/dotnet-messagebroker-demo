@@ -1,5 +1,6 @@
 pub mod constants;
 pub mod settings;
+pub mod data;
 pub mod api;
 
 #[macro_use]
@@ -20,6 +21,11 @@ async fn main() -> io::Result<()> {
 
     env::set_var("RUST_LOG", "actix_web=debug,actix_server=info");
     env_logger::init();
+
+    match data::dataclient::create_client(&settings).await {
+        Err(e) => panic!("Failed to connect to database: {:?}", e),
+        Ok(r) => r,
+    };
     
-    api::httpserver::start_http_server(settings).await
+    api::httpserver::start_http_server(&settings).await
 }

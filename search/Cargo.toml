@@ -9,5 +9,7 @@ actix-web = "4.4.0"
 api = "0.2.0"
 config = "0.13.4"
 env_logger = "0.10.1"
+futures = "0.3.29"
+mongodb = "2.7.1"
 serde = { version = "1.0.193", features = ["derive"] }
 serde_json = "1.0.108"

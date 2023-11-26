@@ -11,7 +11,7 @@ struct Response {
     message: String
 }
 
-pub async fn start_http_server(settings: Settings) -> io::Result<()> {
+pub async fn start_http_server(settings: &Settings) -> io::Result<()> {
     HttpServer::new(|| {
         App::new()
             // enable logger - always register actix-web Logger middleware last
@@ -19,7 +19,7 @@ pub async fn start_http_server(settings: Settings) -> io::Result<()> {
             // register HTTP requests handlers
             .service(hello)
     })
-    .bind(settings.apiserver.application_url)?
+    .bind(&settings.apiserver.application_url)?
     .run()
     .await
 }

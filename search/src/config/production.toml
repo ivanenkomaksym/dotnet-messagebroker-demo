@@ -2,3 +2,8 @@ debug = false
 
 [apiserver]
 application_url = "localhost:80"
+
+[database]
+connection_string = "mongodb://shopdb:27017"
+database_name = "CatalogDb"
+collection_name = "Products"
