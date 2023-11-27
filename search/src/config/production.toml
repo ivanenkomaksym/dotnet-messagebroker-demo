@@ -1,7 +1,7 @@
 debug = false
 
 [apiserver]
-application_url = "localhost:80"
+application_url = "0.0.0.0:80"
 
 [database]
 connection_string = "mongodb://shopdb:27017"

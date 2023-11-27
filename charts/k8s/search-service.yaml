@@ -1,0 +1,11 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: search
+spec:
+  type: LoadBalancer
+  selector:
+    app: search-app
+  ports:
+    - port: 80
+      targetPort: 80
