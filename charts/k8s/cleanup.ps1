@@ -66,3 +66,7 @@ kubectl delete -f feedbackapi-service.yaml
 # DiscountAPI
 kubectl delete -f discount.yaml
 kubectl delete -f discount-service.yaml
+
+# Search
+kubectl delete -f search.yaml
+kubectl delete -f search-service.yaml

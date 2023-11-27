@@ -70,6 +70,10 @@ kubectl apply -f feedbackapi-service.yaml
 kubectl apply -f discount.yaml
 kubectl apply -f discount-service.yaml
 
+# Search
+kubectl apply -f search.yaml
+kubectl apply -f search-service.yaml
+
 minikube dashboard
 Start-Process -FilePath "cmd" -ArgumentList "/c minikube service shopdb" -WorkingDirectory ".\"
 Start-Process -FilePath "cmd" -ArgumentList "/c minikube service webui" -WorkingDirectory ".\"
