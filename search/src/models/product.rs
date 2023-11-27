@@ -17,7 +17,7 @@ pub struct Product {
     #[serde(rename = "ImageFile")]
     pub image_file: String,
     #[serde(rename = "Price")]
-    pub price: f32
+    pub price: String
 }
 
 impl Product {

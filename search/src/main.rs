@@ -33,5 +33,5 @@ async fn main() -> io::Result<()> {
     let products_collection = database.collection::<Document>(&settings.database.collection_name);
     let _products = productrepository::get_products(&products_collection).await;
     
-    api::httpserver::start_http_server(&settings).await
+    api::httpserver::start_http_server(&settings, products_collection).await
 }
