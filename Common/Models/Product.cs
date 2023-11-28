@@ -11,6 +11,7 @@ namespace Common.Models
 
         [BsonElement("Name")]
         public string? Name { get; set; }
+        public string? Author { get; set; }
         public string? Category { get; set; }
         public string? Summary { get; set; }
         public string? ImageFile { get; set; }

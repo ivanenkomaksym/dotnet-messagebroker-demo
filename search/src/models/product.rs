@@ -10,6 +10,8 @@ pub struct Product {
     pub _id: Binary,
     #[serde(rename = "Name")]
     pub name: String,
+    #[serde(rename = "Author")]
+    pub author: String,
     #[serde(rename = "Category")]
     pub category: String,
     #[serde(rename = "Summary")]
