@@ -1,12 +1,14 @@
 using Catalog.API.Repositories;
 using Catalog.API.Repositories.Interfaces;
 using CatalogAPI.Data;
+using Common.Extensions;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
 builder.Services.AddScoped<ICatalogContext, CatalogContext>();

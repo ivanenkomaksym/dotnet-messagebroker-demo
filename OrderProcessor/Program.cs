@@ -1,13 +1,16 @@
-﻿using MassTransit;
+﻿using Common.Extensions;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using OrderProcessor;
 using OrderProcessor.Clients;
 using OrderProcessor.Consumers;
 
-IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices((hostContext, services) =>
-    {
+var hostBuilder = Host.CreateDefaultBuilder(args);
+hostBuilder.ConfigureOpenTelemetry();
+
+var host = hostBuilder.ConfigureServices((hostContext, services) =>
+{
         services.AddHostedService<OrderProcessorWorker>();
 
         services.AddSingleton<IGrpcOrderClient, GrpcOrderClient>();

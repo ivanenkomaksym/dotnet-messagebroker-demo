@@ -1,4 +1,5 @@
 using Common.Examples;
+using Common.Extensions;
 using MassTransit;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
@@ -11,6 +12,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
 builder.Services.AddHttpClient<IOrderContextSeed, OrderContextSeed>(options =>
@@ -18,8 +20,8 @@ builder.Services.AddHttpClient<IOrderContextSeed, OrderContextSeed>(options =>
     options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
 });
 
-builder.Services.AddSingleton<IOrderContext, OrderContext>();
-builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderContext, OrderContext>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.AddScoped<IOrderService, OrderService>();
 
