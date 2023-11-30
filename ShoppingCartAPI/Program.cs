@@ -1,3 +1,4 @@
+using Common.Extensions;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -6,6 +7,7 @@ using ShoppingCartAPI.Data;
 using ShoppingCartAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
 builder.Services.AddScoped<IShoppingCartContext, ShoppingCartContext>();

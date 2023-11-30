@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Common.Extensions;
+using MassTransit;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
 using Warehouse;
@@ -6,7 +7,10 @@ using Warehouse.Consumers;
 using WarehouseCommon.Data;
 using WarehouseCommon.Repositories;
 
-IHost host = Host.CreateDefaultBuilder(args)
+var hostBuilder = Host.CreateDefaultBuilder(args);
+hostBuilder.ConfigureOpenTelemetry();
+
+IHost host = hostBuilder
     .ConfigureServices((hostContext, services) =>
     {
         services.AddHostedService<WarehouseWorker>();

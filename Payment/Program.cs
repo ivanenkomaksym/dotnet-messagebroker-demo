@@ -1,3 +1,4 @@
+using Common.Extensions;
 using PaymentService;
 using PaymentService.Consumers;
 using PaymentService.Data;
@@ -6,7 +7,10 @@ using MassTransit;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
 
-IHost host = Host.CreateDefaultBuilder(args)
+var hostBuilder = Host.CreateDefaultBuilder(args);
+hostBuilder.ConfigureOpenTelemetry();
+
+IHost host = hostBuilder
     .ConfigureServices((hostContext, services) =>
     {
         services.AddHostedService<PaymentWorker>();

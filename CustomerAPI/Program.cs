@@ -1,5 +1,6 @@
 using System.Reflection;
 using Common.Examples;
+using Common.Extensions;
 using CustomerAPI;
 using CustomerAPI.Data;
 using CustomerAPI.Repositories;
@@ -12,6 +13,7 @@ using MongoDB.Bson;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
 builder.Services.AddScoped<ICustomerContext, CustomerContext>();

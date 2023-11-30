@@ -1,12 +1,15 @@
+using Common.Extensions;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
 using OrderCommon.Data;
 using OrderCommon.Repositories;
 using OrderGrpc;
 
-IHost host = Host.CreateDefaultBuilder(args)
+var hostBuilder = Host.CreateDefaultBuilder(args);
+hostBuilder.ConfigureOpenTelemetry();
+
+IHost host = hostBuilder
     .ConfigureWebHostDefaults(builder =>
     {
         builder

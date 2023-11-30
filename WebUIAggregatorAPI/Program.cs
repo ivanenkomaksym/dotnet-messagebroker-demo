@@ -1,6 +1,8 @@
+using Common.Extensions;
 using WebUIAggregatorAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
 builder.Services.AddHttpClient<ICatalogApiService, CatalogApiService>(options =>

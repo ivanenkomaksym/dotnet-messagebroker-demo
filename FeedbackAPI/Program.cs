@@ -1,3 +1,4 @@
+using Common.Extensions;
 using FeedbackAPI.Data;
 using FeedbackAPI.Repositories;
 using HealthChecks.UI.Client;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
 builder.Services.AddScoped<IFeedbackContext, FeedbackContext>();

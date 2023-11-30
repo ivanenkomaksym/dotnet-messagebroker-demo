@@ -1,8 +1,12 @@
-﻿using MassTransit;
+﻿using Common.Extensions;
+using MassTransit;
 using Notifications;
 using Notifications.Consumers;
 
-IHost host = Host.CreateDefaultBuilder(args)
+var hostBuilder = Host.CreateDefaultBuilder(args);
+hostBuilder.ConfigureOpenTelemetry();
+
+IHost host = hostBuilder
     .ConfigureServices((hostContext, services) =>
      {
          services.AddHostedService<NotificationsWorker>();
