@@ -1,5 +1,5 @@
 ﻿using Common.Models;
-using Common.Models.Payment;
+using Common.SeedData;
 
 namespace WebUI.Services
 {
@@ -36,31 +36,6 @@ namespace WebUI.Services
             return Task.FromResult(true);
         }
 
-        private readonly Customer Customer = new Customer
-        {
-            Id = Guid.NewGuid(),
-            FirstName = "Alice",
-            LastName = "Liddell",
-            Email = "alice@gmail.com",
-            Password = "alice",
-            PaymentInfo = new PaymentInfo
-            {
-                CardName = "Alice Liddell",
-                CardNumber = "1234 1234 1234 1234",
-                CVV = "123",
-                Expiration = "01/30",
-                PaymentMethod = PaymentMethod.CreditCard_AlwaysExpire
-            },
-            ShippingAddress = new Address
-            {
-                FirstName = "Alice",
-                LastName = "Liddell",
-                Email = "alice@gmail.com",
-                Country = "England",
-                AddressLine = "London",
-                ZipCode = "12345"
-            },
-            CreationDateTime = DateTime.Now,
-        };
+        private readonly Customer Customer = CustomerSeed.GetPreconfiguredCustomer().ElementAt(0);
     }
 }
