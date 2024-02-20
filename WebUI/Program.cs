@@ -62,6 +62,21 @@ builder.Services.AddMassTransit(x =>
 
 var gatewayAddress = builder.Configuration["ApiSettings:GatewayAddress"];
 
+builder.Services.AddTransient<ICustomerService>(provider =>
+{
+    var featureManager = provider.GetRequiredService<IFeatureManager>();
+
+    if (featureManager.IsEnabledAsync(FeatureFlags.Customer).GetAwaiter().GetResult())
+    {
+        var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+        var httpClient = httpClientFactory.CreateClient(typeof(ICustomerService).FullName);
+        httpClient.BaseAddress = new Uri(gatewayAddress);
+        return new CustomerService(httpClient);
+    }
+
+    return new StubCustomerService();
+});
+
 builder.Services.AddHttpClient<ICustomerService, CustomerService>(options =>
 {
     options.BaseAddress = new Uri(gatewayAddress);
