@@ -5,5 +5,6 @@
         public const string Feedback = "Feedback";
         public const string Discount = "Discount";
         public const string Customer = "Customer";
+        public const string Product = "Product";
     }
 }

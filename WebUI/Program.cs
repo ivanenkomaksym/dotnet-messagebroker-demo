@@ -77,14 +77,19 @@ builder.Services.AddTransient<ICustomerService>(provider =>
     return new StubCustomerService();
 });
 
-builder.Services.AddHttpClient<ICustomerService, CustomerService>(options =>
+builder.Services.AddTransient<IProductService>(provider =>
 {
-    options.BaseAddress = new Uri(gatewayAddress);
-});
+    var featureManager = provider.GetRequiredService<IFeatureManager>();
 
-builder.Services.AddHttpClient<IProductService, ProductService>(options =>
-{
-    options.BaseAddress = new Uri(gatewayAddress);
+    if (featureManager.IsEnabledAsync(FeatureFlags.Product).GetAwaiter().GetResult())
+    {
+        var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+        var httpClient = httpClientFactory.CreateClient(typeof(IProductService).FullName);
+        httpClient.BaseAddress = new Uri(gatewayAddress);
+        return new ProductService(httpClient);
+    }
+
+    return new StubProductService();
 });
 
 builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>(options =>

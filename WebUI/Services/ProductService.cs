@@ -9,7 +9,7 @@ namespace WebUI.Services
     {
         private readonly HttpClient _client;
 
-        public ProductService(HttpClient client, ILogger<ProductService> logger)
+        public ProductService(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
