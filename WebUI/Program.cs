@@ -92,9 +92,19 @@ builder.Services.AddTransient<IProductService>(provider =>
     return new StubProductService();
 });
 
-builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>(options =>
+builder.Services.AddTransient<IShoppingCartService>(provider =>
 {
-    options.BaseAddress = new Uri(gatewayAddress);
+    var featureManager = provider.GetRequiredService<IFeatureManager>();
+
+    if (featureManager.IsEnabledAsync(FeatureFlags.Product).GetAwaiter().GetResult())
+    {
+        var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+        var httpClient = httpClientFactory.CreateClient(typeof(IShoppingCartService).FullName);
+        httpClient.BaseAddress = new Uri(gatewayAddress);
+        return new ShoppingCartService(httpClient);
+    }
+
+    return new StubShoppingCartService();
 });
 
 builder.Services.AddHttpClient<IOrderService, OrderService>(options =>

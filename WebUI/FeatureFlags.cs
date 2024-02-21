@@ -6,5 +6,6 @@
         public const string Discount = "Discount";
         public const string Customer = "Customer";
         public const string Product = "Product";
+        public const string ShoppingCart = "ShoppingCart";
     }
 }
