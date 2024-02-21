@@ -62,69 +62,19 @@ builder.Services.AddMassTransit(x =>
 
 var gatewayAddress = builder.Configuration["ApiSettings:GatewayAddress"];
 
-builder.Services.AddTransient<ICustomerService>(provider =>
-{
-    var featureManager = provider.GetRequiredService<IFeatureManager>();
+builder.Services.AddIfFeatureEnabled<ICustomerService, CustomerService, StubCustomerService>(FeatureFlags.Customer, gatewayAddress);
 
-    if (featureManager.IsEnabledAsync(FeatureFlags.Customer).GetAwaiter().GetResult())
-    {
-        var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
-        var httpClient = httpClientFactory.CreateClient(typeof(ICustomerService).FullName);
-        httpClient.BaseAddress = new Uri(gatewayAddress);
-        return new CustomerService(httpClient);
-    }
+builder.Services.AddIfFeatureEnabled<IProductService, ProductService, StubProductService>(FeatureFlags.Product, gatewayAddress);
 
-    return new StubCustomerService();
-});
+builder.Services.AddIfFeatureEnabled<IShoppingCartService, ShoppingCartService, StubShoppingCartService>(FeatureFlags.ShoppingCart, gatewayAddress);
 
-builder.Services.AddTransient<IProductService>(provider =>
-{
-    var featureManager = provider.GetRequiredService<IFeatureManager>();
+builder.Services.AddIfFeatureEnabled<IDiscountService, DiscountService, EmptyDiscountService>(FeatureFlags.Discount, gatewayAddress);
 
-    if (featureManager.IsEnabledAsync(FeatureFlags.Product).GetAwaiter().GetResult())
-    {
-        var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
-        var httpClient = httpClientFactory.CreateClient(typeof(IProductService).FullName);
-        httpClient.BaseAddress = new Uri(gatewayAddress);
-        return new ProductService(httpClient);
-    }
-
-    return new StubProductService();
-});
-
-builder.Services.AddTransient<IShoppingCartService>(provider =>
-{
-    var featureManager = provider.GetRequiredService<IFeatureManager>();
-
-    if (featureManager.IsEnabledAsync(FeatureFlags.Product).GetAwaiter().GetResult())
-    {
-        var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
-        var httpClient = httpClientFactory.CreateClient(typeof(IShoppingCartService).FullName);
-        httpClient.BaseAddress = new Uri(gatewayAddress);
-        return new ShoppingCartService(httpClient);
-    }
-
-    return new StubShoppingCartService();
-});
+builder.Services.AddIfFeatureEnabled<IFeedbackService, FeedbackService, EmptyFeedbackService>(FeatureFlags.Feedback, gatewayAddress);
 
 builder.Services.AddHttpClient<IOrderService, OrderService>(options =>
 {
     options.BaseAddress = new Uri(gatewayAddress);
-});
-
-builder.Services.AddTransient<IDiscountService>(provider =>
-{
-    var featureManager = provider.GetRequiredService<IFeatureManager>();
-
-    if (featureManager.IsEnabledAsync(FeatureFlags.Discount).GetAwaiter().GetResult())
-    {
-        var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
-        var httpClient = httpClientFactory.CreateClient(typeof(IDiscountService).FullName);
-        httpClient.BaseAddress = new Uri(gatewayAddress);
-        return new DiscountService(httpClient);
-    }
-
-    return new EmptyDiscountService();
 });
 
 builder.Services.AddSingleton<IUserProvider, DefaultUserProvider>();
@@ -134,18 +84,6 @@ builder.Services.AddSession(options => {
 });
 
 builder.Services.AddSingleton<IGraphQLClient>(s => new GraphQLHttpClient(gatewayAddress + "/gateway/graphql", new NewtonsoftJsonSerializer()));
-builder.Services.AddSingleton<IFeedbackService>(services =>
-{
-    var featureManager = services.GetRequiredService<IFeatureManager>();
-
-    if (featureManager.IsEnabledAsync(FeatureFlags.Feedback).GetAwaiter().GetResult())
-    {
-        var graphClient = services.GetRequiredService<IGraphQLClient>();
-        return new FeedbackService(graphClient);
-    }
-
-    return new EmptyFeedbackService();
-});
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
