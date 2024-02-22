@@ -96,7 +96,7 @@ data:
             // Order API
             {
                 "UpstreamPathTemplate": "/gateway/Order",
-                "UpstreamHttpMethod": [ "POST", "PUT" ],
+                "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
                 "DownstreamPathTemplate": "/api/Order",
                 "DownstreamScheme": "http",
                 "DownstreamHostAndPorts": [
@@ -342,6 +342,6 @@ data:
             }
         ],
         "GlobalConfiguration": {
-            "BaseUrl": "http://localhost:5010"
+            "BaseUrl": "http://localhost:5011"
         }
     }

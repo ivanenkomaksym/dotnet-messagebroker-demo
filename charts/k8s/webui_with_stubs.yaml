@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webui-pod
+  labels:
+    app: webui
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: webui-app
+  template:
+    metadata: 
+      labels:
+        app: webui-app
+    spec:
+      containers:
+        - name: webui
+          image: ivanenkomak/webui:latest
+          env:
+            - name: ApiSettings__GatewayAddress
+              value: "http://ocelotapigateway"
+            - name: FeatureManagement_Feedback
+              value: false
+            - name: FeatureManagement_Discount
+              value: false
+            - name: FeatureManagement_Customer
+              value: false
+            - name: FeatureManagement_Product
+              value: false
+            - name: FeatureManagement_ShoppingCart
+              value: false
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
