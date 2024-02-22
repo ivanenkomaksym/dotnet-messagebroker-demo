@@ -20,7 +20,7 @@ namespace WebUI
             where TStubServiceImpl : class, TServiceInterface, new()
             where TServiceImpl : class, TServiceInterface
         {
-            services.AddTransient<TServiceInterface>(provider =>
+            services.AddSingleton<TServiceInterface>(provider =>
             {
                 var featureManager = provider.GetRequiredService<IFeatureManager>();
 
@@ -29,7 +29,6 @@ namespace WebUI
                     var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
                     var httpClient = httpClientFactory.CreateClient(typeof(TServiceInterface).FullName);
                     httpClient.BaseAddress = new Uri(gatewayAddress);
-                    //return new TServiceImpl(httpClient);
                     return (TServiceImpl)Activator.CreateInstance(typeof(TServiceImpl), httpClient);
                 }
 

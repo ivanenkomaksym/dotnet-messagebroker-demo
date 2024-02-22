@@ -7,8 +7,8 @@ namespace WebUI.Services
 {
     public class StubProductService : IProductService
     {
-        private readonly IEnumerable<Product> Products = CatalogSeed.GetPreconfiguredProducts();
-        private readonly IEnumerable<StockItem> StockItems = WarehouseSeed.GetPreconfiguredStockItems();
+        private static readonly IEnumerable<Product> Products = CatalogSeed.GetPreconfiguredProducts();
+        private static readonly IEnumerable<StockItem> StockItems = WarehouseSeed.GetPreconfiguredStockItems(Products);
 
         private async Task<IEnumerable<ProductWithStock>> AddStockInformation(IEnumerable<Product> products)
         {

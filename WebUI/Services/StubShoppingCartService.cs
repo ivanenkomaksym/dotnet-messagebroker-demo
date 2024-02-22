@@ -54,10 +54,10 @@ namespace WebUI.Services
 
         public async Task<ShoppingCartModel> GetShoppingCart(Guid customerId)
         {
-            var shoppingCart = ShoppingCarts.FirstOrDefault(x => x.Id == customerId);
+            var shoppingCart = ShoppingCarts.FirstOrDefault(x => x.CustomerId == customerId);
             if (shoppingCart == null)
             {
-                shoppingCart = new ShoppingCartModel { CustomerId = customerId };
+                shoppingCart = new ShoppingCartModel { Id = Guid.NewGuid(), CustomerId = customerId };
                 await CreateShoppingCart(shoppingCart);
             }
 
@@ -66,7 +66,7 @@ namespace WebUI.Services
 
         public Task<ShoppingCartModel> UpdateShoppingCart(ShoppingCartModel shoppingCart)
         {
-            var index = ShoppingCarts.IndexOf(shoppingCart);
+            var index = ShoppingCarts.IndexOf(ShoppingCarts.Find(c => c.Id == shoppingCart.Id));
             if (index != -1)
             {
                 ShoppingCarts[index] = shoppingCart;
