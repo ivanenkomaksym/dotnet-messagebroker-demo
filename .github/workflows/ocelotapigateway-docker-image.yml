@@ -44,8 +44,7 @@ jobs:
           images: ivanenkomak/ocelotapigateway
       - name: Build and push
         run: |
-          TIMESTAMP="${{ steps.timestamp.outputs.timestamp }}"
-          IMAGE_TAG="ivanenkomak/ocelotapigateway:${TIMESTAMP}"
+          IMAGE_TAG="ivanenkomak/ocelotapigateway:latest"
           DOCKERFILE="OcelotAPIGateway/Dockerfile"
-          echo "Building Docker image with timestamp tag: ${IMAGE_TAG}"
+          echo "Building Docker image with latest tag: ${IMAGE_TAG}"
           docker buildx build -t "${IMAGE_TAG}" --file "${DOCKERFILE}" . --push

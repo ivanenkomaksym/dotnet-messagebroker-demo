@@ -46,8 +46,7 @@ jobs:
           images: ivanenkomak/orderapi
       - name: Build and push
         run: |
-          TIMESTAMP="${{ steps.timestamp.outputs.timestamp }}"
-          IMAGE_TAG="ivanenkomak/orderapi:${TIMESTAMP}"
+          IMAGE_TAG="ivanenkomak/orderapi:latest"
           DOCKERFILE="OrderAPI/Dockerfile"
-          echo "Building Docker image with timestamp tag: ${IMAGE_TAG}"
+          echo "Building Docker image with latest tag: ${IMAGE_TAG}"
           docker buildx build -t "${IMAGE_TAG}" --file "${DOCKERFILE}" . --push
