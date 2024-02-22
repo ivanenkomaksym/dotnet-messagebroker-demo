@@ -10,7 +10,7 @@ namespace Common.SeedData
             {
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems",
                     Author = "Martin Kleppmann",
                     Category = "IT",
@@ -20,7 +20,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "Building Microservices: Designing Fine-Grained Systems 2nd Edition",
                     Author = "Sam Newman",
                     Category = "IT",
@@ -30,7 +30,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Pragmatic Programmer: 20th Anniversary Edition, 2nd Edition: Your Journey to Mastery",
                     Author = "David Thomas, Andrew Hunt",
                     Category = "IT",
@@ -40,7 +40,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "Clean Architecture: A Craftsman's Guide to Software Structure and Design",
                     Author = "Robert C. Martin",
                     Category = "IT",
@@ -50,7 +50,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "Clean Code: A Handbook of Agile Software Craftsmanship",
                     Author = "Robert C. Martin",
                     Category = "IT",
@@ -60,7 +60,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "A Brief History of Time",
                     Author = "Stephen Hawking",
                     Category = "Nonfiction",
@@ -70,7 +70,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "Guns, Germs, and Steel: The Fates of Human Societies",
                     Author = "ared Diamond, Doug Ordunio",
                     Category = "Nonfiction",
@@ -80,7 +80,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "We Have No Idea: A Guide to the Unknown Universe",
                     Author = "J. Cham",
                     Category = "Nonfiction",
@@ -90,7 +90,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "Sapiens: A Brief History of Humankind",
                     Author = "Yuval Noah Harari",
                     Category = "Nonfiction",
@@ -100,7 +100,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "A Short History of Nearly Everything",
                     Author = "Bill Bryson ",
                     Category = "Nonfiction",
@@ -110,7 +110,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "To Kill a Mockingbird",
                     Author = "Harper Lee",
                     Category = "Fiction",
@@ -120,7 +120,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "1984",
                     Author = "George Orwell",
                     Category = "Fiction",
@@ -130,7 +130,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Great Gatsby",
                     Author = "F. Scott Fitzgerald",
                     Category = "Fiction",
@@ -140,7 +140,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "Pride and Prejudice",
                     Author = "Jane Austen",
                     Category = "Fiction",
@@ -150,7 +150,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Catcher in the Rye",
                     Author = "J.D. Salinger",
                     Category = "Fiction",
@@ -160,7 +160,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Lord of the Rings",
                     Author = "J.R.R. Tolkien",
                     Category = "Fantasy",
@@ -170,7 +170,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "To the Lighthouse",
                     Author = "Virginia Woolf",
                     Category = "Fiction",
@@ -180,7 +180,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "One Hundred Years of Solitude",
                     Author = "Gabriel Garcia Marquez",
                     Category = "Magical Realism",
@@ -190,7 +190,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Hobbit",
                     Author = "J.R.R. Tolkien",
                     Category = "Fantasy",
@@ -200,7 +200,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Da Vinci Code",
                     Author = "Dan Brown",
                     Category = "Mystery, Thriller",
@@ -210,7 +210,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "Harry Potter and the Sorcerer's Stone",
                     Author = "J.K. Rowling",
                     Category = "Fantasy",
@@ -220,7 +220,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Alchemist",
                     Author = "Paulo Coelho",
                     Category = "Fiction, Philosophy",
@@ -230,7 +230,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "Brave New World",
                     Author = "Aldous Huxley",
                     Category = "Fiction, Dystopian",
@@ -240,7 +240,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Road",
                     Author = "Cormac McCarthy",
                     Category = "Fiction, Post-Apocalyptic",
@@ -250,7 +250,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Kite Runner",
                     Author = "Khaled Hosseini",
                     Category = "Fiction, Historical",
@@ -260,7 +260,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Girl with the Dragon Tattoo",
                     Author = "Stieg Larsson",
                     Category = "Mystery, Thriller",
@@ -270,7 +270,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Chronicles of Narnia",
                     Author = "C.S. Lewis",
                     Category = "Fantasy",
@@ -280,7 +280,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "The Shining",
                     Author = "Stephen King",
                     Category = "Horror",
@@ -290,7 +290,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "A Song of Ice and Fire",
                     Author = "George R.R. Martin",
                     Category = "Fantasy",

@@ -1,13 +1,13 @@
-﻿using Common.Models.Warehouse;
+﻿using Common.Models;
+using Common.Models.Warehouse;
 
 namespace Common.SeedData
 {
     public static class WarehouseSeed
     {
-        public static IEnumerable<StockItem> GetPreconfiguredStockItems()
+        public static IEnumerable<StockItem> GetPreconfiguredStockItems(IEnumerable<Product> products)
         {
             var stockItems = new List<StockItem>();
-            var products = CatalogSeed.GetPreconfiguredProducts();
             var rand = new Random();
 
             foreach (var product in products)
