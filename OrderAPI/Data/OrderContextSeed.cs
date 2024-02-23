@@ -1,21 +1,19 @@
-﻿using Common.Extensions;
-using Common.Models;
+﻿using Common.Models;
+using Common.SeedData;
 using MongoDB.Driver;
 
 namespace OrderAPI.Data
 {
     /// <summary>
-    /// This class is at the same time HttpClient in order to get available products from CatalogAPI and seed order data.
+    /// This class seeds order data.
     /// </summary>
     internal sealed class OrderContextSeed : IOrderContextSeed
     {
-        private readonly HttpClient _client;
         private readonly IOrderService _orderService;
         private readonly ILogger<OrderContextSeed> _logger;
 
-        public OrderContextSeed(HttpClient client, IOrderService orderService, ILogger<OrderContextSeed> logger)
+        public OrderContextSeed(IOrderService orderService, ILogger<OrderContextSeed> logger)
         {
-            _client = client;
             _orderService = orderService;
             _logger = logger;
         }
@@ -27,8 +25,8 @@ namespace OrderAPI.Data
                 return;
 
             _logger.LogInformation("SeedData started.");
-            var users = await _client.GetUsers();
-            var products = await _client.GetProducts();
+            var users = CustomerSeed.GetPreconfiguredCustomer();
+            var products = CatalogSeed.GetPreconfiguredProducts();
             _logger.LogInformation($"Received `{products.Count()}` products.");
             var rand = new Random();
 

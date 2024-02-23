@@ -15,10 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
-builder.Services.AddHttpClient<IOrderContextSeed, OrderContextSeed>(options =>
-{
-    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
-});
+builder.Services.AddSingleton<IOrderContextSeed, OrderContextSeed>();
 
 builder.Services.AddScoped<IOrderContext, OrderContext>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
