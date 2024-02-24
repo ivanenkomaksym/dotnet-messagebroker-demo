@@ -15,8 +15,10 @@ IHost host = hostBuilder
     {
         services.AddHostedService<WarehouseWorker>();
 
-        services.AddSingleton<IWarehouseContext, WarehouseContextBase>();
-        services.AddSingleton<IWarehouseRepository, WarehouseRepositoryBase>();
+        services.AddSingleton<IWarehouseContextSeed, WarehouseContextSeed>();
+
+        services.AddSingleton<IWarehouseContext, WarehouseContext>();
+        services.AddSingleton<IWarehouseRepository, WarehouseRepository>();
 
         services.AddMassTransit(x =>
         {

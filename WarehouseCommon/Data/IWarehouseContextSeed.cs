@@ -1,7 +1,7 @@
 ﻿using Common.Models.Warehouse;
 using MongoDB.Driver;
 
-namespace WarehouseAPI.Data
+namespace WarehouseCommon.Data
 {
     public interface IWarehouseContextSeed
     {

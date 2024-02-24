@@ -1,7 +1,7 @@
-﻿using WarehouseCommon.Data;
+﻿using Microsoft.Extensions.Logging;
 using WarehouseCommon.Repositories;
 
-namespace WarehouseAPI.Data
+namespace WarehouseCommon.Data
 {
     public sealed class WarehouseRepository : WarehouseRepositoryBase
     {

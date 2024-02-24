@@ -1,8 +1,8 @@
-﻿using WarehouseCommon.Data;
+﻿using Microsoft.Extensions.Configuration;
 
-namespace WarehouseAPI.Data
+namespace WarehouseCommon.Data
 {
-    internal class WarehouseContext : WarehouseContextBase
+    public class WarehouseContext : WarehouseContextBase
     {
         private readonly IWarehouseContextSeed _warehouseContextSeed;
 

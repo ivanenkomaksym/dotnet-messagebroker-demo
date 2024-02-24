@@ -1,28 +1,31 @@
-﻿using Common.Extensions;
-using Common.Models.Warehouse;
+﻿using Common.Models.Warehouse;
+using Common.SeedData;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
-namespace WarehouseAPI.Data
+namespace WarehouseCommon.Data
 {
     /// <summary>
-    /// This class is at the same time HttpClient in order to get available products from CatalogAPI and seed warehouse data.
+    /// This class seeds warehouse data.
     /// </summary>
-    internal sealed class WarehouseContextSeed : IWarehouseContextSeed
+    public sealed class WarehouseContextSeed : IWarehouseContextSeed
     {
-        private readonly HttpClient _client;
         private readonly ILogger<WarehouseContextSeed> _logger;
 
-        public WarehouseContextSeed(HttpClient client, ILogger<WarehouseContextSeed> logger)
+        public WarehouseContextSeed(ILogger<WarehouseContextSeed> logger)
         {
-            _client = client;
             _logger = logger;
         }
 
         public async Task SeedData(IMongoCollection<StockItem> stockItemCollection)
         {
+            var hasAtLeastOneStockItem = stockItemCollection.Find(p => true).Any();
+            if (hasAtLeastOneStockItem)
+                return;
+
             _logger.LogInformation("SeedData started.");
             var stockItems = new List<StockItem>();
-            var products = await _client.GetProducts();
+            var products = CatalogSeed.GetPreconfiguredProducts();
             _logger.LogInformation($"Received `{products.Count()}` products.");
             var rand = new Random();
 
