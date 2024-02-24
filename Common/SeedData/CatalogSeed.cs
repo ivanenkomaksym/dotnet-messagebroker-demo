@@ -10,7 +10,7 @@ namespace Common.SeedData
             {
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("6001CE42-8A8B-4000-A87C-96A06217E8DE"),
                     Name = "Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems",
                     Author = "Martin Kleppmann",
                     Category = "IT",
@@ -20,7 +20,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("B7878A42-7514-4BE7-9E7C-4F8830970D18"),
                     Name = "Building Microservices: Designing Fine-Grained Systems 2nd Edition",
                     Author = "Sam Newman",
                     Category = "IT",
@@ -30,7 +30,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("867BEB56-C6BA-49E1-8446-82E7D8F1A26F"),
                     Name = "The Pragmatic Programmer: 20th Anniversary Edition, 2nd Edition: Your Journey to Mastery",
                     Author = "David Thomas, Andrew Hunt",
                     Category = "IT",
@@ -40,7 +40,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("57622E0B-543A-43BC-B2AF-A4D410E240B2"),
                     Name = "Clean Architecture: A Craftsman's Guide to Software Structure and Design",
                     Author = "Robert C. Martin",
                     Category = "IT",
@@ -50,7 +50,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("9E9CE8E0-2BF0-4A2B-A1EA-CA0586CDDD3A"),
                     Name = "Clean Code: A Handbook of Agile Software Craftsmanship",
                     Author = "Robert C. Martin",
                     Category = "IT",
@@ -60,7 +60,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("947AE15F-8FF6-4B1C-A74E-BE422B00235A"),
                     Name = "A Brief History of Time",
                     Author = "Stephen Hawking",
                     Category = "Nonfiction",
@@ -70,7 +70,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("7B4ABBFB-4758-42F5-88F9-4DA79855F165"),
                     Name = "Guns, Germs, and Steel: The Fates of Human Societies",
                     Author = "ared Diamond, Doug Ordunio",
                     Category = "Nonfiction",
@@ -80,7 +80,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("C986FAB0-2AF0-4E60-8FB6-CCCF27245144"),
                     Name = "We Have No Idea: A Guide to the Unknown Universe",
                     Author = "J. Cham",
                     Category = "Nonfiction",
@@ -90,7 +90,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("053B448A-9B64-4673-BB6A-89D4D6FEC304"),
                     Name = "Sapiens: A Brief History of Humankind",
                     Author = "Yuval Noah Harari",
                     Category = "Nonfiction",
@@ -100,7 +100,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("BBE127FC-FA1D-458A-BAFF-1EC77E6D1CA2"),
                     Name = "A Short History of Nearly Everything",
                     Author = "Bill Bryson ",
                     Category = "Nonfiction",
@@ -110,7 +110,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("9F24F698-269F-487B-9833-3D659C2E8BF0"),
                     Name = "To Kill a Mockingbird",
                     Author = "Harper Lee",
                     Category = "Fiction",
@@ -120,7 +120,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("F6BB01D8-F9CF-4892-9D29-FD6E2AD6B655"),
                     Name = "1984",
                     Author = "George Orwell",
                     Category = "Fiction",
@@ -130,7 +130,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("2FEC938D-71AF-4669-BF9F-9FFB5B93E42A"),
                     Name = "The Great Gatsby",
                     Author = "F. Scott Fitzgerald",
                     Category = "Fiction",
@@ -140,7 +140,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("77B9ABBE-118D-497A-8643-6B2AEDF450FE"),
                     Name = "Pride and Prejudice",
                     Author = "Jane Austen",
                     Category = "Fiction",
@@ -150,7 +150,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("59692559-5538-4CEB-A71A-A3D7577C0CE0"),
                     Name = "The Catcher in the Rye",
                     Author = "J.D. Salinger",
                     Category = "Fiction",
@@ -160,7 +160,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("5B95F97B-4778-48DE-94EC-EBDD60411E41"),
                     Name = "The Lord of the Rings",
                     Author = "J.R.R. Tolkien",
                     Category = "Fantasy",
@@ -170,7 +170,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("8A295DCB-E70B-4645-8E54-197E4AB3254A"),
                     Name = "To the Lighthouse",
                     Author = "Virginia Woolf",
                     Category = "Fiction",
@@ -180,7 +180,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("1AF9F69B-F2CB-49E0-8E69-0A22A1E3FD7B"),
                     Name = "One Hundred Years of Solitude",
                     Author = "Gabriel Garcia Marquez",
                     Category = "Magical Realism",
@@ -190,7 +190,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("40689B99-8F61-4F14-999E-FAD6F9B1EB4D"),
                     Name = "The Hobbit",
                     Author = "J.R.R. Tolkien",
                     Category = "Fantasy",
@@ -200,7 +200,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("D58E191D-975C-47C5-A75F-F661770A86A1"),
                     Name = "The Da Vinci Code",
                     Author = "Dan Brown",
                     Category = "Mystery, Thriller",
@@ -210,7 +210,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("85BEB314-295E-4202-BBE3-1DFC9D65D7EE"),
                     Name = "Harry Potter and the Sorcerer's Stone",
                     Author = "J.K. Rowling",
                     Category = "Fantasy",
@@ -220,7 +220,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("BB19EB78-6A89-4C1D-9F23-8D84930A106C"),
                     Name = "The Alchemist",
                     Author = "Paulo Coelho",
                     Category = "Fiction, Philosophy",
@@ -230,7 +230,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("5106807C-6D14-4E0B-B321-B173573B61DC"),
                     Name = "Brave New World",
                     Author = "Aldous Huxley",
                     Category = "Fiction, Dystopian",
@@ -240,7 +240,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("7EF3667E-E8A9-482F-9754-A12C56946DD0"),
                     Name = "The Road",
                     Author = "Cormac McCarthy",
                     Category = "Fiction, Post-Apocalyptic",
@@ -250,7 +250,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("C46F32B2-D34D-49FD-AAC0-26471DC1DEDE"),
                     Name = "The Kite Runner",
                     Author = "Khaled Hosseini",
                     Category = "Fiction, Historical",
@@ -260,7 +260,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("4EBD28F7-860B-43E4-97C2-BC05B5224AA1"),
                     Name = "The Girl with the Dragon Tattoo",
                     Author = "Stieg Larsson",
                     Category = "Mystery, Thriller",
@@ -270,7 +270,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("2F19FF1B-4EAB-4F98-A130-B27DEDD6C8B7"),
                     Name = "The Chronicles of Narnia",
                     Author = "C.S. Lewis",
                     Category = "Fantasy",
@@ -280,7 +280,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("D99049BA-E078-470E-A7D2-72D58899D1F4"),
                     Name = "The Shining",
                     Author = "Stephen King",
                     Category = "Horror",
@@ -290,7 +290,7 @@ namespace Common.SeedData
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("E55B8A42-DF75-4BB1-B211-83A0046362B5"),
                     Name = "A Song of Ice and Fire",
                     Author = "George R.R. Martin",
                     Category = "Fantasy",

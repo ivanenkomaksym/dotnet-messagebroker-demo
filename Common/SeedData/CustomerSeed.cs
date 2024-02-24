@@ -10,7 +10,7 @@ namespace Common.SeedData
             return new List<Customer>()
             {
                 new() {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("7899DDB4-00F0-43ED-87FE-497D50E0E0B2"),
                     FirstName = "Alice",
                     LastName = "Liddell",
                     Email = "alice@gmail.com",
@@ -35,7 +35,7 @@ namespace Common.SeedData
                     CreationDateTime = DateTime.Now,
                 },
                 new() {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("E269BA84-DFC5-49B1-9F4E-2A0D3D60C374"),
                     FirstName = "Bob",
                     LastName = "Liddell",
                     Email = "bob@gmail.com",

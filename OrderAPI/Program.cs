@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
-builder.Services.AddSingleton<IOrderContextSeed, OrderContextSeed>();
+builder.Services.AddScoped<IOrderContextSeed, OrderContextSeed>();
 
 builder.Services.AddScoped<IOrderContext, OrderContext>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
