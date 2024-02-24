@@ -1,0 +1,13 @@
+debug = true
+
+[apiserver]
+application_url = "localhost:8004"
+hostname = "localhost"
+
+[apisettings]
+gateway_address = "localhost:8003"
+
+[database]
+connection_string = "mongodb://localhost:27017"
+database_name = "OrderDb"
+collection_name = "Orders"
