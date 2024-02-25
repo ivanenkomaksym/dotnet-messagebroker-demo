@@ -8,7 +8,9 @@ edition = "2021"
 [dependencies]
 actix-rt = "2.9.0"
 actix-web = "4.5.1"
+bson = "2.9.0"
 clap = { version = "4.5.1", features = ["derive"] }
 config = "0.14.0"
 env_logger = "0.11.2"
+rust_decimal = "1.34.3"
 serde = "1.0.197"
