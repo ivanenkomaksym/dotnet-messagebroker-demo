@@ -7,7 +7,7 @@ mod services;
 use std::io;
 
 use configuration::settings::Settings;
-use services::orderservice;
+use services::orderservicefactory;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -20,7 +20,10 @@ async fn main() -> io::Result<()> {
         Ok(s) => s,
     };
 
-    let _init_result = orderservice::init(&settings).await;
+    let _order_service = match orderservicefactory::create_order_service(settings.database.clone()).await {
+        Err(e) => panic!("Problem constructing order service: {:?}", e),
+        Ok(s) => s,
+    };
 
     api::httpserver::start_http_server(settings).await
 }
