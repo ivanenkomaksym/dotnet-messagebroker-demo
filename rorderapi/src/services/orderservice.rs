@@ -2,6 +2,7 @@ use crate::{configuration, models::order::Order};
 use mongodb::{ bson::doc, options::{ ClientOptions, ServerApi, ServerApiVersion }, Client, Collection };
 use async_trait::async_trait;
 use log::info;
+use futures_util::TryStreamExt;
 
 use super::orderserviceerror::OrderServiceError;
 
@@ -45,6 +46,17 @@ impl OrderTrait for OrderService {
     }
 
     async fn get_orders(&self) -> Result<Vec<Order>, OrderServiceError> {
-        todo!()
+        let coll = match &self.collection {
+            Some(value) => value,
+            None => return Ok([].to_vec())
+        };
+        
+        let cursor = coll.find(
+            doc! {}, None
+        ).await?;
+        
+        let orders: Vec<Order> = cursor.try_collect().await.expect("");
+
+        Ok(orders.into_iter().collect())
     }
 }

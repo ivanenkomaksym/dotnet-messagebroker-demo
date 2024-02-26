@@ -1,3 +1,7 @@
+extern crate num;
+#[macro_use]
+extern crate num_derive;
+
 mod configuration;
 mod api;
 mod constants;
@@ -20,10 +24,10 @@ async fn main() -> io::Result<()> {
         Ok(s) => s,
     };
 
-    let _order_service = match orderservicefactory::create_order_service(settings.database.clone()).await {
+    let order_service = match orderservicefactory::create_order_service(settings.database.clone()).await {
         Err(e) => panic!("Problem constructing order service: {:?}", e),
         Ok(s) => s,
     };
 
-    api::httpserver::start_http_server(settings).await
+    api::httpserver::start_http_server(settings, order_service).await
 }
