@@ -30,6 +30,7 @@ pub async fn start_http_server(settings: Settings, order_service: Box<dyn OrderT
             // register HTTP requests handlers
             .service(hello)
             .service(orders)
+            .service(get_order_byid)
             .app_data(web::Data::clone(&appdata))
     })
     .bind(application_url)?
@@ -56,6 +57,27 @@ async fn orders(appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
             HttpResponse::Ok()
                 .content_type(APPLICATION_JSON)
                 .json(orders)
+        }
+    }
+}
+
+#[get("/Order/{orderid}")]
+async fn get_order_byid(path: web::Path<String>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
+    let orderid = path.into_inner();
+    if orderid.is_empty() {
+        return HttpResponse::BadRequest()
+            .finish();
+    }
+    
+    match appdata.lock().unwrap().order_service.find(&orderid).await {
+        None => {
+            return HttpResponse::NotFound()
+                .finish();
+        }
+        Some(order) => {
+            HttpResponse::Ok()
+                .content_type(APPLICATION_JSON)
+                .json(order)
         }
     }
 }
