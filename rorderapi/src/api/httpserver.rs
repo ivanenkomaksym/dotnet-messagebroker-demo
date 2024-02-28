@@ -69,7 +69,14 @@ async fn get_order_byid(path: web::Path<String>, appdata: web::Data<Mutex<AppDat
             .finish();
     }
     
-    match appdata.lock().unwrap().order_service.find(&orderid).await {
+    let uuid = match bson::Uuid::parse_str(orderid) {
+        Ok(result) => result,
+        Err(err) => {
+            return HttpResponse::BadRequest().body(err.to_string())
+        }
+    };
+    
+    match appdata.lock().unwrap().order_service.find(&uuid).await {
         None => {
             return HttpResponse::NotFound()
                 .finish();

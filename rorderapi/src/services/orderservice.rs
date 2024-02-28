@@ -11,7 +11,7 @@ pub trait OrderTrait: Send + Sync {
 
     async fn init(&mut self) -> Result<(), OrderServiceError>;
     async fn get_orders(&self) -> Result<Vec<Order>, OrderServiceError>;
-    async fn find(&mut self, key: &str) -> Option<Order>;
+    async fn find(&mut self, uuid: &bson::Uuid) -> Option<Order>;
 }
 
 pub struct OrderService {
@@ -61,15 +61,7 @@ impl OrderTrait for OrderService {
         Ok(orders.into_iter().collect())
     }
 
-    async fn find(&mut self, key: &str) -> Option<Order> {
-        let uuid = match bson::Uuid::parse_str(key) {
-            Ok(result) => result,
-            Err(err) => {
-                log::warn!("{}", err);
-                return None
-            }
-        };
-
+    async fn find(&mut self, uuid: &bson::Uuid) -> Option<Order> {
         let find_result = self.collection.as_mut().unwrap().find_one(
             doc! { "_id": uuid }, None
         ).await;
