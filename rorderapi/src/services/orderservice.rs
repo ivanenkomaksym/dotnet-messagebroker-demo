@@ -1,5 +1,5 @@
 use crate::{configuration, models::order::Order};
-use mongodb::{ bson::doc, options::{ ClientOptions, ServerApi, ServerApiVersion }, Client, Collection };
+use mongodb::{ bson::doc, options::{ ClientOptions, FindOptions, ServerApi, ServerApiVersion }, Client, Collection };
 use async_trait::async_trait;
 use log::info;
 use futures_util::TryStreamExt;
@@ -12,6 +12,7 @@ pub trait OrderTrait: Send + Sync {
     async fn init(&mut self) -> Result<(), OrderServiceError>;
     async fn get_orders(&self) -> Result<Vec<Order>, OrderServiceError>;
     async fn find(&mut self, uuid: &bson::Uuid) -> Option<Order>;
+    async fn get_orders_by_customerid(&self, customerid: &bson::Uuid) -> Result<Vec<Order>, OrderServiceError>;
 }
 
 pub struct OrderService {
@@ -56,7 +57,7 @@ impl OrderTrait for OrderService {
             doc! {}, None
         ).await?;
         
-        let orders: Vec<Order> = cursor.try_collect().await.expect("");
+        let orders: Vec<Order> = cursor.try_collect().await?;
 
         Ok(orders.into_iter().collect())
     }
@@ -75,5 +76,28 @@ impl OrderTrait for OrderService {
                 return None
             }
         }
+    }
+
+    async fn get_orders_by_customerid(&self, customerid: &bson::Uuid) -> Result<Vec<Order>, OrderServiceError> {
+        let coll = match &self.collection {
+            Some(value) => value,
+            None => return Ok([].to_vec())
+        };
+
+        // Define the query to find orders by customer ID
+        let query = doc! {
+            "CustomerInfo._id": customerid
+        };
+
+        // Set any additional options for the find operation
+        let find_options = FindOptions::builder().build();
+
+        // Perform the find operation
+        let cursor = coll.find(query, find_options).await?;
+
+        // Convert the cursor to a vector of Order structs
+        let orders: Vec<Order> = cursor.try_collect().await?;
+
+        Ok(orders.into_iter().collect())
     }
 }

@@ -29,8 +29,9 @@ pub async fn start_http_server(settings: Settings, order_service: Box<dyn OrderT
             .wrap(middleware::Logger::default())
             // register HTTP requests handlers
             .service(hello)
-            .service(orders)
+            .service(get_orders)
             .service(get_order_byid)
+            .service(get_orders_by_customerid)
             .app_data(web::Data::clone(&appdata))
     })
     .bind(application_url)?
@@ -46,7 +47,7 @@ HttpResponse::Ok()
 }
 
 #[get("/Order")]
-async fn orders(appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
+async fn get_orders(appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
     match appdata.lock().unwrap().order_service.get_orders().await {
         Err(err) => {
             log::error!("{}", err);
@@ -85,6 +86,34 @@ async fn get_order_byid(path: web::Path<String>, appdata: web::Data<Mutex<AppDat
             HttpResponse::Ok()
                 .content_type(APPLICATION_JSON)
                 .json(order)
+        }
+    }
+}
+
+#[get("/Order/GetOrdersByCustomerId/{customerid}")]
+async fn get_orders_by_customerid(path: web::Path<String>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
+    let customerid = path.into_inner();
+    if customerid.is_empty() {
+        return HttpResponse::BadRequest()
+            .finish();
+    }
+    
+    let customer_uuid = match bson::Uuid::parse_str(customerid) {
+        Ok(result) => result,
+        Err(err) => {
+            return HttpResponse::BadRequest().body(err.to_string())
+        }
+    };
+    
+    match appdata.lock().unwrap().order_service.get_orders_by_customerid(&customer_uuid).await {
+        Err(err) => {
+            log::error!("{}", err);
+            return HttpResponse::InternalServerError().body(err.to_string());
+        }
+        Ok(orders) => {
+            HttpResponse::Ok()
+                .content_type(APPLICATION_JSON)
+                .json(orders)
         }
     }
 }
