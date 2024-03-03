@@ -13,6 +13,8 @@ pub trait OrderTrait: Send + Sync {
     async fn get_orders(&self) -> Result<Vec<Order>, OrderServiceError>;
     async fn find(&mut self, uuid: &bson::Uuid) -> Option<Order>;
     async fn get_orders_by_customerid(&self, customerid: &bson::Uuid) -> Result<Vec<Order>, OrderServiceError>;
+    async fn create_order(&mut self, new_order: Order) -> Result<(), OrderServiceError>;
+    async fn delete_order(&mut self, uuid: &bson::Uuid) -> Result<(), OrderServiceError>;
 }
 
 pub struct OrderService {
@@ -99,5 +101,17 @@ impl OrderTrait for OrderService {
         let orders: Vec<Order> = cursor.try_collect().await?;
 
         Ok(orders.into_iter().collect())
+    }
+
+    async fn create_order(&mut self, new_order: Order) -> Result<(), OrderServiceError>
+    {
+        self.collection.as_mut().unwrap().insert_one(new_order, None).await?;
+        Ok(())
+    }
+
+    async fn delete_order(&mut self, uuid: &bson::Uuid) -> Result<(), OrderServiceError>
+    {
+        let _res = self.collection.as_mut().unwrap().delete_one(doc! { "_id": uuid }, None).await?;
+        Ok(())
     }
 }

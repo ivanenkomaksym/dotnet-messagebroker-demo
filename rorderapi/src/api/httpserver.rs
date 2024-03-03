@@ -1,10 +1,12 @@
 use crate::configuration::settings::Settings;
 use crate::constants::APPLICATION_JSON;
+use crate::models::order::Order;
 use crate::services::orderservice::OrderTrait;
 
-use actix_web::middleware;
+use actix_web::{delete, middleware, post};
 use actix_web::{App, HttpResponse, get, web};
 use actix_web::HttpServer;
+use bson::Uuid;
 use serde::{Serialize, Deserialize};
 use std::io;
 use std::sync::Mutex;
@@ -32,6 +34,8 @@ pub async fn start_http_server(settings: Settings, order_service: Box<dyn OrderT
             .service(get_orders)
             .service(get_order_byid)
             .service(get_orders_by_customerid)
+            .service(create_order)
+            .service(delete_order)
             .app_data(web::Data::clone(&appdata))
     })
     .bind(application_url)?
@@ -64,20 +68,12 @@ async fn get_orders(appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
 
 #[get("/Order/{orderid}")]
 async fn get_order_byid(path: web::Path<String>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
-    let orderid = path.into_inner();
-    if orderid.is_empty() {
-        return HttpResponse::BadRequest()
-            .finish();
-    }
-    
-    let uuid = match bson::Uuid::parse_str(orderid) {
-        Ok(result) => result,
-        Err(err) => {
-            return HttpResponse::BadRequest().body(err.to_string())
-        }
+    let orderid    = match convert_to_uuid(path) {
+        Err(err) => return err,
+        Ok(result) => result
     };
     
-    match appdata.lock().unwrap().order_service.find(&uuid).await {
+    match appdata.lock().unwrap().order_service.find(&orderid).await {
         None => {
             return HttpResponse::NotFound()
                 .finish();
@@ -92,20 +88,12 @@ async fn get_order_byid(path: web::Path<String>, appdata: web::Data<Mutex<AppDat
 
 #[get("/Order/GetOrdersByCustomerId/{customerid}")]
 async fn get_orders_by_customerid(path: web::Path<String>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
-    let customerid = path.into_inner();
-    if customerid.is_empty() {
-        return HttpResponse::BadRequest()
-            .finish();
-    }
-    
-    let customer_uuid = match bson::Uuid::parse_str(customerid) {
-        Ok(result) => result,
-        Err(err) => {
-            return HttpResponse::BadRequest().body(err.to_string())
-        }
+    let customerid    = match convert_to_uuid(path) {
+        Err(err) => return err,
+        Ok(result) => result
     };
     
-    match appdata.lock().unwrap().order_service.get_orders_by_customerid(&customer_uuid).await {
+    match appdata.lock().unwrap().order_service.get_orders_by_customerid(&customerid).await {
         Err(err) => {
             log::error!("{}", err);
             return HttpResponse::InternalServerError().body(err.to_string());
@@ -116,4 +104,55 @@ async fn get_orders_by_customerid(path: web::Path<String>, appdata: web::Data<Mu
                 .json(orders)
         }
     }
+}
+
+#[post("/Order")]
+async fn create_order(new_order: web::Json<Order>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
+    match appdata.lock().unwrap().order_service.create_order(new_order.0).await {
+        Err(err) => {
+            log::error!("{}", err);
+            return HttpResponse::InternalServerError()
+                .finish();
+        }
+        Ok(_) => {
+            return HttpResponse::Created()
+            .finish();
+        }
+    }
+}
+
+#[delete("/Order/{orderid}")]
+async fn delete_order(path: web::Path<String>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
+    let orderid = match convert_to_uuid(path) {
+        Err(err) => return err,
+        Ok(result) => result
+    };
+    
+    match appdata.lock().unwrap().order_service.delete_order(&orderid).await {
+        Err(err) => {
+            log::error!("{}", err);
+            return HttpResponse::InternalServerError()
+                .finish();
+        }
+        Ok(_) => {
+            return HttpResponse::NoContent()
+            .finish();
+        }
+    }
+}
+
+fn convert_to_uuid(path: web::Path<String>) -> Result<Uuid, HttpResponse>
+{
+    let orderid = path.into_inner();
+    if orderid.is_empty() {
+        return Err(HttpResponse::BadRequest()
+            .finish());
+    }
+    
+    match bson::Uuid::parse_str(orderid) {
+        Ok(result) => return Ok(result),
+        Err(err) => {
+            return Err(HttpResponse::BadRequest().body(err.to_string()))
+        }
+    };
 }
