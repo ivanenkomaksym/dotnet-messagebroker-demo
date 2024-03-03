@@ -9,5 +9,7 @@ pub enum OrderServiceError {
     #[error("internal error")]
     IOError(#[from] io::Error),
     #[error("unknown data store error")]
-    InternalHttpClientError(#[from] reqwest::Error)
+    InternalHttpClientError(#[from] reqwest::Error),
+    #[error("Not found")]
+    NotFound,
 }

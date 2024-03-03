@@ -2,6 +2,7 @@ use crate::configuration::settings::Settings;
 use crate::constants::APPLICATION_JSON;
 use crate::models::order::Order;
 use crate::services::orderservice::OrderTrait;
+use crate::services::orderserviceerror::OrderServiceError;
 
 use actix_web::{delete, middleware, post};
 use actix_web::{App, HttpResponse, get, web};
@@ -131,8 +132,12 @@ async fn delete_order(path: web::Path<String>, appdata: web::Data<Mutex<AppData>
     match appdata.lock().unwrap().order_service.delete_order(&orderid).await {
         Err(err) => {
             log::error!("{}", err);
-            return HttpResponse::InternalServerError()
-                .finish();
+            match err {
+                OrderServiceError::ConnectionError(err) => return HttpResponse::InternalServerError().body(err.to_string()),
+                OrderServiceError::IOError(err) => return HttpResponse::InternalServerError().body(err.to_string()),
+                OrderServiceError::InternalHttpClientError(err) => return HttpResponse::InternalServerError().body(err.to_string()),
+                OrderServiceError::NotFound => return HttpResponse::NotFound().finish(),
+            }
         }
         Ok(_) => {
             return HttpResponse::NoContent()
@@ -150,9 +155,9 @@ fn convert_to_uuid(path: web::Path<String>) -> Result<Uuid, HttpResponse>
     }
     
     match bson::Uuid::parse_str(orderid) {
-        Ok(result) => return Ok(result),
+        Ok(result) => Ok(result),
         Err(err) => {
-            return Err(HttpResponse::BadRequest().body(err.to_string()))
+            Err(HttpResponse::BadRequest().body(err.to_string()))
         }
-    };
+    }
 }

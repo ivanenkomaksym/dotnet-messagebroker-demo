@@ -111,7 +111,11 @@ impl OrderTrait for OrderService {
 
     async fn delete_order(&mut self, uuid: &bson::Uuid) -> Result<(), OrderServiceError>
     {
-        let _res = self.collection.as_mut().unwrap().delete_one(doc! { "_id": uuid }, None).await?;
+        let res = self.collection.as_mut().unwrap().delete_one(doc! { "_id": uuid }, None).await?;
+        if res.deleted_count == 0 {
+            return Err(OrderServiceError::NotFound)
+        }
+
         Ok(())
     }
 }
