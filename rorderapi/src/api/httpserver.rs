@@ -1,6 +1,7 @@
 use crate::configuration::settings::Settings;
 use crate::constants::APPLICATION_JSON;
 use crate::models::order::Order;
+use crate::models::paymentinfo::PaymentInfo;
 use crate::services::orderservice::OrderTrait;
 use crate::services::orderserviceerror::OrderServiceError;
 
@@ -37,6 +38,7 @@ pub async fn start_http_server(settings: Settings, order_service: Box<dyn OrderT
             .service(get_orders_by_customerid)
             .service(create_order)
             .service(delete_order)
+            .service(update_payment)
             .app_data(web::Data::clone(&appdata))
     })
     .bind(application_url)?
@@ -142,6 +144,25 @@ async fn delete_order(path: web::Path<String>, appdata: web::Data<Mutex<AppData>
         Ok(_) => {
             return HttpResponse::NoContent()
             .finish();
+        }
+    }
+}
+
+#[post("/Order/{orderid}/UpdatePayment")]
+async fn update_payment(path: web::Path<String>, payment_info: web::Json<PaymentInfo>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
+    let orderid = match convert_to_uuid(path) {
+        Err(err) => return err,
+        Ok(result) => result
+    };
+
+    match appdata.lock().unwrap().order_service.update_payment(&orderid, payment_info.0).await {
+        Err(err) => {
+            log::error!("{}", err);
+            return HttpResponse::InternalServerError()
+                .finish();
+        }
+        Ok(result) => {
+            return HttpResponse::Ok().body(result.to_string())
         }
     }
 }

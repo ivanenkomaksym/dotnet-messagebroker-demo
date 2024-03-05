@@ -1,4 +1,4 @@
-use crate::{configuration, models::order::Order};
+use crate::{configuration, models::{order::Order, paymentinfo::PaymentInfo}};
 use mongodb::{ bson::doc, options::{ ClientOptions, FindOptions, ServerApi, ServerApiVersion }, Client, Collection };
 use async_trait::async_trait;
 use log::info;
@@ -15,6 +15,8 @@ pub trait OrderTrait: Send + Sync {
     async fn get_orders_by_customerid(&self, customerid: &bson::Uuid) -> Result<Vec<Order>, OrderServiceError>;
     async fn create_order(&mut self, new_order: Order) -> Result<(), OrderServiceError>;
     async fn delete_order(&mut self, uuid: &bson::Uuid) -> Result<(), OrderServiceError>;
+    async fn update_payment(&mut self, uuid: &bson::Uuid, payment_info: PaymentInfo) -> Result<bool, OrderServiceError>;
+    async fn update_order(&mut self, order: Order) -> Result<bool, OrderServiceError>;
 }
 
 pub struct OrderService {
@@ -117,5 +119,20 @@ impl OrderTrait for OrderService {
         }
 
         Ok(())
+    }
+
+    async fn update_payment(&mut self, uuid: &bson::Uuid, payment_info: PaymentInfo) -> Result<bool, OrderServiceError> {
+        let mut order = match self.find(uuid).await {
+            Some(order) => order,
+            None => return Err(OrderServiceError::NotFound)
+        };
+
+        order.payment_info = payment_info;
+        Ok(self.update_order(order).await?)
+    }
+
+    async fn update_order(&mut self, order: Order) -> Result<bool, OrderServiceError> {
+        let res = self.collection.as_mut().unwrap().replace_one(doc! { "_id": order.id }, order, None).await?;
+        return Ok(res.modified_count > 0);
     }
 }
