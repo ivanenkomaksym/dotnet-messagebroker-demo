@@ -1,6 +1,7 @@
-use serde::{Serialize, Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-#[derive(Serialize, Clone, Debug, FromPrimitive)]
+#[derive(Clone, Debug, FromPrimitive)]
+#[repr(u32)]
 pub enum OrderStatus
     {
         New,
@@ -17,6 +18,32 @@ pub enum OrderStatus
         Refunded,
         Cancelled
     }
+
+impl Serialize for OrderStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        // Convert the enum variant to an integer for serialization
+        let variant_int = match self {
+            OrderStatus::New => 0,
+            OrderStatus::StockReserveFailed => 1,
+            OrderStatus::PaymentProcessing => 2,
+            OrderStatus::PaymentFailed => 3,
+            OrderStatus::Paid => 4,
+            OrderStatus::AwaitingShipment => 5,
+            OrderStatus::Shipping => 6,
+            OrderStatus::AwaitingCollection => 7,
+            OrderStatus::Completed => 8,
+            OrderStatus::AwaitingReturn => 9,
+            OrderStatus::Refunding => 10,
+            OrderStatus::Refunded => 11,
+            OrderStatus::Cancelled => 12,
+        };
+
+        serializer.serialize_u32(variant_int)
+    }
+}
 
 impl<'de> Deserialize<'de> for OrderStatus {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>

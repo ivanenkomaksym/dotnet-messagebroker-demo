@@ -1,12 +1,29 @@
-use serde::{Serialize, Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-#[derive(Serialize, Clone, Debug, FromPrimitive)]
+#[derive(Clone, Debug, FromPrimitive)]
+#[repr(u32)]
 pub enum PaymentMethod
     {
         CreditCardAlwaysExpire,
         Crypto,
         PayPalAlwaysFail
     }
+
+impl Serialize for PaymentMethod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        // Convert the enum variant to an integer for serialization
+        let variant_int = match self {
+            PaymentMethod::CreditCardAlwaysExpire => 0,
+            PaymentMethod::Crypto => 1,
+            PaymentMethod::PayPalAlwaysFail => 2,
+        };
+
+        serializer.serialize_u32(variant_int)
+    }
+}
 
 impl<'de> Deserialize<'de> for PaymentMethod {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
