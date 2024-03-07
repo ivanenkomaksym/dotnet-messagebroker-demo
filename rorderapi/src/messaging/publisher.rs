@@ -16,7 +16,7 @@ pub async fn publish_order_created(order_created: OrderCreated) -> Result<(), la
             QUEUE_NAME,
             lapin::ExchangeKind::Fanout,
             ExchangeDeclareOptions {
-                passive: false,
+                passive: true,
                 durable: true,
                 auto_delete: false,
                 internal: false,
@@ -28,8 +28,14 @@ pub async fn publish_order_created(order_created: OrderCreated) -> Result<(), la
 
     let q= channel
         .queue_declare(
-            QUEUE_NAME,
-            QueueDeclareOptions::default(),
+            "OrderProcessor",
+            QueueDeclareOptions {
+                passive: true,
+                durable: false,
+                exclusive: true,
+                auto_delete: false,
+                nowait: false
+            },
             FieldTable::default(),
         )
         .await?;
@@ -41,15 +47,15 @@ pub async fn publish_order_created(order_created: OrderCreated) -> Result<(), la
         QueueBindOptions { nowait: false },
         FieldTable::default()).await?;
 
-    let message = "Hello, RabbitMQ!";
+    let message = serde_json::to_string(&order_created).unwrap();
+    let payload = message.as_bytes();
     channel.basic_publish(
-            "",
-            QUEUE_NAME,
-            BasicPublishOptions::default(),
-            &message.as_bytes().to_vec(),
-            BasicProperties::default(),
-        )
-        .await?;
+        QUEUE_NAME,
+        "",
+        BasicPublishOptions::default(),
+        payload,
+        BasicProperties::default(),
+    ).await?;
 
     println!("Sent message: {}", message);
 

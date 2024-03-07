@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using OrderProcessor;
 using OrderProcessor.Clients;
 using OrderProcessor.Consumers;
+using System.Net.Mime;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
 hostBuilder.ConfigureOpenTelemetry();
@@ -36,6 +37,10 @@ var host = hostBuilder.ConfigureServices((hostContext, services) =>
                 // https://masstransit.io/documentation/configuration#receive-endpoints
                 cfg.ReceiveEndpoint(hostContext.HostingEnvironment.ApplicationName, e =>
                 {
+                    // Consuming messages from other systems where messages may not be produced by MassTransit, raw JSON is commonly used.
+                    e.DefaultContentType = new ContentType("application/json");
+                    e.UseRawJsonDeserializer();
+
                     e.ConfigureConsumer<OrderCreatedConsumer>(context);
                     e.ConfigureConsumer<OrderUpdatedConsumer>(context);
                     e.ConfigureConsumer<ReserveStockResultConsumer>(context);
