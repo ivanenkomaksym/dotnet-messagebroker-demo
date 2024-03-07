@@ -1,4 +1,5 @@
 use crate::{configuration, events::ordercreated::OrderCreated, messaging::publisher, models::{order::Order, paymentinfo::PaymentInfo}};
+use chrono::Utc;
 use mongodb::{ bson::doc, options::{ ClientOptions, FindOptions, ServerApi, ServerApiVersion }, Client, Collection };
 use async_trait::async_trait;
 use log::info;
@@ -114,7 +115,7 @@ impl OrderTrait for OrderService {
             shipping_address: new_order.shipping_address.clone(), 
             payment_info: new_order.payment_info.clone(), 
             items: new_order.items.clone(),
-            creation_date_time: new_order.creation_date_time
+            creation_date_time: chrono::DateTime::parse_from_rfc3339(new_order.creation_date_time.try_to_rfc3339_string().unwrap().as_str()).unwrap().with_timezone(&Utc)
         };
 
         self.collection.as_mut().unwrap().insert_one(new_order, None).await?;

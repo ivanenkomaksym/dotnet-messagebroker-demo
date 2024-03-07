@@ -5,7 +5,7 @@ use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "PascalCase")]
 pub struct OrderItem {
-    #[serde(rename = "_id")] 
+    #[serde(rename(serialize = "Id", deserialize = "_id"))]
     pub id: bson::Uuid,
     pub product_id: bson::Uuid,
     pub product_name: Option<String>,
