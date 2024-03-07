@@ -1,4 +1,4 @@
-use crate::{configuration, models::{order::Order, paymentinfo::PaymentInfo}};
+use crate::{configuration, events::ordercreated::OrderCreated, messaging::publisher, models::{order::Order, paymentinfo::PaymentInfo}};
 use mongodb::{ bson::doc, options::{ ClientOptions, FindOptions, ServerApi, ServerApiVersion }, Client, Collection };
 use async_trait::async_trait;
 use log::info;
@@ -107,7 +107,20 @@ impl OrderTrait for OrderService {
 
     async fn create_order(&mut self, new_order: Order) -> Result<(), OrderServiceError>
     {
+        let order_created_event = OrderCreated{ 
+            order_id: new_order.id, 
+            customer_info: new_order.customer_info.clone(), 
+            order_status: new_order.order_status.clone(), 
+            shipping_address: new_order.shipping_address.clone(), 
+            payment_info: new_order.payment_info.clone(), 
+            items: new_order.items.clone(),
+            creation_date_time: new_order.creation_date_time
+        };
+
         self.collection.as_mut().unwrap().insert_one(new_order, None).await?;
+
+        let _result = publisher::publish_order_created(order_created_event).await;
+
         Ok(())
     }
 
