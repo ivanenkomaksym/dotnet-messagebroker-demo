@@ -1,10 +1,10 @@
 use lapin::{options::*, types::FieldTable, BasicProperties, Connection, ConnectionProperties};
 
-use crate::events::ordercreated::OrderCreated;
-
 const QUEUE_NAME: &str = "Common.Events:OrderCreated";
 
-pub async fn publish_order_created(order_created: OrderCreated) -> Result<(), lapin::Error> {
+pub async fn publish_event<T>(exchange_name: &str, queue_name: &str, event: T) -> Result<(), lapin::Error> 
+    where T: serde::Serialize
+{
     let addr = "amqp://guest:guest@localhost:5672";
     let conn = Connection::connect(&addr, ConnectionProperties::default())
         .await
@@ -13,7 +13,7 @@ pub async fn publish_order_created(order_created: OrderCreated) -> Result<(), la
     let channel = conn.create_channel().await?;
 
     channel.exchange_declare(
-            QUEUE_NAME,
+        exchange_name,
             lapin::ExchangeKind::Fanout,
             ExchangeDeclareOptions {
                 passive: true,
@@ -28,7 +28,7 @@ pub async fn publish_order_created(order_created: OrderCreated) -> Result<(), la
 
     let q= channel
         .queue_declare(
-            "OrderProcessor",
+            queue_name,
             QueueDeclareOptions {
                 passive: true,
                 durable: false,
@@ -42,12 +42,12 @@ pub async fn publish_order_created(order_created: OrderCreated) -> Result<(), la
 
     channel.queue_bind(
         q.name().as_str(),
-        QUEUE_NAME,
+        exchange_name,
         "",
         QueueBindOptions { nowait: false },
         FieldTable::default()).await?;
 
-    let message = serde_json::to_string(&order_created).unwrap();
+    let message = serde_json::to_string(&event).unwrap();
     let payload = message.as_bytes();
     channel.basic_publish(
         QUEUE_NAME,

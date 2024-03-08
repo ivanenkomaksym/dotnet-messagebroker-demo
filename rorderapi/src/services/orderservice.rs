@@ -1,4 +1,4 @@
-use crate::{configuration, events::ordercreated::OrderCreated, messaging::publisher, models::{order::Order, paymentinfo::PaymentInfo}};
+use crate::{configuration, events::ordercreated::OrderCreated, messaging::{constants::{ORDER_CREATED_EXCHANGE, QUEUE_NAME}, publisher}, models::{order::Order, paymentinfo::PaymentInfo}};
 use chrono::Utc;
 use mongodb::{ bson::doc, options::{ ClientOptions, FindOptions, ServerApi, ServerApiVersion }, Client, Collection };
 use async_trait::async_trait;
@@ -120,7 +120,7 @@ impl OrderTrait for OrderService {
 
         self.collection.as_mut().unwrap().insert_one(new_order, None).await?;
 
-        let _result = publisher::publish_order_created(order_created_event).await;
+        let _result = publisher::publish_event(ORDER_CREATED_EXCHANGE, QUEUE_NAME, order_created_event).await;
 
         Ok(())
     }
