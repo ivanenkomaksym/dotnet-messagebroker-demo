@@ -5,3 +5,4 @@ pub mod address;
 pub mod customerinfo;
 pub mod paymentmethod;
 pub mod paymentinfo;
+pub mod paymentstatus;
