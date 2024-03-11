@@ -12,4 +12,6 @@ pub enum OrderServiceError {
     InternalHttpClientError(#[from] reqwest::Error),
     #[error("Not found")]
     NotFound,
+    #[error("messaging error")]
+    InternalMessagingError(#[from] lapin::Error),
 }

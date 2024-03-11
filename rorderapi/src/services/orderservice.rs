@@ -1,5 +1,4 @@
-use crate::{configuration, events::ordercreated::OrderCreated, messaging::{constants::{ORDER_CREATED_EXCHANGE, QUEUE_NAME}, publisher}, models::{order::Order, paymentinfo::PaymentInfo}};
-use chrono::Utc;
+use crate::{configuration, messaging, models::{order::Order, paymentinfo::PaymentInfo}};
 use mongodb::{ bson::doc, options::{ ClientOptions, FindOptions, ServerApi, ServerApiVersion }, Client, Collection };
 use async_trait::async_trait;
 use log::info;
@@ -17,7 +16,10 @@ pub trait OrderTrait: Send + Sync {
     async fn create_order(&mut self, new_order: Order) -> Result<(), OrderServiceError>;
     async fn delete_order(&mut self, uuid: &bson::Uuid) -> Result<(), OrderServiceError>;
     async fn update_payment(&mut self, uuid: &bson::Uuid, payment_info: PaymentInfo) -> Result<bool, OrderServiceError>;
-    async fn update_order(&mut self, order: Order) -> Result<bool, OrderServiceError>;
+    async fn update_order(&mut self, order: &Order) -> Result<bool, OrderServiceError>;
+    async fn cancel_order(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError>;
+    async fn order_collected(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError>;
+    async fn return_order(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError>;
 }
 
 pub struct OrderService {
@@ -108,19 +110,9 @@ impl OrderTrait for OrderService {
 
     async fn create_order(&mut self, new_order: Order) -> Result<(), OrderServiceError>
     {
-        let order_created_event = OrderCreated{ 
-            order_id: new_order.id, 
-            customer_info: new_order.customer_info.clone(), 
-            order_status: new_order.order_status.clone(), 
-            shipping_address: new_order.shipping_address.clone(), 
-            payment_info: new_order.payment_info.clone(), 
-            items: new_order.items.clone(),
-            creation_date_time: chrono::DateTime::parse_from_rfc3339(new_order.creation_date_time.try_to_rfc3339_string().unwrap().as_str()).unwrap().with_timezone(&Utc)
-        };
-
-        self.collection.as_mut().unwrap().insert_one(new_order, None).await?;
-
-        let _result = publisher::publish_event(ORDER_CREATED_EXCHANGE, QUEUE_NAME, order_created_event).await;
+        self.collection.as_mut().unwrap().insert_one(new_order.clone(), None).await?;
+        
+        messaging::orderbroker::create_order(&new_order).await?;
 
         Ok(())
     }
@@ -142,11 +134,44 @@ impl OrderTrait for OrderService {
         };
 
         order.payment_info = payment_info;
-        Ok(self.update_order(order).await?)
+        self.update_order(&order).await?;
+        
+        messaging::orderbroker::update_order(&order).await?;
+        return Ok(true)
     }
 
-    async fn update_order(&mut self, order: Order) -> Result<bool, OrderServiceError> {
+    async fn update_order(&mut self, order: &Order) -> Result<bool, OrderServiceError> {
         let res = self.collection.as_mut().unwrap().replace_one(doc! { "_id": order.id }, order, None).await?;
         return Ok(res.modified_count > 0);
+    }
+
+    async fn cancel_order(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError> {
+        let _ = match self.find(uuid).await {
+            Some(_) => {
+                messaging::orderbroker::cancel_order(*uuid).await?;
+                return Ok(true)
+            },
+            None => return Err(OrderServiceError::NotFound)
+        };
+    }
+
+    async fn order_collected(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError> {
+        let _ = match self.find(uuid).await {
+            Some(_) => {
+                messaging::orderbroker::order_collected(*uuid).await?;
+                return Ok(true)
+            },
+            None => return Err(OrderServiceError::NotFound)
+        };
+    }
+
+    async fn return_order(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError> {
+        let _ = match self.find(uuid).await {
+            Some(_) => {
+                messaging::orderbroker::return_order(*uuid).await?;
+                return Ok(true)
+            },
+            None => return Err(OrderServiceError::NotFound)
+        };
     }
 }
