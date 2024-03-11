@@ -39,6 +39,9 @@ pub async fn start_http_server(settings: Settings, order_service: Box<dyn OrderT
             .service(create_order)
             .service(delete_order)
             .service(update_payment)
+            .service(cancel_order)
+            .service(order_collected)
+            .service(return_order)
             .app_data(web::Data::clone(&appdata))
     })
     .bind(application_url)?
@@ -53,7 +56,7 @@ HttpResponse::Ok()
     .json(Response { message: String::from("hello")})
 }
 
-#[get("/Order")]
+#[get("/api/Order")]
 async fn get_orders(appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
     match appdata.lock().unwrap().order_service.get_orders().await {
         Err(err) => {
@@ -69,7 +72,7 @@ async fn get_orders(appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
     }
 }
 
-#[get("/Order/{orderid}")]
+#[get("/api/Order/{orderid}")]
 async fn get_order_byid(path: web::Path<String>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
     let orderid    = match convert_to_uuid(path) {
         Err(err) => return err,
@@ -89,7 +92,7 @@ async fn get_order_byid(path: web::Path<String>, appdata: web::Data<Mutex<AppDat
     }
 }
 
-#[get("/Order/GetOrdersByCustomerId/{customerid}")]
+#[get("/api/Order/GetOrdersByCustomerId/{customerid}")]
 async fn get_orders_by_customerid(path: web::Path<String>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
     let customerid    = match convert_to_uuid(path) {
         Err(err) => return err,
@@ -109,7 +112,7 @@ async fn get_orders_by_customerid(path: web::Path<String>, appdata: web::Data<Mu
     }
 }
 
-#[post("/Order")]
+#[post("/api/Order")]
 async fn create_order(new_order: web::Json<Order>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
     match appdata.lock().unwrap().order_service.create_order(new_order.0).await {
         Err(err) => {
@@ -124,7 +127,7 @@ async fn create_order(new_order: web::Json<Order>, appdata: web::Data<Mutex<AppD
     }
 }
 
-#[delete("/Order/{orderid}")]
+#[delete("/api/Order/{orderid}")]
 async fn delete_order(path: web::Path<String>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
     let orderid = match convert_to_uuid(path) {
         Err(err) => return err,
@@ -139,6 +142,7 @@ async fn delete_order(path: web::Path<String>, appdata: web::Data<Mutex<AppData>
                 OrderServiceError::IOError(err) => return HttpResponse::InternalServerError().body(err.to_string()),
                 OrderServiceError::InternalHttpClientError(err) => return HttpResponse::InternalServerError().body(err.to_string()),
                 OrderServiceError::NotFound => return HttpResponse::NotFound().finish(),
+                OrderServiceError::InternalMessagingError(err) => return HttpResponse::InternalServerError().body(err.to_string()),
             }
         }
         Ok(_) => {
@@ -148,7 +152,7 @@ async fn delete_order(path: web::Path<String>, appdata: web::Data<Mutex<AppData>
     }
 }
 
-#[post("/Order/{orderid}/UpdatePayment")]
+#[post("/api/Order/{orderid}/UpdatePayment")]
 async fn update_payment(path: web::Path<String>, payment_info: web::Json<PaymentInfo>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
     let orderid = match convert_to_uuid(path) {
         Err(err) => return err,
@@ -156,6 +160,60 @@ async fn update_payment(path: web::Path<String>, payment_info: web::Json<Payment
     };
 
     match appdata.lock().unwrap().order_service.update_payment(&orderid, payment_info.0).await {
+        Err(err) => {
+            log::error!("{}", err);
+            return HttpResponse::InternalServerError()
+                .finish();
+        }
+        Ok(result) => {
+            return HttpResponse::Ok().body(result.to_string())
+        }
+    }
+}
+
+#[post("/api/Order/{orderid}/Cancel")]
+async fn cancel_order(path: web::Path<String>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
+    let orderid = match convert_to_uuid(path) {
+        Err(err) => return err,
+        Ok(result) => result
+    };
+    match appdata.lock().unwrap().order_service.cancel_order(&orderid).await {
+        Err(err) => {
+            log::error!("{}", err);
+            return HttpResponse::InternalServerError()
+                .finish();
+        }
+        Ok(result) => {
+            return HttpResponse::Ok().body(result.to_string())
+        }
+    }
+}
+
+#[post("/api/Order/{orderid}/Collected")]
+async fn order_collected(path: web::Path<String>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
+    let orderid = match convert_to_uuid(path) {
+        Err(err) => return err,
+        Ok(result) => result
+    };
+    match appdata.lock().unwrap().order_service.order_collected(&orderid).await {
+        Err(err) => {
+            log::error!("{}", err);
+            return HttpResponse::InternalServerError()
+                .finish();
+        }
+        Ok(result) => {
+            return HttpResponse::Ok().body(result.to_string())
+        }
+    }
+}
+
+#[post("/api/Order/{orderid}/Return")]
+async fn return_order(path: web::Path<String>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
+    let orderid = match convert_to_uuid(path) {
+        Err(err) => return err,
+        Ok(result) => result
+    };
+    match appdata.lock().unwrap().order_service.return_order(&orderid).await {
         Err(err) => {
             log::error!("{}", err);
             return HttpResponse::InternalServerError()
