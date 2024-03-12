@@ -657,6 +657,7 @@ dependencies = [
  "ahash 0.8.9",
  "base64 0.13.1",
  "bitvec",
+ "chrono",
  "hex",
  "indexmap",
  "js-sys",
@@ -2603,6 +2604,7 @@ dependencies = [
  "chrono",
  "clap",
  "config",
+ "derivative",
  "env_logger",
  "futures-util",
  "lapin",
@@ -2617,6 +2619,7 @@ dependencies = [
  "serde_json",
  "thiserror",
  "tokio",
+ "uuid",
 ]
 
 [[package]]

@@ -1,6 +1,7 @@
-use bson::{doc, DateTime};
+use bson::doc;
 use rust_decimal::prelude::*;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use chrono::{DateTime, Utc};
 
 use super::{address::Address, customerinfo::CustomerInfo, orderitem::OrderItem, orderstatus::OrderStatus, paymentinfo::PaymentInfo};
 
@@ -8,6 +9,7 @@ use super::{address::Address, customerinfo::CustomerInfo, orderitem::OrderItem, 
 #[serde(rename_all = "PascalCase")]
 pub struct Order {
     #[serde(rename = "_id")] 
+    #[serde(default)]
     pub id: bson::Uuid,
     pub order_status: OrderStatus,
     pub customer_info: CustomerInfo,
@@ -16,5 +18,7 @@ pub struct Order {
     pub shipping_address: Address,
     pub payment_info: PaymentInfo,
     pub use_cashback: Decimal,
-    pub creation_date_time: DateTime
+    #[serde(default)]
+    #[serde(with = "bson::serde_helpers::chrono_datetime_as_bson_datetime")]
+    pub creation_date_time: DateTime<Utc>
 }
