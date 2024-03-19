@@ -7,12 +7,16 @@ namespace WebUI.Services
     {
         public Task<Customer> Authenticate(string email, string password)
         {
-            return Task.FromResult(Customer);
+            var foundCustomer = Customers.FirstOrDefault(c => c.Email == email);
+            if (foundCustomer == null || foundCustomer.Password != password)
+                return null;
+
+            return Task.FromResult(foundCustomer);
         }
 
         public Task<Customer> CreateCustomer(Customer customer)
         {
-            return Task.FromResult(Customer);
+            return Task.FromResult(customer);
         }
 
         public Task<bool> DeleteCustomer(Guid customerId)
@@ -22,13 +26,14 @@ namespace WebUI.Services
 
         public Task<Customer> GetCustomerById(Guid customerId)
         {
-            return Task.FromResult(Customer);
+            var foundCustomer = Customers.FirstOrDefault(c => c.Id == customerId);
+
+            return Task.FromResult(foundCustomer);
         }
 
         public Task<IEnumerable<Customer>> GetCustomers()
         {
-            IEnumerable<Customer> customers = new List<Customer> { Customer };
-            return Task.FromResult(customers);
+            return Task.FromResult(CustomerSeed.GetPreconfiguredCustomer());
         }
 
         public Task<bool> UpdateCustomer(Customer customer)
@@ -36,6 +41,6 @@ namespace WebUI.Services
             return Task.FromResult(true);
         }
 
-        private readonly Customer Customer = CustomerSeed.GetPreconfiguredCustomer().ElementAt(0);
+        private readonly IEnumerable<Customer> Customers = CustomerSeed.GetPreconfiguredCustomer();
     }
 }
