@@ -31,6 +31,6 @@ namespace Common.Models
 
         public decimal UseCashback { get; set; }
 
-        public DateTime CreationDateTime { get; set; }
+        public DateTime CreationDateTime { get; set; } = DateTime.UtcNow;
     }
 }
