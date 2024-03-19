@@ -1,5 +1,6 @@
 use crate::configuration::settings::Settings;
 use crate::constants::APPLICATION_JSON;
+use crate::models::converters::{to_order, to_order_db};
 use crate::models::order::Order;
 use crate::models::paymentinfo::PaymentInfo;
 use crate::services::orderservice::OrderTrait;
@@ -65,9 +66,11 @@ async fn get_orders(appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
                 .finish();
         }
         Ok(orders) => {
+            let orders_json: Vec<Order> = orders.iter().map(|order_db| to_order(&order_db)).collect();
+
             HttpResponse::Ok()
                 .content_type(APPLICATION_JSON)
-                .json(orders)
+                .json(orders_json)
         }
     }
 }
@@ -85,9 +88,11 @@ async fn get_order_byid(path: web::Path<String>, appdata: web::Data<Mutex<AppDat
                 .finish();
         }
         Some(order) => {
+            let order_json = to_order(&order);
+
             HttpResponse::Ok()
                 .content_type(APPLICATION_JSON)
-                .json(order)
+                .json(order_json)
         }
     }
 }
@@ -105,16 +110,20 @@ async fn get_orders_by_customerid(path: web::Path<String>, appdata: web::Data<Mu
             return HttpResponse::InternalServerError().body(err.to_string());
         }
         Ok(orders) => {
+            let orders_json: Vec<Order> = orders.iter().map(|order_db| to_order(&order_db)).collect();
+
             HttpResponse::Ok()
                 .content_type(APPLICATION_JSON)
-                .json(orders)
+                .json(orders_json)
         }
     }
 }
 
 #[post("/api/Order")]
 async fn create_order(new_order: web::Json<Order>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
-    match appdata.lock().unwrap().order_service.create_order(new_order.0).await {
+    let order_db = to_order_db(&new_order.0);
+
+    match appdata.lock().unwrap().order_service.create_order(order_db).await {
         Err(err) => {
             log::error!("{}", err);
             return HttpResponse::InternalServerError()

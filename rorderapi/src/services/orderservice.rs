@@ -1,4 +1,4 @@
-use crate::{configuration, messaging, models::{order::Order, paymentinfo::PaymentInfo}};
+use crate::{configuration, messaging, models::{converters::to_order, orderdb::OrderDb, paymentinfo::PaymentInfo}};
 use mongodb::{ bson::doc, options::{ ClientOptions, FindOptions, ServerApi, ServerApiVersion }, Client, Collection };
 use async_trait::async_trait;
 use log::info;
@@ -10,13 +10,13 @@ use super::orderserviceerror::OrderServiceError;
 pub trait OrderTrait: Send + Sync {
 
     async fn init(&mut self) -> Result<(), OrderServiceError>;
-    async fn get_orders(&self) -> Result<Vec<Order>, OrderServiceError>;
-    async fn find(&mut self, uuid: &bson::Uuid) -> Option<Order>;
-    async fn get_orders_by_customerid(&self, customerid: &bson::Uuid) -> Result<Vec<Order>, OrderServiceError>;
-    async fn create_order(&mut self, new_order: Order) -> Result<(), OrderServiceError>;
+    async fn get_orders(&self) -> Result<Vec<OrderDb>, OrderServiceError>;
+    async fn find(&mut self, uuid: &bson::Uuid) -> Option<OrderDb>;
+    async fn get_orders_by_customerid(&self, customerid: &bson::Uuid) -> Result<Vec<OrderDb>, OrderServiceError>;
+    async fn create_order(&mut self, new_order: OrderDb) -> Result<(), OrderServiceError>;
     async fn delete_order(&mut self, uuid: &bson::Uuid) -> Result<(), OrderServiceError>;
     async fn update_payment(&mut self, uuid: &bson::Uuid, payment_info: PaymentInfo) -> Result<bool, OrderServiceError>;
-    async fn update_order(&mut self, order: &Order) -> Result<bool, OrderServiceError>;
+    async fn update_order(&mut self, order: &OrderDb) -> Result<bool, OrderServiceError>;
     async fn cancel_order(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError>;
     async fn order_collected(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError>;
     async fn return_order(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError>;
@@ -24,7 +24,7 @@ pub trait OrderTrait: Send + Sync {
 
 pub struct OrderService {
     database_config: configuration::settings::Database,
-    collection: Option<Collection<Order>>
+    collection: Option<Collection<OrderDb>>
 }
 
 impl OrderService {
@@ -50,11 +50,11 @@ impl OrderTrait for OrderService {
         client.database("admin").run_command(doc! { "ping": 1 }, None).await?;
         info!("Pinged your deployment. You successfully connected to MongoDB!");
 
-        self.collection = Some(client.database(&self.database_config.database_name).collection::<Order>(&self.database_config.collection_name));
+        self.collection = Some(client.database(&self.database_config.database_name).collection::<OrderDb>(&self.database_config.collection_name));
         Ok(())
     }
 
-    async fn get_orders(&self) -> Result<Vec<Order>, OrderServiceError> {
+    async fn get_orders(&self) -> Result<Vec<OrderDb>, OrderServiceError> {
         let coll = match &self.collection {
             Some(value) => value,
             None => return Ok([].to_vec())
@@ -64,12 +64,12 @@ impl OrderTrait for OrderService {
             doc! {}, None
         ).await?;
         
-        let orders: Vec<Order> = cursor.try_collect().await?;
+        let orders: Vec<OrderDb> = cursor.try_collect().await?;
 
         Ok(orders.into_iter().collect())
     }
 
-    async fn find(&mut self, uuid: &bson::Uuid) -> Option<Order> {
+    async fn find(&mut self, uuid: &bson::Uuid) -> Option<OrderDb> {
         let find_result = self.collection.as_mut().unwrap().find_one(
             doc! { "_id": uuid }, None
         ).await;
@@ -85,7 +85,7 @@ impl OrderTrait for OrderService {
         }
     }
 
-    async fn get_orders_by_customerid(&self, customerid: &bson::Uuid) -> Result<Vec<Order>, OrderServiceError> {
+    async fn get_orders_by_customerid(&self, customerid: &bson::Uuid) -> Result<Vec<OrderDb>, OrderServiceError> {
         let coll = match &self.collection {
             Some(value) => value,
             None => return Ok([].to_vec())
@@ -103,16 +103,17 @@ impl OrderTrait for OrderService {
         let cursor = coll.find(query, find_options).await?;
 
         // Convert the cursor to a vector of Order structs
-        let orders: Vec<Order> = cursor.try_collect().await?;
+        let orders: Vec<OrderDb> = cursor.try_collect().await?;
 
         Ok(orders.into_iter().collect())
     }
 
-    async fn create_order(&mut self, new_order: Order) -> Result<(), OrderServiceError>
+    async fn create_order(&mut self, new_order: OrderDb) -> Result<(), OrderServiceError>
     {
         self.collection.as_mut().unwrap().insert_one(new_order.clone(), None).await?;
         
-        messaging::orderbroker::create_order(&new_order).await?;
+        let order_json = to_order(&new_order);
+        messaging::orderbroker::create_order(&order_json).await?;
 
         Ok(())
     }
@@ -136,11 +137,12 @@ impl OrderTrait for OrderService {
         order.payment_info = payment_info;
         self.update_order(&order).await?;
         
-        messaging::orderbroker::update_order(&order).await?;
+        let order_json = to_order(&order);
+        messaging::orderbroker::update_order(&order_json).await?;
         return Ok(true)
     }
 
-    async fn update_order(&mut self, order: &Order) -> Result<bool, OrderServiceError> {
+    async fn update_order(&mut self, order: &OrderDb) -> Result<bool, OrderServiceError> {
         let res = self.collection.as_mut().unwrap().replace_one(doc! { "_id": order.id }, order, None).await?;
         return Ok(res.modified_count > 0);
     }
