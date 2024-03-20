@@ -4,7 +4,9 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "PascalCase")]
-pub struct OrderItem {
+pub struct OrderItemDb {
+    #[serde(rename = "_id")] 
+    #[serde(default)]
     pub id: bson::Uuid,
     pub product_id: bson::Uuid,
     pub product_name: Option<String>,

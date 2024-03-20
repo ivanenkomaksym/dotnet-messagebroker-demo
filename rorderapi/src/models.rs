@@ -7,4 +7,6 @@ pub mod paymentmethod;
 pub mod paymentinfo;
 pub mod paymentstatus;
 pub mod orderdb;
+pub mod customerinfodb;
+pub mod orderitemdb;
 pub mod converters;
