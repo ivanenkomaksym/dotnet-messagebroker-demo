@@ -8,6 +8,7 @@ pub struct OrderItem {
     pub id: bson::Uuid,
     pub product_id: bson::Uuid,
     pub product_name: Option<String>,
+    #[serde(with = "rust_decimal::serde::float")]
     pub product_price: Decimal,
     pub quantity: u16,
     pub image_file: Option<String>

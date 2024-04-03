@@ -12,9 +12,11 @@ pub struct OrderDb {
     pub order_status: OrderStatus,
     pub customer_info: CustomerInfoDb,
     pub items: Vec<OrderItemDb>,
+    #[serde(with = "rust_decimal::serde::float")]
     pub total_price: Decimal,
     pub shipping_address: Address,
     pub payment_info: PaymentInfo,
+    #[serde(with = "rust_decimal::serde::float")]
     pub use_cashback: Decimal,
     pub creation_date_time: DateTime
 }

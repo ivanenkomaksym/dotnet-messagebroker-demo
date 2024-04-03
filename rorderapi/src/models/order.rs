@@ -11,9 +11,11 @@ pub struct Order {
     pub order_status: OrderStatus,
     pub customer_info: CustomerInfo,
     pub items: Vec<OrderItem>,
+    #[serde(with = "rust_decimal::serde::float")]
     pub total_price: Decimal,
     pub shipping_address: Address,
     pub payment_info: PaymentInfo,
+    #[serde(with = "rust_decimal::serde::float")]
     pub use_cashback: Decimal,
     #[serde(default = "Utc::now")]
     pub creation_date_time: DateTime<Utc>
