@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
 using Common.Events;
-using MassTransit;
+using OrderProcessor.Consumers;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -13,15 +13,15 @@ namespace OrderProcessor.Adapters
     /// </summary>
     internal class OrderCreatedConsumerRabbitMQAdapter : BackgroundService
     {
-        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly OrderCreatedConsumer _orderCreatedConsumer;
         private readonly ILogger<OrderCreatedConsumerRabbitMQAdapter> _logger;
         private IConnection _connection;
         private IModel _channel;
         private const string ExchangeName = $"{nameof(OrderCreated)}_RabbitMQAdapter";
 
-        public OrderCreatedConsumerRabbitMQAdapter(IPublishEndpoint publishEndpoint, ILogger<OrderCreatedConsumerRabbitMQAdapter> logger)
+        public OrderCreatedConsumerRabbitMQAdapter(OrderCreatedConsumer orderCreatedConsumer, ILogger<OrderCreatedConsumerRabbitMQAdapter> logger)
         {
-            _publishEndpoint = publishEndpoint;
+            _orderCreatedConsumer = orderCreatedConsumer;
             _logger = logger;
             InitRabbitMQ();
         }
@@ -63,24 +63,10 @@ namespace OrderProcessor.Adapters
 
         private async Task HandleMessage(string content)
         {
-            _logger.LogInformation($"Received `{ExchangeName}` event with content: {content}");
-
-            // In
             var orderCreated = JsonSerializer.Deserialize<OrderCreated>(content);
             Debug.Assert(orderCreated != null);
 
-            // Out
-            var reserveStockEvent = new ReserveStock
-            {
-                OrderId = orderCreated.OrderId,
-                CustomerInfo = orderCreated.CustomerInfo,
-                Items = orderCreated.Items
-            };
-
-            await _publishEndpoint.Publish(reserveStockEvent);
-
-            var message = JsonSerializer.Serialize(reserveStockEvent);
-            _logger.LogInformation($"Sent `ReserveStock` event with content: {message}");
+            await _orderCreatedConsumer.HandleMessage(orderCreated);
         }
 
         public override void Dispose()

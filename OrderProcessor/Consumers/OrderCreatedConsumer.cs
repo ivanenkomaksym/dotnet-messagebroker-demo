@@ -19,6 +19,12 @@ namespace OrderProcessor.Consumers
         {
             // In
             var orderCreated = context.Message;
+
+            HandleMessage(orderCreated);
+        }
+
+        public async Task HandleMessage(OrderCreated orderCreated)
+        { 
             var message = JsonSerializer.Serialize(orderCreated);
             _logger.LogInformation($"Received `OrderCreated` event with content: {message}");
 
