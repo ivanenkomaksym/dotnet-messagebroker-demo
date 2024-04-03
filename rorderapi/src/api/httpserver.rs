@@ -6,7 +6,7 @@ use crate::models::paymentinfo::PaymentInfo;
 use crate::services::orderservice::OrderTrait;
 use crate::services::orderserviceerror::OrderServiceError;
 
-use actix_web::{delete, middleware, post};
+use actix_web::{delete, middleware, post, put};
 use actix_web::{App, HttpResponse, get, web};
 use actix_web::HttpServer;
 use bson::Uuid;
@@ -161,7 +161,7 @@ async fn delete_order(path: web::Path<String>, appdata: web::Data<Mutex<AppData>
     }
 }
 
-#[post("/api/Order/{orderid}/UpdatePayment")]
+#[put("/api/Order/{orderid}/Payment")]
 async fn update_payment(path: web::Path<String>, payment_info: web::Json<PaymentInfo>, appdata: web::Data<Mutex<AppData>>) -> HttpResponse {
     let orderid = match convert_to_uuid(path) {
         Err(err) => return err,
