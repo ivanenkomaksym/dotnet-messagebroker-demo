@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace OrderProcessor.Consumers
 {
-    internal class OrderUpdatedConsumer : IConsumer<OrderUpdated>
+    internal class OrderUpdatedConsumer : BaseConsumer<OrderUpdated>, IConsumer<OrderUpdated>
     {
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<OrderCreatedConsumer> _logger;
@@ -20,6 +20,12 @@ namespace OrderProcessor.Consumers
         {
             // In
             var orderUpdated = context.Message;
+
+            await HandleMessage(orderUpdated);
+        }
+
+        public override async Task HandleMessage(OrderUpdated orderUpdated)
+        {
             var message = JsonSerializer.Serialize(orderUpdated);
             _logger.LogInformation($"Received `OrderUpdated` event with content: {message}");
 

@@ -6,7 +6,7 @@ using MassTransit;
 
 namespace OrderProcessor.Consumers
 {
-    internal class OrderCollectedConsumer : IConsumer<OrderCollected>
+    internal class OrderCollectedConsumer : BaseConsumer<OrderCollected>, IConsumer<OrderCollected>
     {
         private readonly IGrpcOrderClient _grpcOrderClient;
         private readonly IPublishEndpoint _publishEndpoint;
@@ -23,6 +23,12 @@ namespace OrderProcessor.Consumers
         {
             // In
             var orderCollected = context.Message;
+
+            await HandleMessage(orderCollected);
+        }
+
+        public override async Task HandleMessage(OrderCollected orderCollected)
+        {
             var message = JsonSerializer.Serialize(orderCollected);
             _logger.LogInformation($"Received `OrderCollected` event with content: {message}");
 

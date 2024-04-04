@@ -5,7 +5,7 @@ using MassTransit;
 
 namespace OrderProcessor.Consumers
 {
-    internal class CancelOrderConsumer : IConsumer<CancelOrder>
+    internal class CancelOrderConsumer : BaseConsumer<CancelOrder>, IConsumer<CancelOrder>
     {
         private readonly IGrpcOrderClient _grpcOrderClient;
         private readonly ILogger<CancelOrderConsumer> _logger;
@@ -20,6 +20,12 @@ namespace OrderProcessor.Consumers
         {
             // In
             var cancelOrder = context.Message;
+
+            await HandleMessage(cancelOrder);
+        }
+
+        public override async Task HandleMessage(CancelOrder cancelOrder)
+        {
             var message = JsonSerializer.Serialize(cancelOrder);
             _logger.LogInformation($"Received `CancelOrder` event with content: {message}");
 

@@ -19,6 +19,10 @@ var host = hostBuilder.ConfigureServices((hostContext, services) =>
     services.AddSingleton<IGrpcOrderClient, GrpcOrderClient>();
 
     services.AddHostedService<GenericConsumerRabbitMQAdapter<OrderCreatedConsumer, OrderCreated>>();
+    services.AddHostedService<GenericConsumerRabbitMQAdapter<CancelOrderConsumer, CancelOrder>>();
+    services.AddHostedService<GenericConsumerRabbitMQAdapter<OrderCollectedConsumer, OrderCollected>>();
+    services.AddHostedService<GenericConsumerRabbitMQAdapter<OrderUpdatedConsumer, OrderUpdated>>();
+    services.AddHostedService<GenericConsumerRabbitMQAdapter<ReturnOrderConsumer, ReturnOrder>>();
 
     services.AddMassTransit(x =>
     {
