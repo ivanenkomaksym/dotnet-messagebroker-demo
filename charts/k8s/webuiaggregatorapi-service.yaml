@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: webuiaggregatorapi
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: webuiaggregatorapi-app
   ports:

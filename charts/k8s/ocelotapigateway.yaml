@@ -21,7 +21,7 @@ spec:
       containers:
         - name: ocelotapigateway
           image: ivanenkomak/ocelotapigateway:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: k8s

@@ -20,6 +20,8 @@ spec:
           env:
             - name: ApiSettings__GatewayAddress
               value: "http://ocelotapigateway"
-          imagePullPolicy: IfNotPresent
+            - name: Otlp__Endpoint
+              value: "http://simplest-collector:4317"
+          imagePullPolicy: Always
           ports:
             - containerPort: 80

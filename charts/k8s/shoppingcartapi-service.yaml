@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: shoppingcartapi
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: shoppingcartapi-app
   ports:

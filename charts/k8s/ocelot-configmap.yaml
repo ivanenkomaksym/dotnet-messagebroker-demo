@@ -342,6 +342,6 @@ data:
             }
         ],
         "GlobalConfiguration": {
-            "BaseUrl": "http://localhost:5011"
+            "BaseUrl": "http://localhost:5010"
         }
     }

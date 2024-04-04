@@ -20,6 +20,6 @@ spec:
           env:
             - name: GrpcSettings__OrderGrpcUrl
               value: "http://ordergrpc"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 80

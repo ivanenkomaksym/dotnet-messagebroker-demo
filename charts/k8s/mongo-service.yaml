@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: shopdb
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: mongo
   ports:

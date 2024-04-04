@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: search
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: search-app
   ports:

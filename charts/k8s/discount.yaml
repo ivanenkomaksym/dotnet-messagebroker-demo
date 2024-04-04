@@ -29,6 +29,6 @@ spec:
           envFrom:
             - secretRef:
                 name: mongo-secrets
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 80

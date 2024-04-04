@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: warehouseapi
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: warehouseapi-app
   ports:

@@ -21,6 +21,6 @@ spec:
       containers:
         - name: notifications
           image: ivanenkomak/notifications:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 80

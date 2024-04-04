@@ -21,15 +21,15 @@ spec:
             - name: ApiSettings__GatewayAddress
               value: "http://ocelotapigateway"
             - name: FeatureManagement_Feedback
-              value: false
+              value: "false"
             - name: FeatureManagement_Discount
-              value: false
+              value: "false"
             - name: FeatureManagement_Customer
-              value: false
+              value: "false"
             - name: FeatureManagement_Product
-              value: false
+              value: "false"
             - name: FeatureManagement_ShoppingCart
-              value: false
-          imagePullPolicy: IfNotPresent
+              value: "false"
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
