@@ -2,7 +2,7 @@ use chrono::Local;
 
 use crate::{events::{cancelorder::CancelOrder, ordercollected::OrderCollected, ordercreated::OrderCreated, orderupdated::OrderUpdated, returnorder::ReturnOrder}, models::order::Order};
 
-use super::{constants::{CANCEL_ORDER_EXCHANGE, ORDER_COLLECTED_EXCHANGE, ORDER_CREATED_EXCHANGE, ORDER_UPDATED_EXCHANGE, QUEUE_NAME, RETURN_ORDER_EXCHANGE}, publisher};
+use super::{constants::{CANCEL_ORDER_EXCHANGE, ORDER_COLLECTED_EXCHANGE, ORDER_CREATED_EXCHANGE, ORDER_UPDATED_EXCHANGE, RETURN_ORDER_EXCHANGE}, publisher};
 
 pub async fn create_order(order: &Order) -> Result<(), lapin::Error>
 {
@@ -16,7 +16,7 @@ pub async fn create_order(order: &Order) -> Result<(), lapin::Error>
         creation_date_time: order.creation_date_time
     };
 
-    Ok(publisher::publish_event(ORDER_CREATED_EXCHANGE, QUEUE_NAME, order_created_event).await?)
+    Ok(publisher::publish_event(ORDER_CREATED_EXCHANGE, order_created_event).await?)
 }
 
 pub async fn update_order(order: &Order) -> Result<(), lapin::Error>
@@ -32,7 +32,7 @@ pub async fn update_order(order: &Order) -> Result<(), lapin::Error>
         payment_status: crate::models::paymentstatus::PaymentStatus::Paid
     };
 
-    Ok(publisher::publish_event(ORDER_UPDATED_EXCHANGE, QUEUE_NAME, order_updated_event).await?)
+    Ok(publisher::publish_event(ORDER_UPDATED_EXCHANGE, order_updated_event).await?)
 }
 
 pub async fn cancel_order(order_id: bson::Uuid) -> Result<(), lapin::Error>
@@ -42,7 +42,7 @@ pub async fn cancel_order(order_id: bson::Uuid) -> Result<(), lapin::Error>
         cancel_date_time: Local::now().to_utc()
     };
 
-    Ok(publisher::publish_event(CANCEL_ORDER_EXCHANGE, QUEUE_NAME, cancel_order_event).await?)
+    Ok(publisher::publish_event(CANCEL_ORDER_EXCHANGE, cancel_order_event).await?)
 }
 
 pub async fn order_collected(order_id: bson::Uuid) -> Result<(), lapin::Error>
@@ -52,7 +52,7 @@ pub async fn order_collected(order_id: bson::Uuid) -> Result<(), lapin::Error>
         collected_date_time: Local::now().to_utc()
     };
 
-    Ok(publisher::publish_event(ORDER_COLLECTED_EXCHANGE, QUEUE_NAME, order_collected_event).await?)
+    Ok(publisher::publish_event(ORDER_COLLECTED_EXCHANGE, order_collected_event).await?)
 }
 
 pub async fn return_order(order_id: bson::Uuid) -> Result<(), lapin::Error>
@@ -62,5 +62,5 @@ pub async fn return_order(order_id: bson::Uuid) -> Result<(), lapin::Error>
         return_date_time: Local::now().to_utc()
     };
 
-    Ok(publisher::publish_event(RETURN_ORDER_EXCHANGE, QUEUE_NAME, return_order_event).await?)
+    Ok(publisher::publish_event(RETURN_ORDER_EXCHANGE, return_order_event).await?)
 }

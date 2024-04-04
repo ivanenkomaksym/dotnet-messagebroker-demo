@@ -1,9 +1,14 @@
 use lapin::{options::*, types::FieldTable, BasicProperties, Connection, ConnectionProperties};
 
-const QUEUE_NAME: &str = "Common.Events:OrderCreated";
-
-pub async fn publish_event<T>(exchange_name: &str, queue_name: &str, event: T) -> Result<(), lapin::Error> 
+pub async fn publish_event<T>(exchange_name: &str, event: T) -> Result<(), lapin::Error> 
     where T: serde::Serialize
+{
+    let message = serde_json::to_string(&event).unwrap();
+    
+    publish_message(exchange_name, message).await
+}
+
+pub async fn publish_message(exchange_name: &str, message: String) -> Result<(), lapin::Error> 
 {
     let addr = "amqp://guest:guest@localhost:5672";
     let conn = Connection::connect(&addr, ConnectionProperties::default())
@@ -25,39 +30,17 @@ pub async fn publish_event<T>(exchange_name: &str, queue_name: &str, event: T) -
             FieldTable::default()
         )
         .await?;
-
-    let q= channel
-        .queue_declare(
-            queue_name,
-            QueueDeclareOptions {
-                passive: true,
-                durable: false,
-                exclusive: true,
-                auto_delete: false,
-                nowait: false
-            },
-            FieldTable::default(),
-        )
-        .await?;
-
-    channel.queue_bind(
-        q.name().as_str(),
-        exchange_name,
-        "",
-        QueueBindOptions { nowait: false },
-        FieldTable::default()).await?;
-
-    let message = serde_json::to_string(&event).unwrap();
+        
     let payload = message.as_bytes();
     channel.basic_publish(
-        QUEUE_NAME,
+        exchange_name,
         "",
         BasicPublishOptions::default(),
         payload,
         BasicProperties::default(),
     ).await?;
 
-    println!("Sent message: {}", message);
+    println!("Sent `{}` event with content: {}", exchange_name, message);
 
     Ok(())
 }
