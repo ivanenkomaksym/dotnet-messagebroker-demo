@@ -1,4 +1,5 @@
-﻿using Common.Extensions;
+﻿using Common.Events;
+using Common.Extensions;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +18,7 @@ var host = hostBuilder.ConfigureServices((hostContext, services) =>
 
     services.AddSingleton<IGrpcOrderClient, GrpcOrderClient>();
 
-    services.AddHostedService<OrderCreatedConsumerRabbitMQAdapter>();
+    services.AddHostedService<GenericConsumerRabbitMQAdapter<OrderCreatedConsumer, OrderCreated>>();
 
     services.AddMassTransit(x =>
     {

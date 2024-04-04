@@ -4,7 +4,7 @@ using MassTransit;
 
 namespace OrderProcessor.Consumers
 {
-    internal class OrderCreatedConsumer : IConsumer<OrderCreated>
+    internal class OrderCreatedConsumer : BaseConsumer<OrderCreated>, IConsumer<OrderCreated>
     {
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<OrderCreatedConsumer> _logger;
@@ -20,10 +20,10 @@ namespace OrderProcessor.Consumers
             // In
             var orderCreated = context.Message;
 
-            HandleMessage(orderCreated);
+            await HandleMessage(orderCreated);
         }
 
-        public async Task HandleMessage(OrderCreated orderCreated)
+        public override async Task HandleMessage(OrderCreated orderCreated)
         { 
             var message = JsonSerializer.Serialize(orderCreated);
             _logger.LogInformation($"Received `OrderCreated` event with content: {message}");

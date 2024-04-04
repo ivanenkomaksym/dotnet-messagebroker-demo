@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
-using Common.Events;
 using OrderProcessor.Consumers;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -8,20 +7,22 @@ using RabbitMQ.Client.Events;
 namespace OrderProcessor.Adapters
 {
     /// <summary>
-    /// This is a RabbitMQ specific adapter for <seealso cref="Consumers.OrderCreatedConsumer"/>
+    /// This is a RabbitMQ specific adapter for MassTransit consumers.
     /// It will handle messages sent directly from RabbitMQ brokers other than MassTransit.
     /// </summary>
-    internal class OrderCreatedConsumerRabbitMQAdapter : BackgroundService
+    internal class GenericConsumerRabbitMQAdapter<TConsumer, TMessage> : BackgroundService
+        where TMessage : class
+        where TConsumer : BaseConsumer<TMessage>
     {
-        private readonly OrderCreatedConsumer _orderCreatedConsumer;
-        private readonly ILogger<OrderCreatedConsumerRabbitMQAdapter> _logger;
+        private readonly TConsumer _consumer;
+        private readonly ILogger<GenericConsumerRabbitMQAdapter<TConsumer, TMessage>> _logger;
         private IConnection _connection;
         private IModel _channel;
-        private const string ExchangeName = $"{nameof(OrderCreated)}_RabbitMQAdapter";
+        private string ExchangeName = $"{typeof(TMessage).Name}_RabbitMQAdapter";
 
-        public OrderCreatedConsumerRabbitMQAdapter(OrderCreatedConsumer orderCreatedConsumer, ILogger<OrderCreatedConsumerRabbitMQAdapter> logger)
+        public GenericConsumerRabbitMQAdapter(TConsumer consumer, ILogger<GenericConsumerRabbitMQAdapter<TConsumer, TMessage>> logger)
         {
-            _orderCreatedConsumer = orderCreatedConsumer;
+            _consumer = consumer;
             _logger = logger;
             InitRabbitMQ();
         }
@@ -63,10 +64,10 @@ namespace OrderProcessor.Adapters
 
         private async Task HandleMessage(string content)
         {
-            var orderCreated = JsonSerializer.Deserialize<OrderCreated>(content);
-            Debug.Assert(orderCreated != null);
+            var message = JsonSerializer.Deserialize<TMessage>(content);
+            Debug.Assert(message != null);
 
-            await _orderCreatedConsumer.HandleMessage(orderCreated);
+            await _consumer.HandleMessage(message);
         }
 
         public override void Dispose()
