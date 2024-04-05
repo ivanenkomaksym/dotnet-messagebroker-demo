@@ -1,4 +1,4 @@
-name: Docker Image CI - OrderAPI
+name: Docker Image CI - rorderapi
 
 on:
   workflow_dispatch:

@@ -21,9 +21,9 @@ WORKDIR /app
 # source code into the container. Once built, copy the executable to an
 # output directory before the cache mounted /app/target is unmounted.
 RUN apt-get update && apt-get install -y libssl-dev pkg-config
-RUN --mount=type=bind,source=src,target=src \
-    --mount=type=bind,source=Cargo.toml,target=Cargo.toml \
-    --mount=type=bind,source=Cargo.lock,target=Cargo.lock \
+RUN --mount=type=bind,source=rorderapi/src,target=src \
+    --mount=type=bind,source=rorderapi/Cargo.toml,target=Cargo.toml \
+    --mount=type=bind,source=rorderapi/Cargo.lock,target=Cargo.lock \
     --mount=type=cache,target=/app/target/ \
     --mount=type=cache,target=/usr/local/cargo/registry/ \
     <<EOF
@@ -62,7 +62,7 @@ USER appuser
 COPY --from=build /bin/server /bin/
 
 # Copy config files
-COPY /src/configuration /src/configuration
+COPY /rorderapi/src/configuration /src/configuration
 
 # Expose the port that the application listens on.
 EXPOSE 80

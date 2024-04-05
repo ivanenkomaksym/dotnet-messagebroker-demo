@@ -1,13 +1,13 @@
 debug = true
 
 [apiserver]
-application_url = "localhost:8004"
+application_url = "0.0.0.0:80"
 hostname = "localhost"
 
 [apisettings]
-gateway_address = "localhost:8003"
+gateway_address = "http://ocelotapigateway"
 
 [database]
-connection_string = "mongodb://localhost:27017"
+connection_string = "mongodb://shopdb:27017"
 database_name = "OrderDb"
 collection_name = "Orders"

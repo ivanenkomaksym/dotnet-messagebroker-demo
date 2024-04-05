@@ -168,3 +168,12 @@ services:
       - RUN_MODE=production
     ports:
       - "8017:80"
+
+  rorderapi:
+    container_name: rorderapi
+    environment:
+      - RUN_MODE=production
+    depends_on:
+      - shopdb
+    ports:
+      - "8004:80"

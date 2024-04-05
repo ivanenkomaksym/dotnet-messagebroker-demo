@@ -109,6 +109,12 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
 
+  rorderapi:
+    image: ${DOCKER_REGISTRY-}rorderapi
+    build:
+      context: .
+      dockerfile: rorderapi/Dockerfile
+
 volumes:
   mongo_data:
   rabbitmqdata:
