@@ -27,7 +27,7 @@ async fn main() -> io::Result<()> {
         Ok(s) => s,
     };
 
-    let order_service = match orderservicefactory::create_order_service(settings.database.clone()).await {
+    let order_service = match orderservicefactory::create_order_service(settings.clone()).await {
         Err(e) => panic!("Problem constructing order service: {:?}", e),
         Ok(s) => s,
     };

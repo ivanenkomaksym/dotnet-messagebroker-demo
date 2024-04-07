@@ -11,3 +11,6 @@ gateway_address = "localhost:8003"
 connection_string = "mongodb://localhost:27017"
 database_name = "OrderDb"
 collection_name = "Orders"
+
+[rabbitmqsettings]
+ampq_connection_string = "amqp://guest:guest@localhost:5672"

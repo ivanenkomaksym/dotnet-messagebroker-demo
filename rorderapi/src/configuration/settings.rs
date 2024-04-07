@@ -26,10 +26,17 @@ pub struct Database {
 
 #[derive(Clone, Debug, Deserialize)]
 #[allow(unused)]
+pub struct RabbitMQSettings {
+    pub ampq_connection_string: String
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[allow(unused)]
 pub struct Settings {
     pub apiserver: ApiServer,
     pub apisettings: ApiSettings,
-    pub database: Database
+    pub database: Database,
+    pub rabbitmqsettings: RabbitMQSettings
 }
 
 #[derive(Parser)]

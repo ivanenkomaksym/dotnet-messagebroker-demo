@@ -1,17 +1,18 @@
 use lapin::{options::*, types::FieldTable, BasicProperties, Connection, ConnectionProperties};
 
-pub async fn publish_event<T>(exchange_name: &str, event: T) -> Result<(), lapin::Error> 
+use crate::configuration;
+
+pub async fn publish_event<T>(config: &configuration::settings::RabbitMQSettings, exchange_name: &str, event: T) -> Result<(), lapin::Error> 
     where T: serde::Serialize
 {
     let message = serde_json::to_string(&event).unwrap();
     
-    publish_message(exchange_name, message).await
+    publish_message(config, exchange_name, message).await
 }
 
-pub async fn publish_message(exchange_name: &str, message: String) -> Result<(), lapin::Error> 
+pub async fn publish_message(config: &configuration::settings::RabbitMQSettings, exchange_name: &str, message: String) -> Result<(), lapin::Error> 
 {
-    let addr = "amqp://guest:guest@localhost:5672";
-    let conn = Connection::connect(&addr, ConnectionProperties::default())
+    let conn = Connection::connect(&config.ampq_connection_string, ConnectionProperties::default())
         .await
         .expect("Failed to connect to RabbitMQ");
 

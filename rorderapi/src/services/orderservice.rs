@@ -24,13 +24,15 @@ pub trait OrderTrait: Send + Sync {
 
 pub struct OrderService {
     database_config: configuration::settings::Database,
+    rabbitmq_config: configuration::settings::RabbitMQSettings,
     collection: Option<Collection<OrderDb>>
 }
 
 impl OrderService {
-    pub fn new(config: configuration::settings::Database) -> OrderService {
+    pub fn new(config: configuration::settings::Settings) -> OrderService {
         OrderService {
-            database_config: config,
+            database_config: config.database,
+            rabbitmq_config: config.rabbitmqsettings,
             collection: None
         }
     }
@@ -113,7 +115,7 @@ impl OrderTrait for OrderService {
         self.collection.as_mut().unwrap().insert_one(new_order.clone(), None).await?;
         
         let order_json = to_order(&new_order);
-        messaging::orderbroker::create_order(&order_json).await?;
+        messaging::orderbroker::create_order(&self.rabbitmq_config, &order_json).await?;
 
         Ok(())
     }
@@ -138,7 +140,7 @@ impl OrderTrait for OrderService {
         self.update_order(&order).await?;
         
         let order_json = to_order(&order);
-        messaging::orderbroker::update_order(&order_json).await?;
+        messaging::orderbroker::update_order(&self.rabbitmq_config, &order_json).await?;
         return Ok(true)
     }
 
@@ -150,7 +152,7 @@ impl OrderTrait for OrderService {
     async fn cancel_order(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError> {
         let _ = match self.find(uuid).await {
             Some(_) => {
-                messaging::orderbroker::cancel_order(*uuid).await?;
+                messaging::orderbroker::cancel_order(&self.rabbitmq_config, *uuid).await?;
                 return Ok(true)
             },
             None => return Err(OrderServiceError::NotFound)
@@ -160,7 +162,7 @@ impl OrderTrait for OrderService {
     async fn order_collected(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError> {
         let _ = match self.find(uuid).await {
             Some(_) => {
-                messaging::orderbroker::order_collected(*uuid).await?;
+                messaging::orderbroker::order_collected(&self.rabbitmq_config, *uuid).await?;
                 return Ok(true)
             },
             None => return Err(OrderServiceError::NotFound)
@@ -170,7 +172,7 @@ impl OrderTrait for OrderService {
     async fn return_order(&mut self, uuid: &bson::Uuid) -> Result<bool, OrderServiceError> {
         let _ = match self.find(uuid).await {
             Some(_) => {
-                messaging::orderbroker::return_order(*uuid).await?;
+                messaging::orderbroker::return_order(&self.rabbitmq_config, *uuid).await?;
                 return Ok(true)
             },
             None => return Err(OrderServiceError::NotFound)

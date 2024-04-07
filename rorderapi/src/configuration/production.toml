@@ -11,3 +11,6 @@ gateway_address = "http://ocelotapigateway"
 connection_string = "mongodb://shopdb:27017"
 database_name = "OrderDb"
 collection_name = "Orders"
+
+[rabbitmqsettings]
+ampq_connection_string = "amqp://guest:guest@rabbitmq:5672"
