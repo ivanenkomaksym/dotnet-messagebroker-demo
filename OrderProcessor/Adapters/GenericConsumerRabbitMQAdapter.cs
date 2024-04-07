@@ -35,11 +35,8 @@ namespace OrderProcessor.Adapters
 
         private void InitRabbitMQ()
         {
-            var factory = new ConnectionFactory 
-            { 
-                HostName = _rabbitMQOptions.HostName,
-                Port = _rabbitMQOptions.Port
-            };
+            var factory = new ConnectionFactory();
+            factory.Uri = new Uri($"{_rabbitMQOptions.AMQPConnectionString}");
 
             // create connection  
             _connection = factory.CreateConnection();
