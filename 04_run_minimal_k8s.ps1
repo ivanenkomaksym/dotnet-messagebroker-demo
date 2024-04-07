@@ -21,9 +21,9 @@ kubectl apply -f ocelot-configmap.yaml
 kubectl apply -f ocelotapigateway.yaml
 kubectl apply -f ocelotapigateway-service.yaml
 
-# OrderAPI
-kubectl apply -f orderapi.yaml
-kubectl apply -f orderapi-service.yaml
+# rorderapi
+kubectl apply -f rorderapi.yaml
+kubectl apply -f rorderapi-service.yaml
 
 # OrderGRPC
 kubectl apply -f ordergrpc.yaml

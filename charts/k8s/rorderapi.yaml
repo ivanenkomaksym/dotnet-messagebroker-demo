@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderapi-pod
+  labels:
+    app: orderapi
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: orderapi-app
+  template:
+    metadata: 
+      labels:
+        app: orderapi-app
+    spec:
+      containers:
+        - name: orderapi
+          image: ivanenkomak/rorderapi:latest
+          env:
+            - name: RUN_MODE
+              value: production
+          envFrom:
+            - secretRef:
+                name: mongo-secrets
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80

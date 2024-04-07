@@ -27,6 +27,10 @@ kubectl delete -f ocelotapigateway-service.yaml
 kubectl delete -f orderapi.yaml
 kubectl delete -f orderapi-service.yaml
 
+# rorderapi
+kubectl delete -f rorderapi.yaml
+kubectl delete -f rorderapi-service.yaml
+
 # OrderGRPC
 kubectl delete -f ordergrpc.yaml
 kubectl delete -f ordergrpc-service.yaml
