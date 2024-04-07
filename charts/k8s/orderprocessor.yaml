@@ -20,6 +20,10 @@ spec:
           env:
             - name: GrpcSettings__OrderGrpcUrl
               value: "http://ordergrpc"
+            - name: RabbitMQ__HostName
+              value: "amqp://guest:guest@rabbitmq:5672"
+            - name: RabbitMQ__Port
+              value: 5672
           imagePullPolicy: Always
           ports:
             - containerPort: 80

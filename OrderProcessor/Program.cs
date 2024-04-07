@@ -1,4 +1,5 @@
-﻿using Common.Events;
+﻿using Common.Configuration;
+using Common.Events;
 using Common.Extensions;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +16,8 @@ hostBuilder.ConfigureOpenTelemetry();
 var host = hostBuilder.ConfigureServices((hostContext, services) =>
 {
     services.AddHostedService<OrderProcessorWorker>();
+
+    services.Configure<RabbitMQOptions>(hostContext.Configuration.GetSection(RabbitMQOptions.Name));
 
     services.AddSingleton<IGrpcOrderClient, GrpcOrderClient>();
 

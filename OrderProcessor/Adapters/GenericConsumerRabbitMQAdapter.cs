@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
+using Common.Configuration;
+using Microsoft.Extensions.Options;
 using OrderProcessor.Consumers;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -15,21 +17,29 @@ namespace OrderProcessor.Adapters
         where TConsumer : BaseConsumer<TMessage>
     {
         private readonly TConsumer _consumer;
+        private readonly RabbitMQOptions _rabbitMQOptions;
         private readonly ILogger<GenericConsumerRabbitMQAdapter<TConsumer, TMessage>> _logger;
         private IConnection _connection;
         private IModel _channel;
         private string ExchangeName = $"{typeof(TMessage).Name}_RabbitMQAdapter";
 
-        public GenericConsumerRabbitMQAdapter(TConsumer consumer, ILogger<GenericConsumerRabbitMQAdapter<TConsumer, TMessage>> logger)
+        public GenericConsumerRabbitMQAdapter(TConsumer consumer,
+                                              IOptions<RabbitMQOptions> rabbitMQOptions,
+                                              ILogger<GenericConsumerRabbitMQAdapter<TConsumer, TMessage>> logger)
         {
             _consumer = consumer;
+            _rabbitMQOptions = rabbitMQOptions.Value;
             _logger = logger;
             InitRabbitMQ();
         }
 
         private void InitRabbitMQ()
         {
-            var factory = new ConnectionFactory { HostName = "localhost" };
+            var factory = new ConnectionFactory 
+            { 
+                HostName = _rabbitMQOptions.HostName,
+                Port = _rabbitMQOptions.Port
+            };
 
             // create connection  
             _connection = factory.CreateConnection();
