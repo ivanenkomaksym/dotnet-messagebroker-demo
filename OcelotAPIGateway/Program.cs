@@ -14,17 +14,14 @@ var app = builder.Build();
 
 app.UseRouting();
 
-app.UseEndpoints(endpoints =>
+app.UseAuthorization();
+
+app.MapGet("/", async context =>
 {
-    endpoints.MapGet("/", async context =>
-    {
-        await context.Response.WriteAsync("Hello World!");
-    });
+    await context.Response.WriteAsync("Hello World!");
 });
 
 await app.UseOcelot();
-
-app.UseAuthorization();
 
 app.MapControllers();
 

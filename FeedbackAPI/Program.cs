@@ -4,7 +4,6 @@ using FeedbackAPI.Repositories;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureOpenTelemetry();
@@ -22,9 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHealthChecks()
-                .AddMongoDb(builder.Configuration["DatabaseSettings:ConnectionString"], "MongoDb Health", HealthStatus.Degraded);
-
-BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+                .AddMongoDb(builder.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
 
 var app = builder.Build();
 
@@ -41,9 +38,6 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapGraphQL("/api/graphql");
-});
+app.MapGraphQL("/api/graphql");
 
 app.Run();

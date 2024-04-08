@@ -1,7 +1,6 @@
 ﻿using Common.Extensions;
 using MassTransit;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using MongoDB.Bson;
 using Warehouse;
 using Warehouse.Consumers;
 using WarehouseCommon.Data;
@@ -30,9 +29,7 @@ IHost host = hostBuilder
         });
 
         services.AddHealthChecks()
-                .AddMongoDb(hostContext.Configuration["DatabaseSettings:ConnectionString"], "MongoDb Health", HealthStatus.Degraded);
-
-        BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+                .AddMongoDb(hostContext.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
     }).Build();
 
 host.Run();

@@ -4,14 +4,16 @@ using WebUIAggregatorAPI.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureOpenTelemetry();
 
+var gatewayAddress = builder.Configuration.GetGatewayAddress();
+
 // Add services to the container.
 builder.Services.AddHttpClient<ICatalogApiService, CatalogApiService>(options =>
 {
-    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+    options.BaseAddress = new Uri(gatewayAddress);
 });
 builder.Services.AddHttpClient<IWarehouseApiService, WarehouseApiService>(options =>
 {
-    options.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+    options.BaseAddress = new Uri(gatewayAddress);
 });
 
 builder.Services.AddControllers();

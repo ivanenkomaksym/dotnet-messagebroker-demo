@@ -2,7 +2,6 @@ using Common.Extensions;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using MongoDB.Bson;
 using WarehouseCommon.Data;
 using WarehouseCommon.Repositories;
 
@@ -21,9 +20,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHealthChecks()
-                .AddMongoDb(builder.Configuration["DatabaseSettings:ConnectionString"], "MongoDb Health", HealthStatus.Degraded);
-
-BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+                .AddMongoDb(builder.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
 
 var app = builder.Build();
 

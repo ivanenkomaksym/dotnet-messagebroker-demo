@@ -60,7 +60,7 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
-var gatewayAddress = builder.Configuration["ApiSettings:GatewayAddress"];
+var gatewayAddress = builder.Configuration.GetGatewayAddress();
 
 builder.Services.AddIfFeatureEnabled<ICustomerService, CustomerService, StubCustomerService>(FeatureFlags.Customer, gatewayAddress);
 

@@ -1,15 +1,14 @@
+using System.Reflection;
 using Common.Examples;
 using Common.Extensions;
 using MassTransit;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
-using MongoDB.Bson;
 using OrderAPI;
 using OrderAPI.Data;
 using OrderCommon.Data;
 using OrderCommon.Repositories;
 using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureOpenTelemetry();
@@ -50,9 +49,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddSwaggerExamplesFromAssemblyOf<OrderExample>();
 
 builder.Services.AddHealthChecks()
-                .AddMongoDb(builder.Configuration["DatabaseSettings:ConnectionString"], "MongoDb Health", HealthStatus.Degraded);
-
-BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+                .AddMongoDb(builder.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
 
 var app = builder.Build();
 

@@ -1,7 +1,6 @@
 using Common.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using MongoDB.Bson;
 using OrderCommon.Data;
 using OrderCommon.Repositories;
 using OrderGrpc;
@@ -12,16 +11,7 @@ hostBuilder.ConfigureOpenTelemetry();
 IHost host = hostBuilder
     .ConfigureWebHostDefaults(builder =>
     {
-        builder
-            //.ConfigureKestrel(options =>
-            //{
-            //    options.ListenAnyIP(0, listenOptions =>
-            //    {
-            //        listenOptions.Protocols = HttpProtocols.Http2;
-            //    });
-            //})
-            //.UseKestrel()
-            .UseStartup<GrpcServerStartup>();
+        builder.UseStartup<GrpcServerStartup>();
     })
     .ConfigureServices((hostContext, services) =>
     {
@@ -34,9 +24,7 @@ IHost host = hostBuilder
 
 
         services.AddHealthChecks()
-                .AddMongoDb(hostContext.Configuration["DatabaseSettings:ConnectionString"], "MongoDb Health", HealthStatus.Degraded);
-
-        BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+                .AddMongoDb(hostContext.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
     })
     .Build();
 
