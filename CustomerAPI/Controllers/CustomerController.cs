@@ -2,20 +2,34 @@
 using Microsoft.AspNetCore.Mvc;
 using Common.Models;
 using CustomerAPI.Repositories;
+using CustomerAPI.Messaging;
 
 namespace CustomerAPI.Controllers
 {
+    /// <summary>
+    /// Customers controller.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        public CustomerController(ICustomerService customerService, ICustomerRepository repository, ILogger<CustomerController> logger)
+        /// <summary>
+        /// Initializes controller.
+        /// </summary>
+        /// <param name="customerService">Used for publishing messages.</param>
+        /// <param name="repository">Repository for customers data.</param>
+        /// <param name="logger">Used for logging.</param>
+        public CustomerController(ICustomerPublisher customerService, ICustomerRepository repository, ILogger<CustomerController> logger)
         {
             CustomerService = customerService;
             Repository = repository;
             Logger = logger;
         }
 
+        /// <summary>
+        /// Get all customers.
+        /// </summary>
+        /// <returns>List of customers.</returns>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Customer>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
@@ -23,6 +37,11 @@ namespace CustomerAPI.Controllers
             return Ok(await Repository.GetCustomers());
         }
 
+        /// <summary>
+        /// Get customer by id.
+        /// </summary>
+        /// <param name="customerId">Customer id.</param>
+        /// <returns>Customer if found.</returns>
         [HttpGet("{customerId}", Name = "GetCustomerById")]
         [ProducesResponseType(typeof(IEnumerable<Customer>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer(Guid customerId)
@@ -37,6 +56,12 @@ namespace CustomerAPI.Controllers
             return Ok(customer);
         }
 
+        /// <summary>
+        /// Authenticates user by email and password.
+        /// </summary>
+        /// <param name="email">Email.</param>
+        /// <param name="password">Password.</param>
+        /// <returns>Customer if authenticated.</returns>
         [HttpPost("Authenticate")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Customer), (int)HttpStatusCode.OK)]
@@ -52,6 +77,11 @@ namespace CustomerAPI.Controllers
             return Ok(customer);
         }
 
+        /// <summary>
+        /// Create new customer.
+        /// </summary>
+        /// <param name="customer">Customer.</param>
+        /// <returns>True if created.</returns>
         [HttpPost]
         [ProducesResponseType(typeof(Customer), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<bool>> CreateCustomer([FromBody] Customer customer)
@@ -68,6 +98,11 @@ namespace CustomerAPI.Controllers
             return CreatedAtRoute("GetCustomerById", new { customerId = customer.Id }, customer);
         }
 
+        /// <summary>
+        /// Update existing customer.
+        /// </summary>
+        /// <param name="customer">Customer to be updated/</param>
+        /// <returns>True if updated.</returns>
         [HttpPut]
         [ProducesResponseType(typeof(Customer), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateCustomer([FromBody] Customer customer)
@@ -75,18 +110,23 @@ namespace CustomerAPI.Controllers
             return Ok(await Repository.UpdateCustomer(customer));
         }
 
+        /// <summary>
+        /// Delete customer by id.
+        /// </summary>
+        /// <param name="customerId">Customer id</param>
+        /// <returns>NoContent if deleted.</returns>
         [HttpDelete("{id}", Name = "DeleteCustomer")]
         [ProducesResponseType(typeof(Customer), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteCustomerById(Guid id)
+        public async Task<IActionResult> DeleteCustomerById(Guid customerId)
         {
-            var result = await Repository.DeleteCustomer(id);
+            var result = await Repository.DeleteCustomer(customerId);
             if (!result)
                 return NotFound();
 
             return Ok();
         }
 
-        private readonly ICustomerService CustomerService;
+        private readonly ICustomerPublisher CustomerService;
         private readonly ICustomerRepository Repository;
         private readonly ILogger<CustomerController> Logger;
     }

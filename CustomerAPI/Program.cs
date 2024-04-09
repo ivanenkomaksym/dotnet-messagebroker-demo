@@ -1,8 +1,8 @@
 using System.Reflection;
 using Common.Examples;
 using Common.Extensions;
-using CustomerAPI;
 using CustomerAPI.Data;
+using CustomerAPI.Messaging;
 using CustomerAPI.Repositories;
 using HealthChecks.UI.Client;
 using MassTransit;
@@ -18,7 +18,7 @@ builder.Host.ConfigureOpenTelemetry();
 builder.Services.AddScoped<ICustomerContext, CustomerContext>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
-builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ICustomerPublisher, CustomerPublisher>();
 
 builder.Services.AddMassTransit(x =>
 {

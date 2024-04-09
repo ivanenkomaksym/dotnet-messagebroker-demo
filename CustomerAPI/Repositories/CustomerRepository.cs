@@ -4,7 +4,7 @@ using MongoDB.Driver;
 
 namespace CustomerAPI.Repositories
 {
-    public class CustomerRepository : ICustomerRepository
+    internal class CustomerRepository : ICustomerRepository
     {
         private readonly ICustomerContext _context;
 
@@ -43,7 +43,7 @@ namespace CustomerAPI.Repositories
                             .FirstOrDefaultAsync();
         }
 
-        public async Task<Customer> CreateCustomer(Customer customer)
+        public async Task<Customer?> CreateCustomer(Customer customer)
         {
             var c = await Authenticate(customer.Email, customer.Password);
             if (c != null)

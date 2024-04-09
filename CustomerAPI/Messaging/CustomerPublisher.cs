@@ -3,14 +3,14 @@ using Common.Events;
 using Common.Models;
 using MassTransit;
 
-namespace CustomerAPI
+namespace CustomerAPI.Messaging
 {
-    public class CustomerService : ICustomerService
+    internal class CustomerPublisher : ICustomerPublisher
     {
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly ILogger<CustomerService> _logger;
+        private readonly ILogger<CustomerPublisher> _logger;
 
-        public CustomerService(IPublishEndpoint publishEndpoint, ILogger<CustomerService> logger)
+        public CustomerPublisher(IPublishEndpoint publishEndpoint, ILogger<CustomerPublisher> logger)
         {
             _publishEndpoint = publishEndpoint;
             _logger = logger;

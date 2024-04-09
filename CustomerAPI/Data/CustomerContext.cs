@@ -3,7 +3,7 @@ using MongoDB.Driver;
 
 namespace CustomerAPI.Data
 {
-    public class CustomerContext : ICustomerContext
+    internal class CustomerContext : ICustomerContext
     {
         public CustomerContext(IConfiguration configuration)
         {

@@ -4,7 +4,7 @@ using MongoDB.Driver;
 
 namespace CustomerAPI.Data
 {
-    public class CustomerContextSeed
+    internal class CustomerContextSeed
     {
         public static void SeedData(IMongoCollection<Customer> customerCollection)
         {
