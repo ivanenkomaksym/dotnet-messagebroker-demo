@@ -9,9 +9,9 @@ namespace Common.Events
 
         public Guid PaymentId { get; init; }
 
-        public CustomerInfo CustomerInfo { get; init; }
+        public required CustomerInfo CustomerInfo { get; init; }
 
-        public PaymentInfo PaymentInfo { get; init; }
+        public required PaymentInfo PaymentInfo { get; init; }
 
         public PaymentStatus PaymentStatus { get; init; }
     }

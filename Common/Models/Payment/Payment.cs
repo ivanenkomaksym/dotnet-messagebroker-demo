@@ -15,10 +15,10 @@ namespace Common.Models.Payment
         public Guid OrderId { get; set; }
 
         [Required]
-        public CustomerInfo CustomerInfo { get; set; }
+        public required CustomerInfo CustomerInfo { get; set; }
 
         [Required]
-        public PaymentInfo PaymentInfo { get; set; }
+        public required PaymentInfo PaymentInfo { get; set; }
 
         public decimal PaidAmount;
 

@@ -4,6 +4,6 @@
     {
         public const string Name = nameof(DatabaseSettings);
 
-        public string ConnectionString { get; init; }
+        public string? ConnectionString { get; init; }
     }
 }

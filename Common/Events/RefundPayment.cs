@@ -7,10 +7,10 @@ namespace Common.Events
     {
         public Guid OrderId { get; init; }
 
-        public CustomerInfo CustomerInfo { get; init; }
+        public required CustomerInfo CustomerInfo { get; init; }
 
-        public PaymentInfo PaymentInfo { get; init; }
+        public required PaymentInfo PaymentInfo { get; init; }
 
-        public string TotalPrice { get; set; }
+        public required string TotalPrice { get; set; }
     }
 }

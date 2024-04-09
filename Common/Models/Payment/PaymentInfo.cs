@@ -5,18 +5,18 @@ namespace Common.Models.Payment
     public record PaymentInfo
     {
         [Required]
-        public string CardName { get; set; }
+        public required string CardName { get; set; }
 
         [Required]
-        public string CardNumber { get; set; }
+        public required string CardNumber { get; set; }
 
         [Required]
-        public string Expiration { get; set; }
+        public required string Expiration { get; set; }
 
         [Required]
-        public string CVV { get; set; }
+        public required string CVV { get; set; }
 
         [Required]
-        public PaymentMethod PaymentMethod { get; set; }
+        public required PaymentMethod PaymentMethod { get; set; }
     }
 }

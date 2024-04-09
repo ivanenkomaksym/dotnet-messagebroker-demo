@@ -9,14 +9,16 @@ namespace Common.Extensions
         {
             var databaseSettings = new DatabaseSettings();
             configuration.GetSection(DatabaseSettings.Name).Bind(databaseSettings);
-            return databaseSettings.ConnectionString;
+            var connectionString = databaseSettings.ConnectionString ?? string.Empty;
+            return connectionString;
         }
 
         public static string GetGatewayAddress(this IConfiguration configuration)
         {
             var apiSettings = new ApiSettings();
             configuration.GetSection(ApiSettings.Name).Bind(apiSettings);
-            return apiSettings.GatewayAddress;
+            var gatewayAddress = apiSettings.GatewayAddress ?? string.Empty;
+            return gatewayAddress;
         }
     }
 }

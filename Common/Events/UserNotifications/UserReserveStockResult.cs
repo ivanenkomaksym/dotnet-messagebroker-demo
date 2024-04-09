@@ -8,8 +8,8 @@ namespace Common.Events.UserNotifications
 
         public Guid OrderId { get; init; }
 
-        public ReserveResult ReserveResult { get; init; }
+        public ReserveResult? ReserveResult { get; init; }
 
-        public IList<FailedToReserveProduct> FailedToReserveProducts { get; init; }
+        public IList<FailedToReserveProduct>? FailedToReserveProducts { get; init; }
     }
 }

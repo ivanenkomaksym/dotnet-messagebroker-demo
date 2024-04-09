@@ -4,8 +4,8 @@ namespace Common.Events
 {
     public class SubUserCashback
     {
-        public CustomerInfo CustomerInfo { get; init; }
+        public required CustomerInfo CustomerInfo { get; init; }
 
-        public string Cashback { get; init; }
+        public required string Cashback { get; init; }
     }
 }

@@ -9,12 +9,12 @@ namespace Common.Events
 
         public Guid OrderId { get; init; }
 
-        public CustomerInfo CustomerInfo { get; init; }
+        public CustomerInfo? CustomerInfo { get; init; }
 
-        public ReserveResult ReserveResult { get; init; }
+        public ReserveResult? ReserveResult { get; init; }
 
-        public IList<ReservedStockItem> ReservedStockItems { get; init; }
+        public IList<ReservedStockItem>? ReservedStockItems { get; init; }
 
-        public IList<FailedToReserveProduct> FailedToReserveProducts { get; init; }
+        public IList<FailedToReserveProduct>? FailedToReserveProducts { get; init; }
     }
 }

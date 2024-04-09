@@ -4,6 +4,6 @@
     {
         public const string Name = "RabbitMQ";
 
-        public string AMQPConnectionString { get; set; }
+        public required string AMQPConnectionString { get; set; }
     }
 }

@@ -4,6 +4,6 @@
     {
         public const string Name = nameof(ApiSettings);
 
-        public string GatewayAddress { get; init; }
+        public string? GatewayAddress { get; init; }
     }
 }

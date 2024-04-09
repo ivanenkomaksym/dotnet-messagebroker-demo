@@ -13,11 +13,11 @@ namespace Common.Models.Review
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
-        public CustomerInfo CustomerInfo { get; set; }
+        public CustomerInfo? CustomerInfo { get; set; }
 
         [Required]
         [MaxLength(1000)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required]
         [Range(1, 5, ErrorMessage = "Only numbers from 1 to 5 are supported.")]

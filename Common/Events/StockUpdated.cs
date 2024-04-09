@@ -2,6 +2,6 @@
 {
     public record StockUpdated
     {
-        public IList<Guid> StockItemIds { get; set; }
+        public required IList<Guid> StockItemIds { get; set; }
     }
 }

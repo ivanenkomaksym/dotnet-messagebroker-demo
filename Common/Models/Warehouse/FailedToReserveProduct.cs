@@ -1,10 +1,13 @@
-﻿namespace Common.Models.Warehouse
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Common.Models.Warehouse
 {
     public record FailedToReserveProduct
     {
         public Guid ProductId { get; set; }
 
-        public string ProductName { get; set; }
+        [Required]
+        public required string ProductName { get; set; }
 
         public ushort AvailableOnStock { get; set; }
     }

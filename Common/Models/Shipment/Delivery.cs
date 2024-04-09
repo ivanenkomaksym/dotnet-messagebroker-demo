@@ -15,10 +15,10 @@ namespace Common.Models.Shipment
         public Guid OrderId { get; set; }
 
         [Required]
-        public CustomerInfo CustomerInfo { get; set; }
+        public required CustomerInfo CustomerInfo { get; set; }
 
         [Required]
-        public Address ShippingAddress { get; set; }
+        public required Address ShippingAddress { get; set; }
 
         [Required]
         public DeliveryStatus DeliveryStatus { get; set; } = DeliveryStatus.None;

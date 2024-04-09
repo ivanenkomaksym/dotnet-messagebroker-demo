@@ -4,8 +4,8 @@ namespace Common.Events
 {
     public record CustomerCreated
     {
-        public CustomerInfo CustomerInfo { get; init; }
+        public required CustomerInfo CustomerInfo { get; init; }
 
-        public DateTime CreationDateTime { get; init; }
+        public required DateTime CreationDateTime { get; init; }
     }
 }
