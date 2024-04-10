@@ -3,14 +3,14 @@ using Common.Events;
 using Common.Models;
 using MassTransit;
 
-namespace OrderAPI
+namespace OrderAPI.Messaging
 {
-    public class OrderService : IOrderService
+    internal class OrderPublisher : IOrderPublisher
     {
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly ILogger<OrderService> _logger;
+        private readonly ILogger<OrderPublisher> _logger;
 
-        public OrderService(IPublishEndpoint publishEndpoint, ILogger<OrderService> logger)
+        public OrderPublisher(IPublishEndpoint publishEndpoint, ILogger<OrderPublisher> logger)
         {
             _publishEndpoint = publishEndpoint;
             _logger = logger;

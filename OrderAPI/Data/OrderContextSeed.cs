@@ -1,6 +1,7 @@
 ﻿using Common.Models;
 using Common.SeedData;
 using MongoDB.Driver;
+using OrderAPI.Messaging;
 
 namespace OrderAPI.Data
 {
@@ -9,10 +10,10 @@ namespace OrderAPI.Data
     /// </summary>
     internal sealed class OrderContextSeed : IOrderContextSeed
     {
-        private readonly IOrderService _orderService;
+        private readonly IOrderPublisher _orderService;
         private readonly ILogger<OrderContextSeed> _logger;
 
-        public OrderContextSeed(IOrderService orderService, ILogger<OrderContextSeed> logger)
+        public OrderContextSeed(IOrderPublisher orderService, ILogger<OrderContextSeed> logger)
         {
             _orderService = orderService;
             _logger = logger;
@@ -57,6 +58,9 @@ namespace OrderAPI.Data
                 var user = users.ElementAt(userIndex);
 
                 var paymentMethod = (Common.Models.Payment.PaymentMethod)rand.Next(0, Enum.GetValues<Common.Models.Payment.PaymentMethod>().Length);
+
+                ArgumentNullException.ThrowIfNull(user.PaymentInfo);
+                ArgumentNullException.ThrowIfNull(user.ShippingAddress);
 
                 var newOrder = new Order
                 {

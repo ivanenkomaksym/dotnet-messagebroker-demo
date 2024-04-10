@@ -4,8 +4,8 @@ using Common.Extensions;
 using MassTransit;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
-using OrderAPI;
 using OrderAPI.Data;
+using OrderAPI.Messaging;
 using OrderCommon.Data;
 using OrderCommon.Repositories;
 using Swashbuckle.AspNetCore.Filters;
@@ -19,7 +19,7 @@ builder.Services.AddScoped<IOrderContextSeed, OrderContextSeed>();
 builder.Services.AddScoped<IOrderContext, OrderContext>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderPublisher, OrderPublisher>();
 
 builder.Services.AddMassTransit(x =>
 {

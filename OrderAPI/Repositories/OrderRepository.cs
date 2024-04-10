@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-using OrderCommon.Data;
+﻿using OrderCommon.Data;
 
 namespace OrderCommon.Repositories
 {
-    public class OrderRepository : OrderRepositoryBase
+    internal class OrderRepository : OrderRepositoryBase
     {
         private bool _contextInit = false;
         private readonly ILogger<OrderRepository> _logger;
