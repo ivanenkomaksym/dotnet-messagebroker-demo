@@ -20,11 +20,14 @@ namespace Notifications.Consumers
         {
             // In
             var reserveStockResult = context.Message;
+            ArgumentNullException.ThrowIfNull(reserveStockResult);
+            ArgumentNullException.ThrowIfNull(reserveStockResult.CustomerInfo);
+
             var message = JsonSerializer.Serialize(reserveStockResult);
             _logger.LogInformation($"Received `ReserveStockResult` event with content: {message}");
 
             // Out
-            var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{reserveStockResult.CustomerInfo.CustomerId.ToString()}"));
+            var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{reserveStockResult.CustomerInfo.CustomerId}"));
 
             var userReserveStockResult = new UserReserveStockResult
             {

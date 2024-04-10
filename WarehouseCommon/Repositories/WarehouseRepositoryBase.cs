@@ -61,11 +61,12 @@ namespace WarehouseCommon.Repositories
         public async Task<StockItem> GetStockItemByProductId(Guid productId)
         {
             var context = await GetContext();
+
+            var stockItems = context.StockItems;
+
             var matchProductId = Builders<StockItem>.Filter.Eq(s => s.ProductId, productId);
 
-            return await context
-                            .StockItems
-                            .Find(matchProductId)
+            return await stockItems.Find(matchProductId)
                             .FirstOrDefaultAsync();
         }
 

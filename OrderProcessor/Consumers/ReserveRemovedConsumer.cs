@@ -13,12 +13,14 @@ namespace OrderProcessor.Consumers
             _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<ReserveRemoved> context)
+        public Task Consume(ConsumeContext<ReserveRemoved> context)
         {
             // In
             var reserveRemoved = context.Message;
             var message = JsonSerializer.Serialize(reserveRemoved);
             _logger.LogInformation($"Received `ReserveRemoved` event with content: {message}");
+
+            return Task.CompletedTask;
         }
     }
 }

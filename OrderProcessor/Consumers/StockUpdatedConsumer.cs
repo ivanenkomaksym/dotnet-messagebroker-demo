@@ -13,12 +13,14 @@ namespace OrderProcessor.Consumers
             _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<StockUpdated> context)
+        public Task Consume(ConsumeContext<StockUpdated> context)
         {
             // In
             var stockUpdated = context.Message;
             var message = JsonSerializer.Serialize(stockUpdated);
             _logger.LogInformation($"Received `StockUpdated` event with content: {message}");
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace WebUIAggregatorAPI.Services
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<Product>> GetProducts()
+        public async Task<IEnumerable<Product>?> GetProducts()
         {
             var response = await _httpClient.GetAsync("/gateway/Catalog");
             response.EnsureSuccessStatusCode();
@@ -23,7 +23,7 @@ namespace WebUIAggregatorAPI.Services
             return products;
         }
 
-        public async Task<Product> GetProduct(Guid productId)
+        public async Task<Product?> GetProduct(Guid productId)
         {
             var response = await _httpClient.GetAsync($"/gateway/Catalog/{productId}");
             if (response.StatusCode == HttpStatusCode.NotFound)
@@ -36,7 +36,7 @@ namespace WebUIAggregatorAPI.Services
             return product;
         }
 
-        public async Task<IEnumerable<Product>> GetProductsByCategory(string category)
+        public async Task<IEnumerable<Product>?> GetProductsByCategory(string category)
         {
             var response = await _httpClient.GetAsync($"/gateway/Catalog/GetProductByCategory/{category}");
             response.EnsureSuccessStatusCode();
@@ -45,7 +45,7 @@ namespace WebUIAggregatorAPI.Services
             return products;
         }
 
-        public async Task<Product> CreateProduct(Product product)
+        public async Task<Product?> CreateProduct(Product product)
         {
             var content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("/gateway/Catalog", content);
@@ -55,7 +55,7 @@ namespace WebUIAggregatorAPI.Services
             return createdProduct;
         }
 
-        public async Task<Product> UpdateProduct(Product product)
+        public async Task<Product?> UpdateProduct(Product product)
         {
             var content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync("/gateway/Catalog", content);

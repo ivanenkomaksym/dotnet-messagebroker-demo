@@ -24,33 +24,38 @@ namespace OrderAPI.Services
             var order = await _orderRepository.GetOrderById(orderId);
             // TODO: add error handling
 
+            ArgumentNullException.ThrowIfNull(order);
+            ArgumentNullException.ThrowIfNull(order.PaymentInfo);
+
+            var paymentMethod = (int)order.PaymentInfo.PaymentMethod;
+
             var reply = new GetOrderReply
             {
                 OrderId = order.Id.ToString(),
                 OrderStatus = (int)order.OrderStatus,
                 CustomerInfo = new Common.Protos.CustomerInfo()
                 {
-                    CustomerId = order.CustomerInfo.CustomerId.ToString(),
-                    FirstName = order.CustomerInfo.FirstName,
-                    LastName = order.CustomerInfo.LastName,
-                    Email = order.CustomerInfo.Email
+                    CustomerId = order.CustomerInfo?.CustomerId.ToString(),
+                    FirstName = order.CustomerInfo?.FirstName,
+                    LastName = order.CustomerInfo?.LastName,
+                    Email = order.CustomerInfo?.Email
                 },
                 ShippingAddress = new Common.Protos.Address()
                 {
-                    FirstName = order.ShippingAddress.FirstName,
-                    LastName = order.ShippingAddress.LastName,
-                    Country = order.ShippingAddress.Country,
-                    AddressLine = order.ShippingAddress.AddressLine,
-                    Email = order.ShippingAddress.Email,
-                    ZipCode = order.ShippingAddress.ZipCode
+                    FirstName = order.ShippingAddress?.FirstName,
+                    LastName = order.ShippingAddress?.LastName,
+                    Country = order.ShippingAddress?.Country,
+                    AddressLine = order.ShippingAddress?.AddressLine,
+                    Email = order.ShippingAddress?.Email,
+                    ZipCode = order.ShippingAddress?.ZipCode
                 },
                 PaymentInfo = new Common.Protos.PaymentInfo()
                 {
-                    CardName = order.PaymentInfo.CardName,
-                    CardNumber = order.PaymentInfo.CardNumber,
-                    Cvv = order.PaymentInfo.CVV,
-                    Expiration = order.PaymentInfo.Expiration,
-                    PaymentMethod = (int)order.PaymentInfo.PaymentMethod
+                    CardName = order.PaymentInfo?.CardName,
+                    CardNumber = order.PaymentInfo?.CardNumber,
+                    Cvv = order.PaymentInfo?.CVV,
+                    Expiration = order.PaymentInfo?.Expiration,
+                    PaymentMethod = paymentMethod
                 },
                 TotalPrice = order.TotalPrice.ToString()
             };

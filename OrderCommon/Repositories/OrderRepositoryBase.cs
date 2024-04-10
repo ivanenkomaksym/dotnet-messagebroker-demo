@@ -57,9 +57,11 @@ namespace OrderCommon.Repositories
 
             var matchId = Builders<Order>.Filter.Eq(o => o.CustomerInfo.CustomerId, customerId);
 
-            return await context
+            var orders = await context
                             .Orders
                             .Find(matchId).ToListAsync();
+
+            return orders;
         }
 
         public async Task<bool> UpdatePayment(Guid orderId, PaymentInfo payment)

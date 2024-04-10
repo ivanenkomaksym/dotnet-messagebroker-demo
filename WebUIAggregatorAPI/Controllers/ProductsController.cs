@@ -27,6 +27,7 @@ namespace WebUIAggregatorAPI.Controllers
         public async Task<IActionResult> GetProducts()
         {
             var products = await _catalogApiService.GetProducts();
+            ArgumentNullException.ThrowIfNull(products);
             var productsWithStock = await AddStockInformation(products);
 
             return Ok(productsWithStock);
@@ -54,6 +55,7 @@ namespace WebUIAggregatorAPI.Controllers
         public async Task<IActionResult> GetProductByCategory(string category)
         {
             var products = await _catalogApiService.GetProductsByCategory(category);
+            ArgumentNullException.ThrowIfNull(products);
             var productsWithStock = await AddStockInformation(products);
 
             return Ok(productsWithStock);
@@ -76,6 +78,7 @@ namespace WebUIAggregatorAPI.Controllers
             };
 
             var createdProduct = await _catalogApiService.CreateProduct(product);
+            ArgumentNullException.ThrowIfNull(createdProduct);
 
             var stockItem = new StockItem
             {

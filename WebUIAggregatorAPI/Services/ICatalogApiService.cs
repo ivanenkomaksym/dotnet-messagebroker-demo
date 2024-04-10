@@ -4,15 +4,15 @@ namespace WebUIAggregatorAPI.Services
 {
     public interface ICatalogApiService
     {
-        public Task<IEnumerable<Product>> GetProducts();
+        public Task<IEnumerable<Product>?> GetProducts();
 
-        public Task<Product> GetProduct(Guid productId);
+        public Task<Product?> GetProduct(Guid productId);
 
-        public Task<IEnumerable<Product>> GetProductsByCategory(string category);
+        public Task<IEnumerable<Product>?> GetProductsByCategory(string category);
 
-        public Task<Product> CreateProduct(Product product);
+        public Task<Product?> CreateProduct(Product product);
 
-        public Task<Product> UpdateProduct(Product product);
+        public Task<Product?> UpdateProduct(Product product);
 
         public Task DeleteProduct(Guid productId);
     }

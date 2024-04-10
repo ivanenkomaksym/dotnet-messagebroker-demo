@@ -19,8 +19,8 @@ namespace OrderProcessor.Adapters
         private readonly TConsumer _consumer;
         private readonly RabbitMQOptions _rabbitMQOptions;
         private readonly ILogger<GenericConsumerRabbitMQAdapter<TConsumer, TMessage>> _logger;
-        private IConnection _connection;
-        private IModel _channel;
+        private IConnection? _connection;
+        private IModel? _channel;
         private string ExchangeName = $"{typeof(TMessage).Name}_RabbitMQAdapter";
 
         public GenericConsumerRabbitMQAdapter(TConsumer consumer,
@@ -79,8 +79,8 @@ namespace OrderProcessor.Adapters
 
         public override void Dispose()
         {
-            _channel.Close();
-            _connection.Close();
+            _channel?.Close();
+            _connection?.Close();
             base.Dispose();
         }
     }

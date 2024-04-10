@@ -20,6 +20,7 @@ namespace Notifications.Consumers
         {
             // In
             var paymentResult = context.Message;
+            ArgumentNullException.ThrowIfNull(paymentResult);
             var message = JsonSerializer.Serialize(paymentResult);
             _logger.LogInformation($"Received `PaymentResult` event with content: {message}");
 

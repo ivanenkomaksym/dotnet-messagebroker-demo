@@ -19,7 +19,7 @@ namespace PaymentService.Consumers
             _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<TakePayment> context)
+        public Task Consume(ConsumeContext<TakePayment> context)
         {
             // In
             var takePayment = context.Message;
@@ -28,6 +28,8 @@ namespace PaymentService.Consumers
 
             // Out
             _ = SchedulePayment(takePayment);
+
+            return Task.CompletedTask;
         }
 
         private Task SchedulePayment(TakePayment takePayment)

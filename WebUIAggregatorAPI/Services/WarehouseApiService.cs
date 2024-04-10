@@ -14,7 +14,7 @@ namespace WebUIAggregatorAPI.Services
             _httpClient = httpClient;
         }
 
-        public async Task<StockItem> GetStockItemByProductId(Guid productId)
+        public async Task<StockItem?> GetStockItemByProductId(Guid productId)
         {
             var response = await _httpClient.GetAsync($"gateway/StockItem/GetStockItemByProductId/{productId}");
             if (response.StatusCode == HttpStatusCode.NotFound)
@@ -26,7 +26,7 @@ namespace WebUIAggregatorAPI.Services
             return await response.Content.ReadFromJsonAsync<StockItem>();
         }
 
-        public async Task<StockItem> CreateStockItem(StockItem stockItem)
+        public async Task<StockItem?> CreateStockItem(StockItem stockItem)
         {
             var content = new StringContent(JsonSerializer.Serialize(stockItem), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("/gateway/StockItem", content);
@@ -36,7 +36,7 @@ namespace WebUIAggregatorAPI.Services
             return createdStockItem;
         }
 
-        public async Task<StockItem> UpdateStockItem(StockItem stockItem)
+        public async Task<StockItem?> UpdateStockItem(StockItem stockItem)
         {
             var content = new StringContent(JsonSerializer.Serialize(stockItem), Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync("/gateway/StockItem", content);

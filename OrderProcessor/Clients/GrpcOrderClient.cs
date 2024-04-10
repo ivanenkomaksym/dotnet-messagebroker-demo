@@ -1,4 +1,5 @@
-﻿using Common.Models;
+﻿using Common.Extensions;
+using Common.Models;
 using Common.Models.Payment;
 using Common.Protos;
 using Grpc.Net.Client;
@@ -20,7 +21,7 @@ namespace OrderProcessor.Clients
         {
             _logger.LogInformation($"[GRPC] Sending `GetOrderRequest` event with content: {orderId}");
 
-            using var channel = GrpcChannel.ForAddress(_configuration["GrpcSettings:OrderGrpcUrl"]);
+            using var channel = GrpcChannel.ForAddress(_configuration.GetOrderGrpcUrl());
             var client = new OrderService.OrderServiceClient(channel);
 
             var request = new GetOrderRequest();
@@ -83,7 +84,7 @@ namespace OrderProcessor.Clients
         {
             _logger.LogInformation($"[GRPC] Sending `UpdateOrderRequest` event with content: {orderId}");
 
-            using var channel = GrpcChannel.ForAddress(_configuration["GrpcSettings:OrderGrpcUrl"]);
+            using var channel = GrpcChannel.ForAddress(_configuration.GetOrderGrpcUrl());
             var client = new OrderService.OrderServiceClient(channel);
 
             var request = new UpdateOrderRequest();
