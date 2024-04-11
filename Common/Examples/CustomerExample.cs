@@ -1,4 +1,5 @@
 ﻿using Common.Models;
+using Common.SeedData;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Common.Examples
@@ -7,13 +8,7 @@ namespace Common.Examples
     {
         public Customer GetExamples()
         {
-            return new Customer
-            {
-                FirstName = "Alice",
-                LastName = "Liddell",
-                Email = "alice@gmail.com",
-                Password = "password"
-            };
+            return CustomerSeed.GetPreconfiguredCustomer().First();
         }
     }
 }

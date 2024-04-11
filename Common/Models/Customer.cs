@@ -29,9 +29,9 @@ namespace Common.Models
 
         public UserRole UserRole { get; set; } = UserRole.User;
 
-        public Address? ShippingAddress { get; set; }
+        public required Address ShippingAddress { get; set; }
 
-        public PaymentInfo? PaymentInfo { get; set; }
+        public required PaymentInfo PaymentInfo { get; set; }
 
         public DateTime CreationDateTime { get; set; } = DateTime.Now;
     }

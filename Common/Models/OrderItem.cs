@@ -15,7 +15,7 @@ namespace Common.Models
         [BsonGuidRepresentation(GuidRepresentation.Standard)]
         public Guid ProductId { get; init; }
 
-        public string? ProductName { get; init; }
+        public required string ProductName { get; init; }
 
         [Required]
         public decimal ProductPrice { get; init; }

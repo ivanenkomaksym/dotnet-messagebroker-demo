@@ -13,7 +13,7 @@ namespace Common.Models.Review
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
-        public CustomerInfo? CustomerInfo { get; set; }
+        public required CustomerInfo CustomerInfo { get; set; }
 
         [Required]
         [MaxLength(1000)]

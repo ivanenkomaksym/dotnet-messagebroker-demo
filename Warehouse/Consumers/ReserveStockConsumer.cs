@@ -19,7 +19,7 @@ namespace Warehouse.Consumers
             _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<ReserveStock> context)
+        public Task Consume(ConsumeContext<ReserveStock> context)
         {
             // In
             var reserveStock = context.Message;
@@ -27,6 +27,8 @@ namespace Warehouse.Consumers
             _logger.LogInformation($"Received `ReserveStock` event with content: {message}");
 
             _ = ScheduleReserveStock(reserveStock);
+
+            return Task.CompletedTask;
         }
 
         private Task ScheduleReserveStock(ReserveStock reserveStock)

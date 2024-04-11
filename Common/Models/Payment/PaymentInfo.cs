@@ -17,6 +17,6 @@ namespace Common.Models.Payment
         public required string CVV { get; set; }
 
         [Required]
-        public required PaymentMethod PaymentMethod { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
     }
 }

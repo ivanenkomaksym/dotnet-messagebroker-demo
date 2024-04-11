@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using System.ComponentModel.DataAnnotations;
 
 namespace Common.Models
 {
@@ -9,10 +10,13 @@ namespace Common.Models
         [BsonGuidRepresentation(GuidRepresentation.Standard)]
         public Guid CustomerId { get; init; }
 
-        public string? FirstName { get; init; }
+        [Required]
+        public required string FirstName { get; init; }
 
-        public string? LastName { get; init; }
+        [Required]
+        public required string LastName { get; init; }
 
-        public string? Email { get; init; }
+        [Required]
+        public required string Email { get; init; }
     }
 }

@@ -15,7 +15,7 @@ namespace Common.Models
         public OrderStatus OrderStatus { get; set; } = OrderStatus.New;
 
         [Required]
-        public CustomerInfo? CustomerInfo { get; set; }
+        public required CustomerInfo CustomerInfo { get; set; }
 
         [Required]
         public IList<OrderItem> Items { get; set; } = new List<OrderItem>();
@@ -24,10 +24,10 @@ namespace Common.Models
         public decimal TotalPrice { get; set; }
 
         [Required]
-        public Address? ShippingAddress { get; set; }
+        public required Address ShippingAddress { get; set; }
 
         [Required]
-        public PaymentInfo? PaymentInfo { get; set; }
+        public required PaymentInfo PaymentInfo { get; set; }
 
         public decimal UseCashback { get; set; }
 
