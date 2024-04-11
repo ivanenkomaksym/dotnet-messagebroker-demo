@@ -14,25 +14,25 @@ namespace WebUI.Services
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<IEnumerable<ProductWithStock>> GetProducts()
+        public async Task<IEnumerable<ProductWithStock>?> GetProducts()
         {
             var response = await _client.GetAsync("/gateway/Products");
             return await response.ReadContentAs<List<ProductWithStock>>();
         }
 
-        public async Task<ProductWithStock> GetProduct(Guid productId)
+        public async Task<ProductWithStock?> GetProduct(Guid productId)
         {
             var response = await _client.GetAsync($"/gateway/Products/{productId}");
             return await response.ReadContentAs<ProductWithStock>();
         }
 
-        public async Task<IEnumerable<ProductWithStock>> GetProductsByCategory(string category)
+        public async Task<IEnumerable<ProductWithStock>?> GetProductsByCategory(string category)
         {
             var response = await _client.GetAsync($"/gateway/Products/GetProductByCategory/{category}");
             return await response.ReadContentAs<List<ProductWithStock>>();
         }
 
-        public async Task<ProductWithStock> CreateProductWithStock(ProductWithStock productWithStock)
+        public async Task<ProductWithStock?> CreateProductWithStock(ProductWithStock productWithStock)
         {
             var content = new StringContent(JsonSerializer.Serialize(productWithStock), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync("/gateway/Products", content);
@@ -42,7 +42,7 @@ namespace WebUI.Services
             return createdProduct;
         }
 
-        public async Task<ProductWithStock> UpdateProductWithStock(ProductWithStock productWithStock)
+        public async Task<ProductWithStock?> UpdateProductWithStock(ProductWithStock productWithStock)
         {
             var content = new StringContent(JsonSerializer.Serialize(productWithStock), Encoding.UTF8, "application/json");
             var response = await _client.PutAsync("/gateway/Products", content);

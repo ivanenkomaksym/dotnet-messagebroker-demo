@@ -18,13 +18,14 @@ namespace WebUI.Pages
         }
 
         [BindProperty]
-        public ShoppingCartModel Cart { get; set; }
+        public required ShoppingCartModel Cart { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
             var customerId = _userProvider.GetCustomerId(HttpContext);
-
-            Cart = await _shoppingCartService.GetShoppingCart(customerId);
+            var cart = await _shoppingCartService.GetShoppingCart(customerId);
+            ArgumentNullException.ThrowIfNull(cart);
+            Cart = cart;
 
             return Page();
         }
@@ -33,7 +34,10 @@ namespace WebUI.Pages
         {
             var customerId = _userProvider.GetCustomerId(HttpContext);
 
-            Cart = await _shoppingCartService.GetShoppingCart(customerId);
+            var cart = await _shoppingCartService.GetShoppingCart(customerId);
+            ArgumentNullException.ThrowIfNull(cart);
+
+            Cart = cart;
 
             // Find the item in the shopping cart
             var item = Cart.Items.FirstOrDefault(i => i.Id == itemId);
@@ -62,6 +66,7 @@ namespace WebUI.Pages
             var customerId = _userProvider.GetCustomerId(HttpContext);
 
             var cart = await _shoppingCartService.GetShoppingCart(customerId);
+            ArgumentNullException.ThrowIfNull(cart);
 
             var item = cart.Items.Single(x => x.ProductId == productId);
             cart.Items.Remove(item);

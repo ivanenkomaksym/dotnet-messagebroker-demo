@@ -31,7 +31,7 @@ namespace WebUI.Consumers
         public async Task StopListeningForApplicationUser(Guid customerId)
         {
             var result = _hostReceiveEndpoints.TryGetValue(customerId, out var handle);
-            if (result)
+            if (result && handle != null)
             {
                 await handle.StopAsync();
             }

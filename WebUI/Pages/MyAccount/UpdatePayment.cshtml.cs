@@ -22,11 +22,11 @@ namespace WebUI.Pages.MyAccount
         public Guid OrderId { get; set; }
 
         [BindProperty]
-        public PaymentInfo PaymentInfo { get; set; }
+        public required PaymentInfo PaymentInfo { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(Guid orderId, string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(Guid orderId, string? returnUrl = null)
         {
             ReturnUrl = returnUrl;
             OrderId = orderId;
@@ -40,7 +40,7 @@ namespace WebUI.Pages.MyAccount
             return Page();
         }
 
-        public async Task<IActionResult> OnPostUpdatePaymentAsync(Guid orderId, string returnUrl = null)
+        public async Task<IActionResult> OnPostUpdatePaymentAsync(Guid orderId, string? returnUrl = null)
         {
             if (!ModelState.IsValid)
                 return Page();
@@ -51,7 +51,7 @@ namespace WebUI.Pages.MyAccount
 
                 return RedirectToPage(returnUrl);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ModelState.AddModelError(nameof(Order.Id), "Problem updating order.");
             }

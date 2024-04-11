@@ -5,11 +5,12 @@ namespace WebUI
 {
     public static class Helpers
     {
-        public static string GetLocalUrl(IUrlHelper urlHelper, string localUrl)
+        public static string GetLocalUrl(IUrlHelper urlHelper, string? localUrl)
         {
+            ArgumentNullException.ThrowIfNull(urlHelper);
             if (!urlHelper.IsLocalUrl(localUrl))
             {
-                return urlHelper!.Page("/Index");
+                return urlHelper!.Page("/Index") ?? string.Empty;
             }
 
             return localUrl;
@@ -27,9 +28,13 @@ namespace WebUI
                 if (featureManager.IsEnabledAsync(feature).GetAwaiter().GetResult())
                 {
                     var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
-                    var httpClient = httpClientFactory.CreateClient(typeof(TServiceInterface).FullName);
+                    var serviceInterfaceName = typeof(TServiceInterface).FullName;
+                    ArgumentNullException.ThrowIfNull(serviceInterfaceName);
+                    var httpClient = httpClientFactory.CreateClient(serviceInterfaceName);
                     httpClient.BaseAddress = new Uri(gatewayAddress);
-                    return (TServiceImpl)Activator.CreateInstance(typeof(TServiceImpl), httpClient);
+                    var instance = Activator.CreateInstance(typeof(TServiceImpl), httpClient);
+                    ArgumentNullException.ThrowIfNull(instance);
+                    return (TServiceImpl)instance;
                 }
 
                 return new TStubServiceImpl();

@@ -7,6 +7,6 @@ namespace WebUI.Models.Reviews
         /// <summary>
         /// Name of this property must match with the one returned from GraphQL endpoint
         /// </summary>
-        public IEnumerable<Review> ReviewsByProductId { get; set; }
+        public required IEnumerable<Review> ReviewsByProductId { get; set; }
     }
 }

@@ -5,10 +5,10 @@ namespace WebUI.Services
 {
     public interface IOrderService
     {
-        Task<IEnumerable<Order>> GetAllOrders();
-        Task<IEnumerable<Order>> GetOrders(Guid customerId);
+        Task<IEnumerable<Order>?> GetAllOrders();
+        Task<IEnumerable<Order>?> GetOrders(Guid customerId);
 
-        Task<Order> GetOrder(Guid orderId);
+        Task<Order?> GetOrder(Guid orderId);
         Task CreateOrder(Order order);
 
         Task<bool> UpdatePayment(Guid orderId, PaymentInfo payment);

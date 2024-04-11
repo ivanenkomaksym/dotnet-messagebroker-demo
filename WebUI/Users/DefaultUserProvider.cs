@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using WebUI.Consumers;
 using WebUI.Data;
 using WebUI.Services;
-using WebUI.Consumers;
 
 namespace WebUI.Users
 {
@@ -20,7 +20,7 @@ namespace WebUI.Users
 
         public Guid GetCustomerId(HttpContext httpContext)
         {
-            if (!httpContext.User.Identity.IsAuthenticated)
+            if (httpContext.User.Identity != null && !httpContext.User.Identity.IsAuthenticated)
             {
                 Guid sessionId = Guid.Empty;
 
@@ -42,7 +42,7 @@ namespace WebUI.Users
             return customerId;
         }
 
-        public async Task<ApplicationUser> AuthenticateUserAsync(string email, string password)
+        public async Task<ApplicationUser?> AuthenticateUserAsync(string email, string password)
         {
             var customer = await _customerService.Authenticate(email, password);
             if (customer != null)
@@ -55,10 +55,8 @@ namespace WebUI.Users
                     UserRole = customer.UserRole
                 };
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public async Task SignInAsync(HttpContext httpContext, ApplicationUser user)

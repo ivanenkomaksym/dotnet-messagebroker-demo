@@ -5,7 +5,7 @@ namespace WebUI.Pages
 {
     public class ConfirmationModel : PageModel
     {
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         public void OnGetContact()
         {

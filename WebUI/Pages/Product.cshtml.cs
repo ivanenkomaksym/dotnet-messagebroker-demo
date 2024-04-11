@@ -19,16 +19,17 @@ namespace WebUI.Pages
             _userProvider = userProvider;
         }
 
-        public IEnumerable<string> CategoryList { get; set; } = new List<string>();
+        public required IEnumerable<string?> CategoryList { get; set; } = new List<string?>();
 
-        public IEnumerable<ProductWithStock> ProductList { get; set; } = new List<ProductWithStock>();
+        public required IEnumerable<ProductWithStock> ProductList { get; set; } = new List<ProductWithStock>();
 
         [BindProperty(SupportsGet = true)]
-        public string SelectedCategory { get; set; }
+        public required string SelectedCategory { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string categoryName)
         {
             var productList = await _productService.GetProducts();
+            ArgumentNullException.ThrowIfNull(productList);
             CategoryList = productList.Select(p => p.Category).Distinct();
 
             if (!string.IsNullOrWhiteSpace(categoryName))
@@ -49,6 +50,7 @@ namespace WebUI.Pages
         public async Task<IActionResult> OnPostAddToCartAsync(Guid productId)
         {
             var product = await _productService.GetProduct(productId);
+            ArgumentNullException.ThrowIfNull(product);
 
             var customerId = _userProvider.GetCustomerId(HttpContext);
 

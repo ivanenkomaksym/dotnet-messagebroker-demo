@@ -16,11 +16,13 @@ namespace WebUI.Pages.MyAccount
             _orderService = orderService;
         }
 
-        public Order Order { get; set; }
+        public required Order Order { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid orderId)
         {
-            Order = await _orderService.GetOrder(orderId);
+            var order = await _orderService.GetOrder(orderId);
+            ArgumentNullException.ThrowIfNull(order);
+            Order = order;
             if (Order == null)
             {
                 return NotFound();

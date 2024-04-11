@@ -20,7 +20,7 @@ namespace WebUI.Users
             var userPrincipal = context.Principal;
 
             // Look for the CustomerId claim.
-            var customerIdString = (from c in userPrincipal.Claims
+            var customerIdString = (from c in userPrincipal?.Claims
                                     where c.Type == "CustomerId"
                                     select c.Value).FirstOrDefault();
 

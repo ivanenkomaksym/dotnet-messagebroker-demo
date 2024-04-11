@@ -26,9 +26,9 @@ namespace WebUI.Pages
             _feedbackService = feedbackService;
         }
 
-        public ProductWithStock Product { get; set; }
+        public required ProductWithStock Product { get; set; }
 
-        public IEnumerable<Review> Reviews { get; set; }
+        public required IEnumerable<Review> Reviews { get; set; }
 
         public decimal StarRatio(int star)
         {
@@ -49,12 +49,9 @@ namespace WebUI.Pages
 
         public async Task<IActionResult> OnGetAsync(Guid productId)
         {
-            if (productId == null)
-            {
-                return NotFound();
-            }
-
-            Product = await _productService.GetProduct(productId);
+            var product = await _productService.GetProduct(productId);
+            ArgumentNullException.ThrowIfNull(product);
+            Product = product;
             if (Product == null)
             {
                 return NotFound();
@@ -71,6 +68,7 @@ namespace WebUI.Pages
         public async Task<IActionResult> OnPostAddToCartAsync(Guid productId)
         {
             var product = await _productService.GetProduct(productId);
+            ArgumentNullException.ThrowIfNull(product);
 
             var customerId = _userProvider.GetCustomerId(HttpContext);
 

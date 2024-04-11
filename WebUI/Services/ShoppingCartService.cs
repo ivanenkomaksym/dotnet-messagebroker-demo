@@ -43,7 +43,7 @@ namespace WebUI.Services
             return true;
         }
 
-        public async Task<ShoppingCartModel> GetShoppingCart(Guid customerId)
+        public async Task<ShoppingCartModel?> GetShoppingCart(Guid customerId)
         {
             var response = await _client.GetAsync($"/gateway/ShoppingCart/{customerId}");
             if (!response.IsSuccessStatusCode)
@@ -54,7 +54,7 @@ namespace WebUI.Services
             return await response.ReadContentAs<ShoppingCartModel>();
         }
 
-        public async Task<ShoppingCartModel> UpdateShoppingCart(ShoppingCartModel shoppingCart)
+        public async Task<ShoppingCartModel?> UpdateShoppingCart(ShoppingCartModel shoppingCart)
         {
             var response = await _client.PutAsJsonAsync($"/gateway/ShoppingCart", shoppingCart);
             if (!response.IsSuccessStatusCode)
@@ -65,9 +65,11 @@ namespace WebUI.Services
             return await response.ReadContentAs<ShoppingCartModel>();
         }
 
-        public async Task<ShoppingCartModel> AddProductToCart(Guid customerId, ProductWithStock product, ushort quantity = 1)
+        public async Task<ShoppingCartModel?> AddProductToCart(Guid customerId, ProductWithStock product, ushort quantity = 1)
         {
             var cart = await GetShoppingCart(customerId);
+            if (cart == null)
+                return null;
 
             var items = cart.Items.Where(x => x.ProductId == product.Id);
             if (items.Any())

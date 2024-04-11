@@ -10,21 +10,21 @@ namespace WebUI.Services
         private static readonly IEnumerable<Product> Products = CatalogSeed.GetPreconfiguredProducts();
         private static readonly IEnumerable<StockItem> StockItems = WarehouseSeed.GetPreconfiguredStockItems(Products);
 
-        private async Task<IEnumerable<ProductWithStock>> AddStockInformation(IEnumerable<Product> products)
+        private async Task<IEnumerable<ProductWithStock>?> AddStockInformation(IEnumerable<Product> products)
         {
             var productsWithStock = new List<ProductWithStock>();
 
             foreach (var product in products)
             {
                 var productWithStock = await AddStockInformation(product);
-
-                productsWithStock.Add(productWithStock);
+                if (productWithStock != null)
+                    productsWithStock.Add(productWithStock);
             }
 
             return productsWithStock;
         }
 
-        private Task<ProductWithStock> AddStockInformation(Product product)
+        private Task<ProductWithStock?> AddStockInformation(Product product)
         {
             var stockItem = StockItems.Where(stockItem => stockItem.ProductId == product.Id).FirstOrDefault();
             var productWithStock = new ProductWithStock
@@ -42,10 +42,10 @@ namespace WebUI.Services
                 AvailableOnStock = stockItem?.AvailableOnStock ?? 0
             };
 
-            return Task.FromResult(productWithStock);
+            return Task.FromResult<ProductWithStock?>(productWithStock);
         }
 
-        public Task<ProductWithStock> CreateProductWithStock(ProductWithStock productWithStock)
+        public Task<ProductWithStock?> CreateProductWithStock(ProductWithStock productWithStock)
         {
             throw new NotImplementedException();
         }
@@ -55,27 +55,28 @@ namespace WebUI.Services
             throw new NotImplementedException();
         }
 
-        public Task<ProductWithStock> GetProduct(Guid productId)
+        public Task<ProductWithStock?> GetProduct(Guid productId)
         {
             var product = Products.Where(p => p.Id == productId).FirstOrDefault();
+            ArgumentNullException.ThrowIfNull(product);
             var productWithStock = AddStockInformation(product);
             return productWithStock;
         }
 
-        public Task<IEnumerable<ProductWithStock>> GetProducts()
+        public Task<IEnumerable<ProductWithStock>?> GetProducts()
         {
             var productsWithStock = AddStockInformation(Products);
             return productsWithStock;
         }
 
-        public Task<IEnumerable<ProductWithStock>> GetProductsByCategory(string category)
+        public Task<IEnumerable<ProductWithStock>?> GetProductsByCategory(string category)
         {
             var products = Products.Where(p => p.Category == category);
             var productsWithStock = AddStockInformation(products);
             return productsWithStock;
         }
 
-        public Task<ProductWithStock> UpdateProductWithStock(ProductWithStock productWithStock)
+        public Task<ProductWithStock?> UpdateProductWithStock(ProductWithStock productWithStock)
         {
             throw new NotImplementedException();
         }

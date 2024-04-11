@@ -5,9 +5,10 @@ namespace WebUI.Services
 {
     public class StubShoppingCartService : IShoppingCartService
     {
-        public async Task<ShoppingCartModel> AddProductToCart(Guid customerId, ProductWithStock product, ushort quantity = 1)
+        public async Task<ShoppingCartModel?> AddProductToCart(Guid customerId, ProductWithStock product, ushort quantity = 1)
         {
             var cart = await GetShoppingCart(customerId);
+            ArgumentNullException.ThrowIfNull(cart);
 
             var items = cart.Items.Where(x => x.ProductId == product.Id);
             if (items.Any())
@@ -46,13 +47,13 @@ namespace WebUI.Services
         {
             var cart = ShoppingCarts.Find(x => x.Id == customerId);
             var found = cart != null;
-            if (found)
+            if (cart != null)
                 ShoppingCarts.Remove(cart);
 
             return Task.FromResult(found);
         }
 
-        public async Task<ShoppingCartModel> GetShoppingCart(Guid customerId)
+        public async Task<ShoppingCartModel?> GetShoppingCart(Guid customerId)
         {
             var shoppingCart = ShoppingCarts.FirstOrDefault(x => x.CustomerId == customerId);
             if (shoppingCart == null)
@@ -64,15 +65,19 @@ namespace WebUI.Services
             return shoppingCart;
         }
 
-        public Task<ShoppingCartModel> UpdateShoppingCart(ShoppingCartModel shoppingCart)
+        public Task<ShoppingCartModel?> UpdateShoppingCart(ShoppingCartModel shoppingCart)
         {
-            var index = ShoppingCarts.IndexOf(ShoppingCarts.Find(c => c.Id == shoppingCart.Id));
+            var foundShoppingCart = ShoppingCarts.Find(c => c.Id == shoppingCart.Id);
+            if (foundShoppingCart == null)
+                return Task.FromResult<ShoppingCartModel?>(null);
+
+            var index = ShoppingCarts.IndexOf(foundShoppingCart);
             if (index != -1)
             {
                 ShoppingCarts[index] = shoppingCart;
             }
 
-            return Task.FromResult(shoppingCart);
+            return Task.FromResult<ShoppingCartModel?>(shoppingCart);
         }
 
         private readonly List<ShoppingCartModel> ShoppingCarts = new();

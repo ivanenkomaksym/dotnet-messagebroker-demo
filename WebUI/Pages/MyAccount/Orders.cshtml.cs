@@ -22,7 +22,7 @@ namespace WebUI.Pages.MyAccount
         public IEnumerable<Order> Orders { get; set; } = new List<Order>();
 
         [BindProperty]
-        public string ErrorMessage { get; set; }
+        public required string ErrorMessage { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -32,7 +32,9 @@ namespace WebUI.Pages.MyAccount
 
             try
             {
-                Orders = await _orderService.GetOrders(customerId);
+                var orders  = await _orderService.GetOrders(customerId);
+                ArgumentNullException.ThrowIfNull(orders);
+                Orders = orders;
             }
             catch (Exception ex)
             {

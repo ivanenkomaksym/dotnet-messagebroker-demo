@@ -10,10 +10,10 @@ namespace WebUI.Pages.Admin.Products
         private readonly IProductService _productService;
 
         [BindProperty]
-        public ProductWithStock NewProduct { get; set; }
+        public required ProductWithStock NewProduct { get; set; }
 
         [BindProperty]
-        public IEnumerable<ProductWithStock> Products { get; private set; }
+        public required IEnumerable<ProductWithStock> Products { get; set; }
 
         public AddRemoveProductModel(IProductService productService)
         {
@@ -22,13 +22,19 @@ namespace WebUI.Pages.Admin.Products
 
         public async Task OnGetAsync()
         {
+            var products = await _productService.GetProducts();
+            ArgumentNullException.ThrowIfNull(products);
             // Get existing products
-            Products = await _productService.GetProducts();
+            Products = products;
 
             // Initialize the NewProduct with a new Guid for the Id property
             NewProduct = new ProductWithStock
             {
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                Name = string.Empty,
+                Category = string.Empty,
+                Summary = string.Empty,
+                ImageFile = string.Empty
             };
         }
 
@@ -36,8 +42,10 @@ namespace WebUI.Pages.Admin.Products
         {
             if (!ModelState.IsValid)
             {
+                var products = await _productService.GetProducts();
+                ArgumentNullException.ThrowIfNull(products);
                 // If the model state is invalid, refresh the page with the existing input fields.
-                Products = await _productService.GetProducts();
+                Products = products;
                 return Page();
             }
 
@@ -53,12 +61,6 @@ namespace WebUI.Pages.Admin.Products
 
             // Refresh the page with the updated product list.
             return RedirectToPage();
-        }
-
-        // Method to fetch all products with stock information
-        public async Task<IEnumerable<ProductWithStock>> GetProductsAsync()
-        {
-            return await _productService.GetProducts();
         }
     }
 }

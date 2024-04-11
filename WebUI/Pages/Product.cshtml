@@ -36,10 +36,10 @@
             <div class="card bg-light mb-3">
                 <div class="card-header bg-success text-white text-uppercase">Last product</div>
                 <div class="card-body">
-                    <img asp-append-version="true" class="img-fluid" src="@Model.ProductList.LastOrDefault().ImageFile" />
-                    <h5 class="card-title">@Model.ProductList.LastOrDefault().Name</h5>
-                    <p class="card-text">@Model.ProductList.LastOrDefault().Summary</p>
-                    <p class="bloc_left_price">@Model.ProductList.LastOrDefault().Price $</p>
+                    <img asp-append-version="true" class="img-fluid" src="@Model.ProductList.LastOrDefault()?.ImageFile" />
+                    <h5 class="card-title">@Model.ProductList.LastOrDefault()?.Name</h5>
+                    <p class="card-text">@Model.ProductList.LastOrDefault()?.Summary</p>
+                    <p class="bloc_left_price">@Model.ProductList.LastOrDefault()?.Price $</p>
                 </div>
             </div>
 

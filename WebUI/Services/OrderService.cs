@@ -13,7 +13,7 @@ namespace WebUI.Services
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrders()
+        public async Task<IEnumerable<Order>?> GetAllOrders()
         {
             var response = await _client.GetAsync($"/gateway/Order");
             if (!response.IsSuccessStatusCode)
@@ -23,7 +23,7 @@ namespace WebUI.Services
             return await response.ReadContentAs<IEnumerable<Order>>();
         }
 
-        public async Task<IEnumerable<Order>> GetOrders(Guid customerId)
+        public async Task<IEnumerable<Order>?> GetOrders(Guid customerId)
         {
             var response = await _client.GetAsync($"/gateway/Order/GetOrdersByCustomerId/{customerId}");
             if (!response.IsSuccessStatusCode)
@@ -33,7 +33,7 @@ namespace WebUI.Services
             return await response.ReadContentAs<IEnumerable<Order>>();
         }
 
-        public async Task<Order> GetOrder(Guid orderId)
+        public async Task<Order?> GetOrder(Guid orderId)
         {
             var response = await _client.GetAsync($"/gateway/Order/{orderId}");
             if (!response.IsSuccessStatusCode)

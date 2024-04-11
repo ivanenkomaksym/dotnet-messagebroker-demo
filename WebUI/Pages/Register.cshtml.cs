@@ -47,7 +47,7 @@ namespace WebUI.Pages
 
                 return RedirectToPage("./Index");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ModelState.AddModelError(nameof(Customer.Email), "User with this email already exists.");
             }

@@ -7,19 +7,19 @@ namespace WebUI.Notifications
     {
         public async override Task OnConnectedAsync()
         {
-            string customerId = Context.GetHttpContext().Request.Query["customerId"];
-
-            // Associate the user with the connection using Groups.AddToGroupAsync
-            await Groups.AddToGroupAsync(Context.ConnectionId, customerId);
+            string? customerId = Context.GetHttpContext()?.Request.Query["customerId"];
+            if (customerId != null)
+                // Associate the user with the connection using Groups.AddToGroupAsync
+                await Groups.AddToGroupAsync(Context.ConnectionId, customerId);
 
             await base.OnConnectedAsync();
         }
 
         public async override Task OnDisconnectedAsync(Exception? exception)
         {
-            string customerId = Context.GetHttpContext().Request.Query["customerId"];
-
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, customerId);
+            string? customerId = Context.GetHttpContext()?.Request.Query["customerId"];
+            if (customerId != null)
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, customerId);
             await base.OnDisconnectedAsync(exception);
         }
 

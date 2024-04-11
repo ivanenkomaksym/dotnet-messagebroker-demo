@@ -7,7 +7,7 @@ namespace WebUI.Pages.Account
     {
         public IActionResult OnGet()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 // Redirect to home page if the user is authenticated.
                 return RedirectToPage("/Index");

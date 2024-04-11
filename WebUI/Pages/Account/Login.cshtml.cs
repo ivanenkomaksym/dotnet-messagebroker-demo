@@ -25,20 +25,20 @@ namespace WebUI.Pages.Account
         {
             [Required]
             [EmailAddress]
-            public string Email { get; set; }
+            public required string Email { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
-            public string Password { get; set; }
+            public required string Password { get; set; }
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public required InputModel Input { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             ReturnUrl = returnUrl;
 
@@ -62,7 +62,7 @@ namespace WebUI.Pages.Account
 
                 return LocalRedirect(Helpers.GetLocalUrl(Url, returnUrl));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ModelState.AddModelError(nameof(Input.Email), "Login Failed: Invalid Email or Password");
             }

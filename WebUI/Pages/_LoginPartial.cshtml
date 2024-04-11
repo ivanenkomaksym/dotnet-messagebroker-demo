@@ -1,6 +1,6 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 
-@if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+@if (HttpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated == true)
 {
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-page="/MyAccount/Index">Welcome, @HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value!</a>

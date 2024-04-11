@@ -16,13 +16,13 @@ namespace WebUI.Pages.MyAccount
         private readonly IUserProvider _userProvider;
         private readonly ICustomerService _customerService;
 
-        public Order Order { get; set; } = new();
+        public required Order Order { get; set; }
 
         [BindProperty]
-        public Review Review { get; set; }
+        public required Review Review { get; set; }
 
         [BindProperty]
-        public bool Anonymous { get; set; }
+        public required bool Anonymous { get; set; }
 
         public FeedbackModel(IOrderService orderService, IFeedbackService feedbackService, IUserProvider userProvider, ICustomerService customerService)
         {
@@ -34,10 +34,13 @@ namespace WebUI.Pages.MyAccount
 
         public async Task<IActionResult> OnGetAsync(Guid orderId)
         {
-            Order = await _orderService.GetOrder(orderId);
+            var order = await _orderService.GetOrder(orderId);
+            ArgumentNullException.ThrowIfNull(order);
+            Order = order;
 
             var customerId = _userProvider.GetCustomerId(HttpContext);
             var customer = await _customerService.GetCustomerById(customerId);
+            ArgumentNullException.ThrowIfNull(customer);
 
             Review = new Review
             {
@@ -71,7 +74,7 @@ namespace WebUI.Pages.MyAccount
             return RedirectToPage(new { orderId = orderId });
         }
 
-        public async Task<IActionResult> OnPostSkipAsync()
+        public IActionResult OnPostSkipAsync()
         {
             return RedirectToPage("/Index");
         }
@@ -80,8 +83,10 @@ namespace WebUI.Pages.MyAccount
         {
             var customerId = _userProvider.GetCustomerId(HttpContext);
             var customer = await _customerService.GetCustomerById(customerId);
+            ArgumentNullException.ThrowIfNull(customer);
 
             var reviews = await _feedbackService.GetReviews(productId);
+            ArgumentNullException.ThrowIfNull(reviews);
             return reviews.Where(r => r.CustomerInfo.Email == customer.Email).Any();
         }
     }

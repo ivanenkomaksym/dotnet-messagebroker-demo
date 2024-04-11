@@ -6,7 +6,7 @@
 
         public Guid CustomerId { get; set; }
 
-        public string CustomerEmail { get; set; }
+        public required string CustomerEmail { get; set; }
 
         public decimal Cashback { get; set; }
 

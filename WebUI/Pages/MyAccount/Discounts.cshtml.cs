@@ -14,7 +14,7 @@ namespace WebUI.Pages.MyAccount
         private readonly IUserProvider _userProvider;
 
         [BindProperty]
-        public UserPromo UserPromo { get; set; }
+        public UserPromo? UserPromo { get; set; }
 
         public DiscountsModel(IDiscountService discountService, IUserProvider userProvider)
         {

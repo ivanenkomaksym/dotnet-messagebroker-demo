@@ -12,7 +12,7 @@ namespace WebUI.Pages.MyAccount
         private readonly IUserProvider _userProvider;
 
         [BindProperty]
-        public Customer Customer { get; set; }
+        public required Customer Customer { get; set; }
 
         public IndexModel(ICustomerService customerService, IUserProvider userProvider)
         {
@@ -23,7 +23,9 @@ namespace WebUI.Pages.MyAccount
         public async Task<IActionResult> OnGetAsync()
         {
             var customerId = _userProvider.GetCustomerId(HttpContext);
-            Customer = await _customerService.GetCustomerById(customerId);
+            var customer = await _customerService.GetCustomerById(customerId);
+            ArgumentNullException.ThrowIfNull(customer);
+            Customer = customer;
 
             return Page();
         }

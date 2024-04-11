@@ -15,13 +15,15 @@ namespace WebUI.Pages.Admin
         }
 
         [BindProperty]
-        public IEnumerable<Order> Orders { get; private set; }
+        public required IEnumerable<Order> Orders { get; set; }
 
 
         public async Task OnGetAsync()
         {
+            var orders = await _orderService.GetAllOrders();
+            ArgumentNullException.ThrowIfNull(orders);
             // Get existing users
-            Orders = await _orderService.GetAllOrders();
+            Orders = orders;
         }
     }
 }

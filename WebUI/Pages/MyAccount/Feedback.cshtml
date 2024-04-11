@@ -1,4 +1,5 @@
 ﻿@page "/MyAccount/Orders/{orderId}/Feedback"
+@using Common.Models.Review
 @model WebUI.Pages.MyAccount.FeedbackModel
 @{
     ViewData["Title"] = "Feedback";
@@ -24,53 +25,54 @@
     <div class="row">
         <div class="col-12">
             <div class="table-responsive">
-                <tbody>
-                    @foreach (var orderItem in Model.Order.Items)
-                    {
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col"> </th>
-                                    <th scope="col">Product</th>
-                                    <th scope="col" class="text-right">Price</th>
-                                    <th scope="col" class="text-center">Quantity</th>
-                                    <th scope="col" class="text-right">Total</th>
-                                    <th> </th>
-                                </tr>
-                            </thead>
+                @foreach (var orderItem in Model.Order.Items)
+                {
+                    <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>
-                                    <a asp-page="ProductDetail" asp-route-productId="@orderItem.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@orderItem.ImageFile" alt="Order Item"></a>
-                                </td>
-                                <td>@orderItem.ProductName</td>
-                                <td class="text-right">@(orderItem.ProductPrice.ToString("C"))</td>
-                                <td>@orderItem.Quantity</td>
-                                <td class="text-right">@((orderItem.ProductPrice * orderItem.Quantity).ToString("C"))</td>
+                                <th scope="col"> </th>
+                                <th scope="col">Product</th>
+                                <th scope="col" class="text-right">Price</th>
+                                <th scope="col" class="text-center">Quantity</th>
+                                <th scope="col" class="text-right">Total</th>
+                                <th> </th>
                             </tr>
-                        </table>
-                        @if (!await Model.IsFeedbackProvided(Model.Order.Id, orderItem.ProductId))
-                        {
-                            <form method="post" class="needs-validation" novalidate>
-                                <div class="form-group">
-                                    <label asp-for="Review.Rating" for="rating">Please rate this product:</label>
-                                    <span asp-validation-for="Review.Rating" class="text-danger"></span>
-                                    <div class="star-rating">
-                                        @for (int i = 1; i <= 5; i++)
-                                        {
-                                            <i class="far fa-star star" data-value="@i"></i>
-                                        }
-                                        <input asp-for="Review.Rating" type="hidden" class="form-control" id="rating" minvalue="1" maxvalue="5" value="0" required>
-                                    </div>
+                        </thead>
+                        <tr>
+                            <td>
+                                <a asp-page="ProductDetail" asp-route-productId="@orderItem.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@orderItem.ImageFile" alt="Order Item"></a>
+                            </td>
+                            <td>@orderItem.ProductName</td>
+                            <td class="text-right">@(orderItem.ProductPrice.ToString("C"))</td>
+                            <td>@orderItem.Quantity</td>
+                            <td class="text-right">@((orderItem.ProductPrice * orderItem.Quantity).ToString("C"))</td>
+                        </tr>
+                    </table>
+                    @if (!await Model.IsFeedbackProvided(Model.Order.Id, orderItem.ProductId))
+                    {
+                        <form method="post" class="needs-validation" novalidate>
+                            <div class="form-group">
+                                <label asp-for="Review.Rating" for="rating">Please rate this product:</label>
+                                <span asp-validation-for="Review.Rating" class="text-danger"></span>
+                                <div class="star-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="far fa-star star" data-value="@i"></i>
+                                    }
+                                    <input asp-for="Review.Rating" type="hidden" class="form-control" id="rating" minvalue="1" maxvalue="5" value="0" required>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    <label asp-for="Review.Description" class="control-label" for="reviewText">Write your review (1000 characters max):</label>
-                                    @*<textarea asp-for="Review.Description" class="form-control" id="reviewText" name="reviewText" rows="4" maxlength="1000"></textarea>*@
-                                    @*<input asp-for="Review.Description" type="hidden" class="form-control" id="description" name="description" value="0">*@
-                                    <textarea input class="form-control" id="abc" rows="4" minlength="1" maxlength="1000" asp-for="Review.Description"></textarea>
-                                    <span asp-validation-for="Review.Description" class="text-danger"></span>
-                                </div>
-
+                            <div class="form-group">
+                                <label asp-for="Review.Description" class="control-label" for="reviewText">Write your review (1000 characters max):</label>
+                                @*<textarea asp-for="Review.Description" class="form-control" id="reviewText" name="reviewText" rows="4" maxlength="1000"></textarea>*@
+                                @*<input asp-for="Review.Description" type="hidden" class="form-control" id="description" name="description" value="0">*@
+                                <textarea input class="form-control" id="abc" rows="4" minlength="1" maxlength="1000" asp-for="Review.Description"></textarea>
+                                <span asp-validation-for="Review.Description" class="text-danger"></span>
+                            </div>
+                            @if (Model.Review.ReviewDetails != null)
+                            {
+                                var reviewDetails = Model.Review.ReviewDetails;
                                 <div class="form-group">
                                     <div>
                                         <span>Accuracy:</span>
@@ -79,7 +81,7 @@
                                             {
                                                 <i class="far fa-star star" data-value="@i"></i>
                                             }
-                                            <input asp-for="Review.ReviewDetails.Accuracy" type="hidden" class="form-control" id="Accuracy">
+                                            <input asp-for="@reviewDetails.Accuracy" type="hidden" class="form-control" id="Accuracy">
                                         </div>
                                     </div>
                                     <div>
@@ -89,7 +91,7 @@
                                             {
                                                 <i class="far fa-star star" data-value="@i"></i>
                                             }
-                                            <input asp-for="Review.ReviewDetails.Communication" type="hidden" class="form-control" id="Communication">
+                                            <input asp-for="@reviewDetails.Communication" type="hidden" class="form-control" id="Communication">
                                         </div>
                                     </div>
                                     <div>
@@ -99,35 +101,34 @@
                                             {
                                                 <i class="far fa-star star" data-value="@i"></i>
                                             }
-                                            <input asp-for="Review.ReviewDetails.DeliverySpeed" type="hidden" class="form-control" id="DeliverySpeed">
+                                            <input asp-for="@reviewDetails.DeliverySpeed" type="hidden" class="form-control" id="DeliverySpeed">
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="form-group form-check">
-                                    @Html.CheckBoxFor(model => model.Anonymous, new { @class = "form-check-input", id = "Anonymous" })
-                                    <label class="form-check-label" for="anonymous">4. Submit Anonymously</label>
-                                </div>
-
-                                <input asp-for="Review.CustomerInfo.CustomerId" type="hidden" class="form-control" id="CustomerId" value="@Model.Review.CustomerInfo.CustomerId">
-                                <input asp-for="Review.CustomerInfo.FirstName" type="hidden" class="form-control" id="FirstName" value="@Model.Review.CustomerInfo.FirstName">
-                                <input asp-for="Review.CustomerInfo.LastName" type="hidden" class="form-control" id="LastName" value="@Model.Review.CustomerInfo.LastName">
-                                <input asp-for="Review.CustomerInfo.Email" type="hidden" class="form-control" id="Email" value="@Model.Review.CustomerInfo.Email">
-                                <input type="hidden" asp-for="@orderItem.ProductId" name="productId" />
-
-                                <div class="form-group">
-                                    <input type="submit" value="Submit" class="btn btn-primary" asp-for="@orderItem.ProductId" />
-                                </div>
-                            </form>
-                        }
-                        else
-                        {
-                            <div class="col mb-2">
-                                <label for="rating">Thank you for your feedback!</label>
+                            }
+                            <div class="form-group form-check">
+                                @Html.CheckBoxFor(model => model.Anonymous, new { @class = "form-check-input", id = "Anonymous" })
+                                <label class="form-check-label" for="anonymous">4. Submit Anonymously</label>
                             </div>
-                        }
+
+                            <input asp-for="Review.CustomerInfo.CustomerId" type="hidden" class="form-control" id="CustomerId" value="@Model.Review.CustomerInfo.CustomerId">
+                            <input asp-for="Review.CustomerInfo.FirstName" type="hidden" class="form-control" id="FirstName" value="@Model.Review.CustomerInfo.FirstName">
+                            <input asp-for="Review.CustomerInfo.LastName" type="hidden" class="form-control" id="LastName" value="@Model.Review.CustomerInfo.LastName">
+                            <input asp-for="Review.CustomerInfo.Email" type="hidden" class="form-control" id="Email" value="@Model.Review.CustomerInfo.Email">
+                            <input type="hidden" asp-for="@orderItem.ProductId" name="productId" />
+
+                            <div class="form-group">
+                                <input type="submit" value="Submit" class="btn btn-primary" asp-for="@orderItem.ProductId" />
+                            </div>
+                        </form>
                     }
-                </tbody>
+                    else
+                    {
+                        <div class="col mb-2">
+                            <label for="rating">Thank you for your feedback!</label>
+                        </div>
+                    }
+                }
             </div>
         </div>
         <div class="col mb-2">

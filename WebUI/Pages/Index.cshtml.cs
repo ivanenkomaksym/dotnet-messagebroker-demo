@@ -28,7 +28,9 @@ namespace WebUI.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            ProductList = await _productService.GetProducts();
+            var products = await _productService.GetProducts();
+            ArgumentNullException.ThrowIfNull(products);
+            ProductList = products;
 
             var customerId = _userProvider.GetCustomerId(HttpContext);
             var cart = await _shoppingCartService.GetShoppingCart(customerId);
@@ -41,6 +43,7 @@ namespace WebUI.Pages
         public async Task<IActionResult> OnPostAddToCartAsync(Guid productId)
         {
             var product = await _productService.GetProduct(productId);
+            ArgumentNullException.ThrowIfNull(product);
 
             var customerId = _userProvider.GetCustomerId(HttpContext);
 

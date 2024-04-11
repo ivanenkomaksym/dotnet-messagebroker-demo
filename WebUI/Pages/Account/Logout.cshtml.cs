@@ -17,7 +17,7 @@ namespace WebUI.Pages.Account
 
         public async Task<IActionResult> OnGetAsync()
         {
-            _logger.LogInformation("User {Name} logged out at {Time}.", User.Identity.Name, DateTime.UtcNow);
+            _logger.LogInformation("User {Name} logged out at {Time}.", User?.Identity?.Name, DateTime.UtcNow);
 
             await _userProvider.SignOutAsync(HttpContext);
 

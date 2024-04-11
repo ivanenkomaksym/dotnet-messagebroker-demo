@@ -10,7 +10,7 @@ namespace WebUI.Pages.Admin
         private readonly ICustomerService _customerService;
 
         [BindProperty]
-        public IEnumerable<Customer> Users { get; private set; }
+        public required IEnumerable<Customer> Users { get; set; }
 
         public UsersModel(ICustomerService customerService)
         {
@@ -20,7 +20,9 @@ namespace WebUI.Pages.Admin
         public async Task OnGetAsync()
         {
             // Get existing users
-            Users = await _customerService.GetCustomers();
+            var users = await _customerService.GetCustomers();
+            ArgumentNullException.ThrowIfNull(users);
+            Users = users;
         }
     }
 }

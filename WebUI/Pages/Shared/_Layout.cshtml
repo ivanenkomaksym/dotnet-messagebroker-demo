@@ -6,7 +6,7 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 
 @{
-    var isMyAccountPage = HttpContextAccessor.HttpContext.Request.Path.StartsWithSegments("/MyAccount");
+    var isMyAccountPage = HttpContextAccessor.HttpContext?.Request.Path.StartsWithSegments("/MyAccount") == true;
     var layoutToUse = isMyAccountPage ? "_MyAccountLayout" : "_Layout";
 }
 
@@ -28,7 +28,7 @@
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
-        var customerIdStr = @Html.Raw(Json.Serialize(HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value));
+        var customerIdStr = @Html.Raw(Json.Serialize(HttpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value));
     </script>
     <script src="~/toastr.js"></script>
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
@@ -63,7 +63,7 @@
                             var customerId = _userProvider.GetCustomerId(Context);
                             var cart = await _shoppingCartService.GetShoppingCart(customerId);
 
-                            var nofItemsInCart = cart.Items.Count;
+                            var nofItemsInCart = cart?.Items.Count;
 
                             if (nofItemsInCart != null)
                             {

@@ -12,7 +12,7 @@ namespace WebUI.Services
             _client = client;
         }
 
-        public async Task<UserPromo> GetUserPromoForCustomerById(Guid customerId)
+        public async Task<UserPromo?> GetUserPromoForCustomerById(Guid customerId)
         {
             var response = await _client.GetAsync($"/gateway/userpromos/{customerId}");
             if (response.IsSuccessStatusCode)
