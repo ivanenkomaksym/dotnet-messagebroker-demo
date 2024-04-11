@@ -1,6 +1,7 @@
 using Common.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MongoDB.Bson;
 using OrderCommon.Data;
 using OrderCommon.Repositories;
 using OrderGrpc;
@@ -25,6 +26,8 @@ IHost host = hostBuilder
 
         services.AddHealthChecks()
                 .AddMongoDb(hostContext.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
+
+        BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
     })
     .Build();
 

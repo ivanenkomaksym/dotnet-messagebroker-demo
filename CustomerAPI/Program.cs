@@ -9,6 +9,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,6 +50,8 @@ builder.Services.AddSwaggerExamplesFromAssemblyOf<CustomerExample>();
 
 builder.Services.AddHealthChecks()
                 .AddMongoDb(builder.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
+
+BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
 
 var app = builder.Build();
 

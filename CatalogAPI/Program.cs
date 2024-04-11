@@ -22,6 +22,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks()
                 .AddMongoDb(builder.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
 
+BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

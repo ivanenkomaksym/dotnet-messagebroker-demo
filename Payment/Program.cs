@@ -1,6 +1,7 @@
 using Common.Extensions;
 using MassTransit;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MongoDB.Bson;
 using PaymentService;
 using PaymentService.Consumers;
 using PaymentService.Data;
@@ -27,6 +28,8 @@ IHost host = hostBuilder
 
         services.AddHealthChecks()
                 .AddMongoDb(hostContext.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
+
+        BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
     }).Build();
 
 host.Run();

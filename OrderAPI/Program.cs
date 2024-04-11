@@ -4,6 +4,7 @@ using Common.Extensions;
 using MassTransit;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson;
 using OrderAPI.Data;
 using OrderAPI.Messaging;
 using OrderCommon.Data;
@@ -50,6 +51,8 @@ builder.Services.AddSwaggerExamplesFromAssemblyOf<OrderExample>();
 
 builder.Services.AddHealthChecks()
                 .AddMongoDb(builder.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
+
+BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
 
 var app = builder.Build();
 
