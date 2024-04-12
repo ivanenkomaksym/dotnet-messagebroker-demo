@@ -41,6 +41,25 @@ namespace Architecture.Tests
             }
         }
 
+        [Fact]
+        public void GivenOrderCommon_ShouldBeExclusivelyDependentByOrderPackagesOnly()
+        {
+            // Arrange
+            var allAssemblies = GetAllAssemblies();
+            var orderAssemblies = GetOrderAssemblies();
+            var allAssembliesExceptOrder = allAssemblies.Except(orderAssemblies);
+
+            var orderCommonAssembly = typeof(OrderCommon.Data.IOrderContext).Assembly;
+
+            // Act
+            var allAssembliesExceptOrderShouldNotDependOnOrderCommonResult = Types.InAssemblies(allAssembliesExceptOrder)
+                .ShouldNot().HaveDependencyOnAny(orderCommonAssembly.GetName().Name)
+                .GetResult();
+
+            // Assert
+            allAssembliesExceptOrderShouldNotDependOnOrderCommonResult.IsSuccessful.Should().BeTrue();
+        }
+
         private IEnumerable<Assembly> GetAllAssemblies()
         {
             return new[]
@@ -62,6 +81,17 @@ namespace Architecture.Tests
                 typeof(WarehouseCommon.Data.IWarehouseContext).Assembly,
                 typeof(WebUI.Services.ICustomerService).Assembly,
                 typeof(WebUIAggregatorAPI.Controllers.ProductsController).Assembly
+            };
+        }
+
+        private IEnumerable<Assembly> GetOrderAssemblies()
+        {
+            return new[]
+            {
+                typeof(OrderAPI.Controllers.OrderController).Assembly,
+                typeof(OrderGrpc.Worker).Assembly,
+                typeof(OrderProcessor.OrderProcessorWorker).Assembly,
+                typeof(OrderCommon.Data.IOrderContext).Assembly,
             };
         }
     }
