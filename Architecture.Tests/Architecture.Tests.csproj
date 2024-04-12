@@ -10,11 +10,39 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="NetArchTest.Rules" Version="1.3.2" />
-    <PackageReference Include="xunit" Version="2.5.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <PackageReference Include="xunit" Version="2.7.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CatalogAPI\CatalogAPI.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\CustomerAPI\CustomerAPI.csproj" />
+    <ProjectReference Include="..\FeedbackAPI\FeedbackAPI.csproj" />
+    <ProjectReference Include="..\Notifications\Notifications.csproj" />
+    <ProjectReference Include="..\OcelotAPIGateway\OcelotAPIGateway.csproj" />
+    <ProjectReference Include="..\OrderAPI\OrderAPI.csproj" />
+    <ProjectReference Include="..\OrderCommon\OrderCommon.csproj" />
+    <ProjectReference Include="..\OrderGrpc\OrderGrpc.csproj" />
+    <ProjectReference Include="..\OrderProcessor\OrderProcessor.csproj" />
+    <ProjectReference Include="..\Payment\PaymentService.csproj" />
+    <ProjectReference Include="..\Shipment\Shipment.csproj" />
+    <ProjectReference Include="..\ShoppingCartAPI\ShoppingCartAPI.csproj" />
+    <ProjectReference Include="..\WarehouseAPI\WarehouseAPI.csproj" />
+    <ProjectReference Include="..\WarehouseCommon\WarehouseCommon.csproj" />
+    <ProjectReference Include="..\Warehouse\Warehouse.csproj" />
+    <ProjectReference Include="..\WebUIAggregatorAPI\WebUIAggregatorAPI.csproj" />
+    <ProjectReference Include="..\WebUI\WebUI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
