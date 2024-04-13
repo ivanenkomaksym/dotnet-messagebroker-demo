@@ -183,7 +183,7 @@
                 </div>
                 <hr class="mb-4">
                 <div class="custom-control custom-checkbox">
-                    @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+                    @if (HttpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated == true)
                     {
                         <input asp-for="@Model.SaveShippingAddressAndPayment" type="checkbox" class="custom-control-input" id="save-info">
                     }

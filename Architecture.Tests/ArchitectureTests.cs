@@ -60,6 +60,25 @@ namespace Architecture.Tests
             allAssembliesExceptOrderShouldNotDependOnOrderCommonResult.IsSuccessful.Should().BeTrue();
         }
 
+        [Fact]
+        public void GivenWarehouseCommon_ShouldBeExclusivelyDependentByWarehousePackagesOnly()
+        {
+            // Arrange
+            var allAssemblies = GetAllAssemblies();
+            var warehouseAssemblies = GetWarehouseAssemblies();
+            var allAssembliesExceptWarehouse = allAssemblies.Except(warehouseAssemblies);
+
+            var warehouseCommonAssembly = typeof(WarehouseCommon.Data.IWarehouseContext).Assembly;
+
+            // Act
+            var allAssembliesExceptWarehouseShouldNotDependOnWarehouseCommonResult = Types.InAssemblies(allAssembliesExceptWarehouse)
+                .ShouldNot().HaveDependencyOnAny(warehouseCommonAssembly.GetName().Name)
+                .GetResult();
+
+            // Assert
+            allAssembliesExceptWarehouseShouldNotDependOnWarehouseCommonResult.IsSuccessful.Should().BeTrue();
+        }
+
         private IEnumerable<Assembly> GetAllAssemblies()
         {
             return new[]
@@ -92,6 +111,16 @@ namespace Architecture.Tests
                 typeof(OrderGrpc.Worker).Assembly,
                 typeof(OrderProcessor.OrderProcessorWorker).Assembly,
                 typeof(OrderCommon.Data.IOrderContext).Assembly,
+            };
+        }
+
+        private IEnumerable<Assembly> GetWarehouseAssemblies()
+        {
+            return new[]
+            {
+                typeof(Warehouse.WarehouseWorker).Assembly,
+                typeof(WarehouseAPI.Controllers.StockItemController).Assembly,
+                typeof(WarehouseCommon.Data.IWarehouseContext).Assembly,
             };
         }
     }
