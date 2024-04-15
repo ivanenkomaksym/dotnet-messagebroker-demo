@@ -1,4 +1,5 @@
 use crate::{configuration, messaging, models::{converters::to_order, orderdb::OrderDb, paymentinfo::PaymentInfo}};
+use mockall::automock;
 use mongodb::{ bson::doc, options::{ ClientOptions, FindOptions, ServerApi, ServerApiVersion }, Client, Collection };
 use async_trait::async_trait;
 use log::info;
@@ -6,6 +7,7 @@ use futures_util::TryStreamExt;
 
 use super::orderserviceerror::OrderServiceError;
 
+#[automock]
 #[async_trait]
 pub trait OrderTrait: Send + Sync {
 
