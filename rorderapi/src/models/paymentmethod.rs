@@ -1,3 +1,4 @@
+use num_derive::FromPrimitive;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 #[derive(Clone, Debug, FromPrimitive)]
