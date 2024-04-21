@@ -10,6 +10,10 @@ kubectl apply -f mongo-secret.yaml
 kubectl apply -f mongo-deployment.yaml
 kubectl apply -f mongo-service.yaml
 
+# Jaeger
+kubectl apply -f jaeger.yaml
+kubectl apply -f jaeger-service.yaml
+
 # CatalogAPI Stub
 
 # CustomerAPI Stub

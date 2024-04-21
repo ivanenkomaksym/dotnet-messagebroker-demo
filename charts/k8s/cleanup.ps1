@@ -7,6 +7,10 @@ kubectl delete -f mongo-secret.yaml
 kubectl delete -f mongo-deployment.yaml
 kubectl delete -f mongo-service.yaml
 
+# Jaeger
+kubectl delete -f jaeger.yaml
+kubectl delete -f jaeger-service.yaml
+
 # CatalogAPI
 kubectl delete -f catalogapi.yaml
 kubectl delete -f catalogapi-service.yaml
