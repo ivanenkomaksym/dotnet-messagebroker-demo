@@ -20,6 +20,8 @@ spec:
           env:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"
+            - name: Urls
+              value: "http://0.0.0.0:80"
           envFrom:
             - secretRef:
                 name: mongo-secrets

@@ -25,6 +25,8 @@ spec:
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: k8s
+            - name: Urls
+              value: "http://0.0.0.0:80"
           volumeMounts:
             - name: ocelot-volume
               mountPath: /app/ocelot.k8s.json

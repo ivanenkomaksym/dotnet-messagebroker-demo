@@ -30,6 +30,8 @@ spec:
               value: "false"
             - name: FeatureManagement_ShoppingCart
               value: "false"
+            - name: Urls
+              value: "http://0.0.0.0:80"
           imagePullPolicy: Always
           ports:
             - containerPort: 80

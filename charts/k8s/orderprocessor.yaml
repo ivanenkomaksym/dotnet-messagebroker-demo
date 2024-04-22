@@ -22,6 +22,8 @@ spec:
               value: "http://ordergrpc"
             - name: RabbitMQ__AMQPConnectionString
               value: "amqp://guest:guest@rabbitmq:5672"
+            - name: Urls
+              value: "http://0.0.0.0:80"
           imagePullPolicy: Always
           ports:
             - containerPort: 80
