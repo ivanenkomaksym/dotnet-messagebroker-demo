@@ -13,6 +13,8 @@ This repository showcases a sample implementation of a message broker using .NET
 * Includes Dockerfiles and Docker Compose configuration for containerizing the sample microservices.
 * Provides Kubernetes deployment manifests and Helm charts for deploying the microservices to a Kubernetes cluster.
 * Demonstrates how to scale and manage the message broker infrastructure using Kubernetes and Helm.
+* Seamless integration of Rust implementation for Order functionality with the existing infrastructure without requiring any modifications to the database schema or the message broker configuration.
+* Configure OpenTelemetry to export traces directly to Jaeger.
 
 ![Alt text](docs/architecture.png?raw=true "Application architecture")
 
@@ -32,7 +34,7 @@ Application consists of several .NET microservices all communicating with Rabbit
 2. **CustomerAPI** basic authentication microservice that allows to register, log in and delete users. Data persisted in mongo **CustomerDb**.
 3. **Notifications** observes events on the message broker and sends user specific events to clients.
 4. **OcelotAPIGateway** basic Gateway microservice that stands in front of all microservices.
-5. **OrderAPI** provides basic API for managing orders. Data persisted in mongo **OrderDb**.
+5. **OrderAPI** provides basic API for managing orders. It interfaces with MongoDB for data storage and RabbitMQ for message queuing, and it exposes a RESTful API for managing orders. Data persisted in mongo **OrderDb**.
 6. **OrderGrpc** internal microservice for managing orders via GRPC instead of REST API, used by **OrderProcessor**.
 7. **OrderProcessor** main ordering business logic, uses message broker to produce and consume messages to and from other services.
 8. **PaymentService** basic payment microservice, consumes and produces message from the message broker. Data persisted in mongo **PaymentDb**.
@@ -42,6 +44,7 @@ Application consists of several .NET microservices all communicating with Rabbit
 12. **WarehouseAPI** provides REST API to get products stock levels. Used by **WebUI**. Data persisted in mongo **WarehouseDb**.
 13. **WebUI** main UI application built with .NET Razor pages. Uses **WebUIAggregator** and **OcelotAPIGateway**. Supports SignalR notifications to browser clients.
 14. **WebUIAggregator** aggregates requests to multiple microservices. Used by **WebUI**.
+15. **roderapi** Rust implementation of **OrderAPI** seamlessly integrated with the existing infrastructure without requiring any modifications to the database schema or the message broker configuration. This demonstrates the interoperability and flexibility of the system architecture, allowing developers to leverage different programming languages while maintaining compatibility with the existing ecosystem.
 
 ## Sagas
 
@@ -90,7 +93,9 @@ You can run this sample in 3 different ways:
 ```
 
 10. Observe logs in pods in Kubernetes dashboard from step 4.
-11. **Run with Powershell** script **04_stop_k8s.ps1** to delete the deployment.
+11. Observe traces in Jaeger UI
+![Alt text](docs/traces_jaeger.png?raw=true "Traces in Jaeger")
+12. **Run with Powershell** script **04_stop_k8s.ps1** to delete the deployment.
 
 ![Alt text](docs/run_k8s.png?raw=true "Run in Kubernetes")
 
