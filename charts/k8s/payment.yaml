@@ -21,7 +21,7 @@ spec:
             - name: DatabaseSettings__ConnectionString
               value: "mongodb://shopdb:27017"
             - name: Otlp__Endpoint
-              value: "http://simplest-collector:4317"
+              value: "http://jaeger:4317"
           envFrom:
             - secretRef:
                 name: mongo-secrets

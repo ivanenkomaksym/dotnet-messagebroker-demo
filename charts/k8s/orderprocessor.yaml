@@ -24,6 +24,8 @@ spec:
               value: "amqp://guest:guest@rabbitmq:5672"
             - name: Urls
               value: "http://0.0.0.0:80"
+            - name: Otlp__Endpoint
+              value: "http://jaeger:4317"
           imagePullPolicy: Always
           ports:
             - containerPort: 80

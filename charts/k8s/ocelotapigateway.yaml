@@ -27,6 +27,8 @@ spec:
               value: k8s
             - name: Urls
               value: "http://0.0.0.0:80"
+            - name: Otlp__Endpoint
+              value: "http://jaeger:4317"
           volumeMounts:
             - name: ocelot-volume
               mountPath: /app/ocelot.k8s.json

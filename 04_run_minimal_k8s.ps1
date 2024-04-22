@@ -62,4 +62,5 @@ kubectl apply -f webui-service.yaml
 minikube dashboard
 Start-Process -FilePath "cmd" -ArgumentList "/c minikube service shopdb" -WorkingDirectory ".\"
 Start-Process -FilePath "cmd" -ArgumentList "/c minikube service webui" -WorkingDirectory ".\"
+Start-Process -FilePath "cmd" -ArgumentList "/c minikube service jaeger" -WorkingDirectory ".\"
 cd ..\..\
