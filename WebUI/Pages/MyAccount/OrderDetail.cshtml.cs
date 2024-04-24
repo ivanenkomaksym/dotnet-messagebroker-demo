@@ -2,6 +2,7 @@ using Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.FeatureManagement;
 using WebUI.Services;
 
 namespace WebUI.Pages.MyAccount
@@ -10,10 +11,12 @@ namespace WebUI.Pages.MyAccount
     public class OrderDetailModel : PageModel
     {
         private readonly IOrderService _orderService;
+        private readonly IFeatureManager _featureManager;
 
-        public OrderDetailModel(IOrderService orderService)
+        public OrderDetailModel(IOrderService orderService, IFeatureManager featureManager)
         {
             _orderService = orderService;
+            _featureManager = featureManager;
         }
 
         public required Order Order { get; set; }
@@ -51,7 +54,11 @@ namespace WebUI.Pages.MyAccount
             {
                 return NotFound();
             }
-            return RedirectToPage($"/Orders/{orderId}/Feedback");
+
+            if (await _featureManager.IsEnabledAsync(FeatureFlags.Feedback))
+                return RedirectToPage($"/Orders/{orderId}/Feedback");
+
+            return RedirectToPage("/Index");
         }
 
         public async Task<IActionResult> OnPostReturnOrderAsync(Guid orderId)

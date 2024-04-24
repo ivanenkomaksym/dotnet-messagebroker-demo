@@ -39,6 +39,7 @@ namespace OrderAPI.Messaging
             var orderUpdatedEvent = new OrderUpdated
             {
                 OrderId = order.Id,
+                PaymentStatus = Common.Models.Payment.PaymentStatus.Unpaid,
                 CustomerInfo = order.CustomerInfo,
                 OrderStatus = order.OrderStatus,
                 ShippingAddress = order.ShippingAddress,

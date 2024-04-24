@@ -2,6 +2,7 @@ using Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.FeatureManagement;
 using WebUI.Services;
 using WebUI.Users;
 
@@ -12,11 +13,13 @@ namespace WebUI.Pages.MyAccount
     {
         private readonly IOrderService _orderService;
         private readonly IUserProvider _userProvider;
+        private readonly IFeatureManager _featureManager;
 
-        public OrdersModel(IOrderService orderService, IUserProvider userProvider)
+        public OrdersModel(IOrderService orderService, IUserProvider userProvider, IFeatureManager featureManager)
         {
             _orderService = orderService;
             _userProvider = userProvider;
+            _featureManager = featureManager;
         }
 
         public IEnumerable<Order> Orders { get; set; } = new List<Order>();
@@ -65,7 +68,11 @@ namespace WebUI.Pages.MyAccount
             {
                 return NotFound();
             }
-            return RedirectToPage("Feedback", new { orderId = orderId });
+
+            if (await _featureManager.IsEnabledAsync(FeatureFlags.Feedback))
+                return RedirectToPage("Feedback", new { orderId = orderId });
+
+            return RedirectToPage("/Index");
         }
     }
 }
