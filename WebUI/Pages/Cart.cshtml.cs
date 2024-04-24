@@ -45,20 +45,11 @@ namespace WebUI.Pages
             {
                 // Increase the quantity
                 item.Quantity = quantity;
-
-                // Update the total price of the shopping cart
-                Cart.TotalPrice = CalculateTotalPrice();
             }
 
             var basketUpdated = await _shoppingCartService.UpdateShoppingCart(Cart);
 
             return Page();
-        }
-
-        private decimal CalculateTotalPrice()
-        {        
-            // Calculate the total price based on the items in the shopping cart
-            return Cart.Items.Sum(item => item.ProductPrice * item.Quantity);
         }
 
         public async Task<IActionResult> OnPostRemoveToCartAsync(Guid productId)
