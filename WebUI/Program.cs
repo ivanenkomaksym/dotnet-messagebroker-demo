@@ -62,15 +62,15 @@ builder.Services.AddMassTransit(x =>
 
 var gatewayAddress = builder.Configuration.GetGatewayAddress();
 
-builder.Services.AddIfFeatureEnabled<ICustomerService, CustomerService, StubCustomerService>(FeatureFlags.Customer, gatewayAddress);
+builder.Services.AddIfFeatureEnabledHttpClientBased<ICustomerService, CustomerService, StubCustomerService>(FeatureFlags.Customer, gatewayAddress);
 
-builder.Services.AddIfFeatureEnabled<IProductService, ProductService, StubProductService>(FeatureFlags.Product, gatewayAddress);
+builder.Services.AddIfFeatureEnabledHttpClientBased<IProductService, ProductService, StubProductService>(FeatureFlags.Product, gatewayAddress);
 
-builder.Services.AddIfFeatureEnabled<IShoppingCartService, ShoppingCartService, StubShoppingCartService>(FeatureFlags.ShoppingCart, gatewayAddress);
+builder.Services.AddIfFeatureEnabledHttpClientBased<IShoppingCartService, ShoppingCartService, StubShoppingCartService>(FeatureFlags.ShoppingCart, gatewayAddress);
 
-builder.Services.AddIfFeatureEnabled<IDiscountService, DiscountService, EmptyDiscountService>(FeatureFlags.Discount, gatewayAddress);
+builder.Services.AddIfFeatureEnabledHttpClientBased<IDiscountService, DiscountService, EmptyDiscountService>(FeatureFlags.Discount, gatewayAddress);
 
-builder.Services.AddIfFeatureEnabled<IFeedbackService, FeedbackService, EmptyFeedbackService>(FeatureFlags.Feedback, gatewayAddress);
+builder.Services.AddIfFeatureEnabledServiceBased<IFeedbackService, FeedbackService, EmptyFeedbackService, IGraphQLClient>(FeatureFlags.Feedback);
 
 builder.Services.AddHttpClient<IOrderService, OrderService>(options =>
 {
