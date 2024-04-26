@@ -45,7 +45,7 @@ namespace WebUI.Services
 
         public Task<bool> DeleteShoppingCart(Guid customerId)
         {
-            var cart = ShoppingCarts.Find(x => x.Id == customerId);
+            var cart = ShoppingCarts.Find(x => x.CustomerId == customerId);
             var found = cart != null;
             if (cart != null)
                 ShoppingCarts.Remove(cart);
