@@ -99,6 +99,17 @@ You can run this sample in 3 different ways:
 
 ![Alt text](docs/run_k8s.png?raw=true "Run in Kubernetes")
 
+### Run with Aspire
+
+1. Make sure you have docker running locally
+2. Execute in `\eshop-aspire.AppHost`
+```
+dotnet run
+```
+3. Aspire dashboard page should be opened
+
+![Alt text](docs/aspire.png?raw=true "Aspire dashboard")
+
 ### Using Helm chart
 
 1. **Run with Powershell** script **03_start_minikube.ps1** to start **minikube**. Wait for the script to complete.
