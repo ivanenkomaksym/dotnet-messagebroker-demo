@@ -1,5 +1,6 @@
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
+using Common.Configuration;
 using Common.Extensions;
 using GraphQL.Client.Abstractions;
 using GraphQL.Client.Http;
@@ -11,6 +12,7 @@ using NToastNotify;
 using WebUI;
 using WebUI.Consumers;
 using WebUI.Notifications;
+using WebUI.Routing;
 using WebUI.Services;
 using WebUI.Users;
 
@@ -20,6 +22,9 @@ builder.AddServiceDefaults();
 builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
+builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(ApplicationOptions.Name));
+builder.Services.AddSingleton<IEnvironmentRouter, EnvironmentRouter>();
+
 builder.Services.AddRazorPages().AddNToastNotifyToastr(new ToastrOptions
 {
     ProgressBar = true,

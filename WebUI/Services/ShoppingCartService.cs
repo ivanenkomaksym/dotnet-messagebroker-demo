@@ -1,21 +1,24 @@
 ﻿using Common.Extensions;
 using Common.Models;
 using WebUI.Models;
+using WebUI.Routing;
 
 namespace WebUI.Services
 {
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly HttpClient _client;
+        private readonly string _environmentRoutePrefix;
 
-        public ShoppingCartService(HttpClient client)
+        public ShoppingCartService(HttpClient client, IEnvironmentRouter environmentRouter)
         {
             _client = client;
+            _environmentRoutePrefix = environmentRouter.GetShoppingCartRoute();
         }
 
         public async Task<bool> Checkout(Guid customerId)
         {
-            var response = await _client.PostAsJson($"/gateway/ShoppingCart/{customerId}", "");
+            var response = await _client.PostAsJson($"{_environmentRoutePrefix}/{customerId}", "");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());
@@ -25,7 +28,7 @@ namespace WebUI.Services
 
         public async Task CreateShoppingCart(ShoppingCartModel shoppingCart)
         {
-            var response = await _client.PostAsJson($"/gateway/ShoppingCart", shoppingCart);
+            var response = await _client.PostAsJson($"{_environmentRoutePrefix}", shoppingCart);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());
@@ -34,7 +37,7 @@ namespace WebUI.Services
 
         public async Task<bool> DeleteShoppingCart(Guid customerId)
         {
-            var response = await _client.DeleteAsync($"/gateway/ShoppingCart/{customerId}");
+            var response = await _client.DeleteAsync($"{_environmentRoutePrefix}/{customerId}");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());
@@ -45,7 +48,7 @@ namespace WebUI.Services
 
         public async Task<ShoppingCartModel?> GetShoppingCart(Guid customerId)
         {
-            var response = await _client.GetAsync($"/gateway/ShoppingCart/{customerId}");
+            var response = await _client.GetAsync($"{_environmentRoutePrefix}/{customerId}");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());
@@ -56,7 +59,7 @@ namespace WebUI.Services
 
         public async Task<ShoppingCartModel?> UpdateShoppingCart(ShoppingCartModel shoppingCart)
         {
-            var response = await _client.PutAsJsonAsync($"/gateway/ShoppingCart", shoppingCart);
+            var response = await _client.PutAsJsonAsync($"{_environmentRoutePrefix}", shoppingCart);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());

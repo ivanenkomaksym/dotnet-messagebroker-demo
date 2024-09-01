@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
+using WebUI.Routing;
 
 namespace WebUI
 {
@@ -28,11 +29,12 @@ namespace WebUI
                 if (featureManager.IsEnabledAsync(feature).GetAwaiter().GetResult())
                 {
                     var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+                    var environmentRouter = provider.GetRequiredService<IEnvironmentRouter>();
                     var serviceInterfaceName = typeof(TServiceInterface).FullName;
                     ArgumentNullException.ThrowIfNull(serviceInterfaceName);
                     var httpClient = httpClientFactory.CreateClient(serviceInterfaceName);
                     httpClient.BaseAddress = new Uri(gatewayAddress);
-                    var instance = Activator.CreateInstance(typeof(TServiceImpl), httpClient);
+                    var instance = Activator.CreateInstance(typeof(TServiceImpl), httpClient, environmentRouter);
                     ArgumentNullException.ThrowIfNull(instance);
                     return (TServiceImpl)instance;
                 }
