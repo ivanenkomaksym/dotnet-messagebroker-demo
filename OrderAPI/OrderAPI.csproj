@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\eshop-aspire.ServiceDefaults\eshop-aspire.ServiceDefaults.csproj" />
     <ProjectReference Include="..\OrderCommon\OrderCommon.csproj" />
   </ItemGroup>
 

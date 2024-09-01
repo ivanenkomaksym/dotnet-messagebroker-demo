@@ -16,11 +16,16 @@ var shoppingCart = builder.AddProject<Projects.ShoppingCartAPI>("shoppingcartapi
     // Use Aspire's mongodb connection string in ShoppingCartAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
 
+var order = builder.AddProject<Projects.OrderAPI>("orderapi")
+    // Use Aspire's mongodb connection string in OrderAPI's appsettings
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
+
 builder.AddProject<Projects.WebUI>("webui")
     .WithExternalHttpEndpoints()
     .WithReference(customers)
     .WithReference(catalog)
     .WithReference(shoppingCart)
+    .WithReference(order)
     // Configure WebUI to use real CustomerAPI
     .WithEnvironment($"FeatureManagement:Customer", "true")
     // Configure WebUI to use real CatalogAPI

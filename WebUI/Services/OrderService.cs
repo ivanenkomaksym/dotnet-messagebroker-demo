@@ -1,21 +1,24 @@
 ﻿using Common.Extensions;
 using Common.Models;
 using Common.Models.Payment;
+using WebUI.Routing;
 
 namespace WebUI.Services
 {
     public class OrderService : IOrderService
     {
         private readonly HttpClient _client;
+        private readonly string _environmentRoutePrefix;
 
-        public OrderService(HttpClient client)
+        public OrderService(HttpClient client, IEnvironmentRouter environmentRouter)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            _environmentRoutePrefix = environmentRouter.GetOrderRoute();
         }
 
         public async Task<IEnumerable<Order>?> GetAllOrders()
         {
-            var response = await _client.GetAsync($"/gateway/Order");
+            var response = await _client.GetAsync($"{_environmentRoutePrefix}");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());
@@ -25,7 +28,7 @@ namespace WebUI.Services
 
         public async Task<IEnumerable<Order>?> GetOrders(Guid customerId)
         {
-            var response = await _client.GetAsync($"/gateway/Order/GetOrdersByCustomerId/{customerId}");
+            var response = await _client.GetAsync($"{_environmentRoutePrefix}/GetOrdersByCustomerId/{customerId}");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());
@@ -35,7 +38,7 @@ namespace WebUI.Services
 
         public async Task<Order?> GetOrder(Guid orderId)
         {
-            var response = await _client.GetAsync($"/gateway/Order/{orderId}");
+            var response = await _client.GetAsync($"{_environmentRoutePrefix}/{orderId}");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());
@@ -45,7 +48,7 @@ namespace WebUI.Services
 
         public async Task CreateOrder(Order order)
         {
-            var response = await _client.PostAsJson($"/gateway/Order", order);
+            var response = await _client.PostAsJson($"{_environmentRoutePrefix}", order);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());
@@ -55,7 +58,7 @@ namespace WebUI.Services
 
         public async Task<bool> UpdatePayment(Guid orderId, PaymentInfo payment)
         {
-            var response = await _client.PutAsJson($"/gateway/Order/{orderId}/Payment", payment);
+            var response = await _client.PutAsJson($"{_environmentRoutePrefix}/{orderId}/Payment", payment);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());
@@ -66,7 +69,7 @@ namespace WebUI.Services
 
         public async Task<bool> Cancel(Guid orderId)
         {
-            var response = await _client.PostAsJson($"/gateway/Order/{orderId}/Cancel", "");
+            var response = await _client.PostAsJson($"{_environmentRoutePrefix}/{orderId}/Cancel", "");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());
@@ -77,7 +80,7 @@ namespace WebUI.Services
 
         public async Task<bool> Collected(Guid orderId)
         {
-            var response = await _client.PostAsJson($"/gateway/Order/{orderId}/Collected", "");
+            var response = await _client.PostAsJson($"{_environmentRoutePrefix}/{orderId}/Collected", "");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());
@@ -88,7 +91,7 @@ namespace WebUI.Services
 
         public async Task<bool> Return(Guid orderId)
         {
-            var response = await _client.PostAsJson($"/gateway/Order/{orderId}/Return", "");
+            var response = await _client.PostAsJson($"{_environmentRoutePrefix}/{orderId}/Return", "");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.StatusCode.ToString());

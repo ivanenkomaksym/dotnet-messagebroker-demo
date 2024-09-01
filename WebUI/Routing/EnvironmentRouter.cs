@@ -21,12 +21,12 @@ namespace WebUI.Routing
             return "/gateway/Customer";
         }
 
-        public string GetDiscountRoute()
+        public string GetOrderRoute()
         {
             if (_applicationOptions.StartupEnvironment == StartupEnvironment.Aspire)
-                return "http://discountapi/api";
+                return "http://orderapi/api/Order";
 
-            return "/gateway/userpromos";
+            return "/gateway/Order";
         }
 
         public string GetProductRoute()

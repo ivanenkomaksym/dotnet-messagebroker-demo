@@ -8,6 +8,6 @@
 
         public string GetShoppingCartRoute();
 
-        public string GetDiscountRoute();
+        public string GetOrderRoute();
     }
 }
