@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CatalogAPI\CatalogAPI.csproj" />
     <ProjectReference Include="..\CustomerAPI\CustomerAPI.csproj" />
+    <ProjectReference Include="..\ShoppingCartAPI\ShoppingCartAPI.csproj" />
     <ProjectReference Include="..\WebUI\WebUI.csproj" />
   </ItemGroup>
 

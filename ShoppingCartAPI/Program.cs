@@ -7,6 +7,8 @@ using ShoppingCartAPI.Data;
 using ShoppingCartAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
@@ -24,6 +26,8 @@ builder.Services.AddHealthChecks()
 BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
