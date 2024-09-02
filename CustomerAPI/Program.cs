@@ -1,4 +1,5 @@
 using System.Reflection;
+using Common.Configuration;
 using Common.Examples;
 using Common.Extensions;
 using CustomerAPI.Data;
@@ -18,6 +19,8 @@ builder.AddServiceDefaults();
 builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
+builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(ApplicationOptions.Name));
+
 builder.Services.AddScoped<ICustomerContext, CustomerContext>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
@@ -25,7 +28,7 @@ builder.Services.AddScoped<ICustomerPublisher, CustomerPublisher>();
 
 builder.Services.AddMassTransit(x =>
 {
-    x.UsingRabbitMq();
+    x.UsingRabbitMq(AspireExtensions.ConfigureRabbitMq);
 });
 
 builder.Services.AddControllers();

@@ -55,17 +55,14 @@ builder.Services.AddToastify(config => { config.DurationInSeconds = 1000; config
 
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddMassTransit(x =>
+builder.Services.AddMassTransit((Action<IBusRegistrationConfigurator>)(x =>
 {
     x.AddConsumer<UserReserveStockResultConsumer>();
     x.AddConsumer<UserPaymentResultConsumer>();
     x.AddConsumer<UserShipmentResultConsumer>();
 
-    x.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.ConfigureEndpoints(context);
-    });
-});
+    x.UsingRabbitMq(AspireExtensions.ConfigureRabbitMq);
+}));
 
 var gatewayAddress = builder.Configuration.GetGatewayAddress();
 

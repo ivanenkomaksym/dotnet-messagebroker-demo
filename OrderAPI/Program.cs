@@ -1,4 +1,4 @@
-using System.Reflection;
+using Common.Configuration;
 using Common.Examples;
 using Common.Extensions;
 using MassTransit;
@@ -10,6 +10,7 @@ using OrderAPI.Messaging;
 using OrderCommon.Data;
 using OrderCommon.Repositories;
 using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.AddServiceDefaults();
 builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
+builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(ApplicationOptions.Name));
+
 builder.Services.AddScoped<IOrderContextSeed, OrderContextSeed>();
 
 builder.Services.AddScoped<IOrderContext, OrderContext>();
@@ -26,7 +29,7 @@ builder.Services.AddScoped<IOrderPublisher, OrderPublisher>();
 
 builder.Services.AddMassTransit(x =>
 {
-    x.UsingRabbitMq();
+    x.UsingRabbitMq(AspireExtensions.ConfigureRabbitMq);
 });
 
 builder.Services.AddControllers();

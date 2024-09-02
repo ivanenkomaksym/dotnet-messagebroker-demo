@@ -3,10 +3,13 @@ var builder = DistributedApplication.CreateBuilder(args);
 var mongo = builder.AddMongoDB("mongo").PublishAsConnectionString();
 var mongodb = mongo.AddDatabase("mongodb");
 
+var messaging = builder.AddRabbitMQ("messaging");
+
 var customers = builder.AddProject<Projects.CustomerAPI>("customerapi")
     .WithReference(mongodb)
     // Use Aspire's mongodb connection string in CustomerAPI's appsettings
-    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
+    .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 var catalog = builder.AddProject<Projects.CatalogAPI>("catalogapi")
     // Use Aspire's mongodb connection string in CatalogAPI's appsettings
@@ -27,11 +30,14 @@ var webuiaggregator = builder.AddProject<Projects.WebUIAggregatorAPI>("webuiaggr
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 var order = builder.AddProject<Projects.OrderAPI>("orderapi")
+    .WithReference(messaging)
     // Use Aspire's mongodb connection string in OrderAPI's appsettings
-    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
+    .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 builder.AddProject<Projects.WebUI>("webui")
     .WithExternalHttpEndpoints()
+    .WithReference(messaging)
     .WithReference(customers)
     .WithReference(catalog)
     .WithReference(shoppingCart)
