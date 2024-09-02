@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\eshop-aspire.ServiceDefaults\eshop-aspire.ServiceDefaults.csproj" />
     <ProjectReference Include="..\WarehouseCommon\WarehouseCommon.csproj" />
   </ItemGroup>
 

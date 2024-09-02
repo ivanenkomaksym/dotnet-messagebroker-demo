@@ -2,21 +2,24 @@
 using System.Text.Json;
 using System.Text;
 using Common.Models;
+using Common.Routing;
 
 namespace WebUIAggregatorAPI.Services
 {
     public class CatalogApiService : ICatalogApiService
     {
         private readonly HttpClient _httpClient;
+        private readonly string _environmentRoutePrefix;
 
-        public CatalogApiService(HttpClient httpClient)
+        public CatalogApiService(HttpClient httpClient, IEnvironmentRouter environmentRouter)
         {
             _httpClient = httpClient;
+            _environmentRoutePrefix = environmentRouter.GetCatalogRoute();
         }
 
         public async Task<IEnumerable<Product>?> GetProducts()
         {
-            var response = await _httpClient.GetAsync("/gateway/Catalog");
+            var response = await _httpClient.GetAsync($"{_environmentRoutePrefix}");
             response.EnsureSuccessStatusCode();
 
             var products = await response.Content.ReadFromJsonAsync<IEnumerable<Product>>();
@@ -25,7 +28,7 @@ namespace WebUIAggregatorAPI.Services
 
         public async Task<Product?> GetProduct(Guid productId)
         {
-            var response = await _httpClient.GetAsync($"/gateway/Catalog/{productId}");
+            var response = await _httpClient.GetAsync($"{_environmentRoutePrefix}/{productId}");
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
                 return null;
@@ -38,7 +41,7 @@ namespace WebUIAggregatorAPI.Services
 
         public async Task<IEnumerable<Product>?> GetProductsByCategory(string category)
         {
-            var response = await _httpClient.GetAsync($"/gateway/Catalog/GetProductByCategory/{category}");
+            var response = await _httpClient.GetAsync($"{_environmentRoutePrefix}/GetProductByCategory/{category}");
             response.EnsureSuccessStatusCode();
 
             var products = await response.Content.ReadFromJsonAsync<IEnumerable<Product>>();
@@ -48,7 +51,7 @@ namespace WebUIAggregatorAPI.Services
         public async Task<Product?> CreateProduct(Product product)
         {
             var content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("/gateway/Catalog", content);
+            var response = await _httpClient.PostAsync($"{_environmentRoutePrefix}", content);
             response.EnsureSuccessStatusCode();
 
             var createdProduct = await response.Content.ReadFromJsonAsync<Product>();
@@ -58,7 +61,7 @@ namespace WebUIAggregatorAPI.Services
         public async Task<Product?> UpdateProduct(Product product)
         {
             var content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync("/gateway/Catalog", content);
+            var response = await _httpClient.PutAsync($"{_environmentRoutePrefix}", content);
             response.EnsureSuccessStatusCode();
 
             var updatedProduct = await response.Content.ReadFromJsonAsync<Product>();
@@ -67,7 +70,7 @@ namespace WebUIAggregatorAPI.Services
 
         public async Task DeleteProduct(Guid productId)
         {
-            var response = await _httpClient.DeleteAsync($"/gateway/Catalog/{productId}");
+            var response = await _httpClient.DeleteAsync($"{_environmentRoutePrefix}/{productId}");
             response.EnsureSuccessStatusCode();
         }
     }

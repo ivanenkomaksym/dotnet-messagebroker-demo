@@ -16,6 +16,16 @@ var shoppingCart = builder.AddProject<Projects.ShoppingCartAPI>("shoppingcartapi
     // Use Aspire's mongodb connection string in ShoppingCartAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
 
+var warehouse = builder.AddProject<Projects.WarehouseAPI>("warehouseapi")
+    // Use Aspire's mongodb connection string in WarehouseAPI's appsettings
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
+
+// Configure WebUIAggregator to startup in Aspire configuration, since it uses two services: CatalogAPI and WarehouseAPI to aggregate response
+var webuiaggregator = builder.AddProject<Projects.WebUIAggregatorAPI>("webuiaggregatorapi")
+    .WithReference(catalog)
+    .WithReference(warehouse)
+    .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
+
 var order = builder.AddProject<Projects.OrderAPI>("orderapi")
     // Use Aspire's mongodb connection string in OrderAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
@@ -25,6 +35,7 @@ builder.AddProject<Projects.WebUI>("webui")
     .WithReference(customers)
     .WithReference(catalog)
     .WithReference(shoppingCart)
+    .WithReference(webuiaggregator)
     .WithReference(order)
     // Configure WebUI to use real CustomerAPI
     .WithEnvironment($"FeatureManagement:Customer", "true")
