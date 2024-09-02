@@ -1,7 +1,7 @@
 ﻿using Common.Extensions;
 using Common.Models;
 using Common.Models.Payment;
-using WebUI.Routing;
+using Common.Routing;
 
 namespace WebUI.Services
 {

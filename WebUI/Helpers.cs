@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Common.Routing;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
-using WebUI.Routing;
 
 namespace WebUI
 {

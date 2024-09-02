@@ -1,6 +1,6 @@
 ﻿using Common.Extensions;
 using Common.Models;
-using WebUI.Routing;
+using Common.Routing;
 
 namespace WebUI.Services
 {

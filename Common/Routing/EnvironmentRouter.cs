@@ -1,7 +1,7 @@
 ﻿using Common.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace WebUI.Routing
+namespace Common.Routing
 {
     public class EnvironmentRouter : IEnvironmentRouter
     {
@@ -29,10 +29,26 @@ namespace WebUI.Routing
             return "/gateway/Order";
         }
 
-        public string GetProductRoute()
+        public string GetCatalogRoute()
         {
             if (_applicationOptions.StartupEnvironment == StartupEnvironment.Aspire)
                 return "http://catalogapi/api/Catalog";
+
+            return "/gateway/Products";
+        }
+
+        public string GetWarehouseRoute()
+        {
+            if (_applicationOptions.StartupEnvironment == StartupEnvironment.Aspire)
+                return "http://warehouseapi/api/StockItem";
+
+            return "/gateway/StockItem";
+        }
+
+        public string GetProductRoute()
+        {
+            if (_applicationOptions.StartupEnvironment == StartupEnvironment.Aspire)
+                return "http://webuiaggregatorapi/api/Products";
 
             return "/gateway/Products";
         }

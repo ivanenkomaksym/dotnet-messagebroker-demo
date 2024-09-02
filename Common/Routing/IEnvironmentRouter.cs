@@ -1,8 +1,12 @@
-﻿namespace WebUI.Routing
+﻿namespace Common.Routing
 {
     public interface IEnvironmentRouter
     {
         public string GetCustomerRoute();
+
+        public string GetCatalogRoute();
+
+        public string GetWarehouseRoute();
 
         public string GetProductRoute();
 

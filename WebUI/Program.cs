@@ -2,6 +2,7 @@ using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using Common.Configuration;
 using Common.Extensions;
+using Common.Routing;
 using GraphQL.Client.Abstractions;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
@@ -12,7 +13,6 @@ using NToastNotify;
 using WebUI;
 using WebUI.Consumers;
 using WebUI.Notifications;
-using WebUI.Routing;
 using WebUI.Services;
 using WebUI.Users;
 
