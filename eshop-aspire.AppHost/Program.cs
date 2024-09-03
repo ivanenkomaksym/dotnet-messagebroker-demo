@@ -19,14 +19,14 @@ var shoppingCart = builder.AddProject<Projects.ShoppingCartAPI>("shoppingcartapi
     // Use Aspire's mongodb connection string in ShoppingCartAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
 
-var warehouse = builder.AddProject<Projects.WarehouseAPI>("warehouseapi")
+var warehouseapi = builder.AddProject<Projects.WarehouseAPI>("warehouseapi")
     // Use Aspire's mongodb connection string in WarehouseAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
 
 // Configure WebUIAggregator to startup in Aspire configuration, since it uses two services: CatalogAPI and WarehouseAPI to aggregate response
 var webuiaggregator = builder.AddProject<Projects.WebUIAggregatorAPI>("webuiaggregatorapi")
     .WithReference(catalog)
-    .WithReference(warehouse)
+    .WithReference(warehouseapi)
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 var order = builder.AddProject<Projects.OrderAPI>("orderapi")
@@ -34,6 +34,18 @@ var order = builder.AddProject<Projects.OrderAPI>("orderapi")
     // Use Aspire's mongodb connection string in OrderAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
+
+var payment = builder.AddProject<Projects.PaymentService>("paymentservice")
+    // Use Aspire's mongodb connection string in PaymentService's appsettings
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
+
+var shipment = builder.AddProject<Projects.Shipment>("shipment")
+    // Use Aspire's mongodb connection string in Shipment's appsettings
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
+
+var warehouse = builder.AddProject<Projects.Warehouse>("warehouse")
+    // Use Aspire's mongodb connection string in Warehouse's appsettings
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
 
 builder.AddProject<Projects.WebUI>("webui")
     .WithExternalHttpEndpoints()
@@ -43,6 +55,9 @@ builder.AddProject<Projects.WebUI>("webui")
     .WithReference(shoppingCart)
     .WithReference(webuiaggregator)
     .WithReference(order)
+    .WithReference(payment)
+    .WithReference(shipment)
+    .WithReference(warehouse)
     // Configure WebUI to use real CustomerAPI
     .WithEnvironment($"FeatureManagement:Customer", "true")
     // Configure WebUI to use real CatalogAPI

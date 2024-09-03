@@ -8,6 +8,7 @@ using PaymentService.Data;
 using PaymentService.Repositories;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
+hostBuilder.AddServiceDefaults();
 hostBuilder.ConfigureOpenTelemetry();
 
 IHost host = hostBuilder

@@ -8,6 +8,7 @@ using Shipment.Data;
 using Shipment.Repositories;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
+hostBuilder.AddServiceDefaults();
 hostBuilder.ConfigureOpenTelemetry();
 
 IHost host = hostBuilder
