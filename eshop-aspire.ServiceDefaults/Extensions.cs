@@ -16,7 +16,7 @@ public static class Extensions
 {
     public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
     {
-        builder.ConfigureOpenTelemetry();
+        builder.ConfigureAspireOpenTelemetry();
 
         builder.AddDefaultHealthChecks();
 
@@ -34,7 +34,30 @@ public static class Extensions
         return builder;
     }
 
-    public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
+    public static IHostBuilder AddServiceDefaults(this IHostBuilder builder)
+    {
+        builder.ConfigureServices((hostContext, services) =>
+        {
+            builder.ConfigureAspireOpenTelemetry();
+
+            builder.AddDefaultHealthChecks();
+
+            services.AddServiceDiscovery();
+
+            services.ConfigureHttpClientDefaults(http =>
+            {
+                // Turn on resilience by default
+                http.AddStandardResilienceHandler();
+
+                // Turn on service discovery by default
+                http.AddServiceDiscovery();
+            });
+        });
+
+        return builder;
+    }
+
+    public static IHostApplicationBuilder ConfigureAspireOpenTelemetry(this IHostApplicationBuilder builder)
     {
         builder.Logging.AddOpenTelemetry(logging =>
         {
@@ -57,19 +80,53 @@ public static class Extensions
                     .AddHttpClientInstrumentation();
             });
 
-        builder.AddOpenTelemetryExporters();
+        //builder.AddOpenTelemetryExporters();
+
+        return builder;
+    }
+
+    public static IHostBuilder ConfigureAspireOpenTelemetry(this IHostBuilder builder)
+    {
+        builder.ConfigureLogging(logging =>
+        {
+            logging.AddOpenTelemetry(logging =>
+            {
+                logging.IncludeFormattedMessage = true;
+                logging.IncludeScopes = true;
+            });
+        });
+
+        builder.ConfigureServices((hostContext, services) =>
+        {            
+            services.AddOpenTelemetry()
+                .WithMetrics(metrics =>
+                {
+                    metrics.AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddRuntimeInstrumentation();
+                })
+                .WithTracing(tracing =>
+                {
+                    tracing.AddAspNetCoreInstrumentation()
+                        // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
+                        //.AddGrpcClientInstrumentation()
+                        .AddHttpClientInstrumentation();
+                });
+        });
+
+        //builder.AddOpenTelemetryExporters();
 
         return builder;
     }
 
     private static IHostApplicationBuilder AddOpenTelemetryExporters(this IHostApplicationBuilder builder)
     {
-        //var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
+        var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
 
-        //if (useOtlpExporter)
-        //{
-        //    builder.Services.AddOpenTelemetry().UseOtlpExporter();
-        //}
+        if (useOtlpExporter)
+        {
+            builder.Services.AddOpenTelemetry().UseOtlpExporter();
+        }
 
         // Uncomment the following lines to enable the Azure Monitor exporter (requires the Azure.Monitor.OpenTelemetry.AspNetCore package)
         //if (!string.IsNullOrEmpty(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
@@ -81,11 +138,48 @@ public static class Extensions
         return builder;
     }
 
+    private static IHostBuilder AddOpenTelemetryExporters(this IHostBuilder builder)
+    {
+        builder.ConfigureServices((hostContext, services) =>
+        {
+            var useOtlpExporter = !string.IsNullOrWhiteSpace(hostContext.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
+
+            if (useOtlpExporter)
+            {
+                services.AddOpenTelemetry().UseOtlpExporter();
+            }
+        });
+
+        // Uncomment the following lines to enable the Azure Monitor exporter (requires the Azure.Monitor.OpenTelemetry.AspNetCore package)
+        //builder.ConfigureServices((hostContext, services) =>
+        //{
+        //    if (!string.IsNullOrEmpty(hostContext.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
+        //    {
+        //        services.AddOpenTelemetry()
+        //            .UseAzureMonitor();
+        //    }
+        //});
+
+        return builder;
+    }
+
     public static IHostApplicationBuilder AddDefaultHealthChecks(this IHostApplicationBuilder builder)
     {
         builder.Services.AddHealthChecks()
             // Add a default liveness check to ensure app is responsive
             .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
+
+        return builder;
+    }
+
+    public static IHostBuilder AddDefaultHealthChecks(this IHostBuilder builder)
+    {
+        builder.ConfigureServices((hostContext, services) =>
+        {
+            services.AddHealthChecks()
+            // Add a default liveness check to ensure app is responsive
+            .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
+        });
 
         return builder;
     }
