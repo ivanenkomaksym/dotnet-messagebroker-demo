@@ -40,6 +40,12 @@ var order = builder.AddProject<Projects.OrderAPI>("orderapi")
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
+var ordergrpc = builder.AddProject<Projects.OrderGrpc>("ordergrpc")
+    .WithReference(mongodb)
+    // Use Aspire's mongodb connection string in OrderAPI's appsettings
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
+    .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
+
 var payment = builder.AddProject<Projects.PaymentService>("paymentservice")
     // Use Aspire's mongodb connection string in PaymentService's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)

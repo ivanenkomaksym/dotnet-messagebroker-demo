@@ -7,15 +7,19 @@ using OrderCommon.Repositories;
 using OrderGrpc;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
-hostBuilder.ConfigureOpenTelemetry();
 
 IHost host = hostBuilder
+    .ConfigureLogging((hostContext, logging) =>
+    {
+        logging.AddLogging(hostContext.Configuration);
+    })
     .ConfigureWebHostDefaults(builder =>
     {
         builder.UseStartup<GrpcServerStartup>();
     })
     .ConfigureServices((hostContext, services) =>
     {
+        hostBuilder.AddServiceDefaults(hostContext, services);
         services.AddHostedService<Worker>();
 
         services.AddScoped<IOrderContext, OrderContextBase>();
