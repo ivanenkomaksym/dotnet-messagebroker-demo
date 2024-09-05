@@ -28,7 +28,7 @@ builder.Services.AddScoped<ICustomerPublisher, CustomerPublisher>();
 
 builder.Services.AddMassTransit(x =>
 {
-    x.UsingRabbitMq(AspireExtensions.ConfigureRabbitMq);
+    x.UsingRabbitMq(Extensions.ConfigureRabbitMq);
 });
 
 builder.Services.AddControllers();

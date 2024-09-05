@@ -1,11 +1,13 @@
 using Common.Configuration;
 using Common.Extensions;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -74,6 +76,17 @@ public static class Extensions
             // Turn on service discovery by default
             http.AddServiceDiscovery();
         });
+    }
+
+    public static void ConfigureRabbitMq(IBusRegistrationContext context, IRabbitMqBusFactoryConfigurator cfg)
+    {
+        var applicationOptions = context.GetRequiredService<IOptions<ApplicationOptions>>();
+        if (applicationOptions != null && applicationOptions.Value.StartupEnvironment == StartupEnvironment.Aspire)
+        {
+            var configService = context.GetRequiredService<IConfiguration>();
+            var connectionString = configService.GetConnectionString("messaging"); // <--- same name as in the orchestration
+            cfg.Host(connectionString);
+        }
     }
 
     private static void ConfigureAspireLogging(this ILoggingBuilder loggingBuilder)

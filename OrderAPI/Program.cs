@@ -29,7 +29,7 @@ builder.Services.AddScoped<IOrderPublisher, OrderPublisher>();
 
 builder.Services.AddMassTransit(x =>
 {
-    x.UsingRabbitMq(AspireExtensions.ConfigureRabbitMq);
+    x.UsingRabbitMq(Extensions.ConfigureRabbitMq);
 });
 
 builder.Services.AddControllers();

@@ -61,7 +61,7 @@ builder.Services.AddMassTransit((Action<IBusRegistrationConfigurator>)(x =>
     x.AddConsumer<UserPaymentResultConsumer>();
     x.AddConsumer<UserShipmentResultConsumer>();
 
-    x.UsingRabbitMq(AspireExtensions.ConfigureRabbitMq);
+    x.UsingRabbitMq(Extensions.ConfigureRabbitMq);
 }));
 
 var gatewayAddress = builder.Configuration.GetGatewayAddress();

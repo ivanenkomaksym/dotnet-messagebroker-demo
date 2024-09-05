@@ -32,7 +32,7 @@ IHost host = hostBuilder
 
             x.UsingRabbitMq((context, cfg) => 
             {
-                AspireExtensions.ConfigureRabbitMq(context, cfg);
+                Extensions.ConfigureRabbitMq(context, cfg);
                 cfg.ConfigureEndpoints(context);
             });
         });
