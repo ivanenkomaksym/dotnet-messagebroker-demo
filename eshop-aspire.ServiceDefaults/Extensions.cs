@@ -1,5 +1,8 @@
+using Common.Configuration;
+using Common.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
@@ -34,37 +37,56 @@ public static class Extensions
         return builder;
     }
 
-    public static IHostBuilder AddServiceDefaults(this IHostBuilder builder)
+    public static void AddLogging(this ILoggingBuilder loggingBuilder, IConfiguration configuration)
     {
-        builder.ConfigureServices((hostContext, services) =>
+        var applicationOptions = configuration.GetSection(ApplicationOptions.Name).Get<ApplicationOptions>();
+        if (applicationOptions != null && applicationOptions.StartupEnvironment == StartupEnvironment.Kubernetes)
         {
-            builder.ConfigureAspireOpenTelemetry();
-
-            builder.AddDefaultHealthChecks();
-
-            services.AddServiceDiscovery();
-
-            services.ConfigureHttpClientDefaults(http =>
-            {
-                // Turn on resilience by default
-                http.AddStandardResilienceHandler();
-
-                // Turn on service discovery by default
-                http.AddServiceDiscovery();
-            });
-        });
-
-        return builder;
+            loggingBuilder.ConfigureLogging(configuration);
+        }
+        else
+        {
+            loggingBuilder.ConfigureAspireLogging();
+        }
     }
 
-    public static IHostApplicationBuilder ConfigureAspireOpenTelemetry(this IHostApplicationBuilder builder)
+    public static void AddServiceDefaults(this IHostBuilder builder, HostBuilderContext hostContext, IServiceCollection services)
     {
-        builder.Logging.AddOpenTelemetry(logging =>
+        var applicationOptions = hostContext.Configuration.GetSection(ApplicationOptions.Name).Get<ApplicationOptions>();
+        if (applicationOptions != null && applicationOptions.StartupEnvironment == StartupEnvironment.Kubernetes)
+        {
+            builder.ConfigureOpenTelemetry();
+        }
+        else
+        {
+            builder.ConfigureAspireOpenTelemetry(services);
+        }
+
+        services.AddDefaultHealthChecks();
+
+        services.AddServiceDiscovery();
+
+        services.ConfigureHttpClientDefaults(http =>
+        {
+            // Turn on resilience by default
+            http.AddStandardResilienceHandler();
+
+            // Turn on service discovery by default
+            http.AddServiceDiscovery();
+        });
+    }
+
+    private static void ConfigureAspireLogging(this ILoggingBuilder loggingBuilder)
+    {
+        loggingBuilder.AddOpenTelemetry(logging =>
         {
             logging.IncludeFormattedMessage = true;
             logging.IncludeScopes = true;
         });
+    }
 
+    private static IHostApplicationBuilder ConfigureAspireOpenTelemetry(this IHostApplicationBuilder builder)
+    {
         builder.Services.AddOpenTelemetry()
             .WithMetrics(metrics =>
             {
@@ -85,36 +107,22 @@ public static class Extensions
         return builder;
     }
 
-    public static IHostBuilder ConfigureAspireOpenTelemetry(this IHostBuilder builder)
+    public static IHostBuilder ConfigureAspireOpenTelemetry(this IHostBuilder builder, IServiceCollection services)
     {
-        builder.ConfigureLogging(logging =>
-        {
-            logging.AddOpenTelemetry(logging =>
+        services.AddOpenTelemetry()
+            .WithMetrics(metrics =>
             {
-                logging.IncludeFormattedMessage = true;
-                logging.IncludeScopes = true;
+                metrics.AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddRuntimeInstrumentation();
+            })
+            .WithTracing(tracing =>
+            {
+                tracing.AddAspNetCoreInstrumentation()
+                    // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
+                    //.AddGrpcClientInstrumentation()
+                    .AddHttpClientInstrumentation();
             });
-        });
-
-        builder.ConfigureServices((hostContext, services) =>
-        {            
-            services.AddOpenTelemetry()
-                .WithMetrics(metrics =>
-                {
-                    metrics.AddAspNetCoreInstrumentation()
-                        .AddHttpClientInstrumentation()
-                        .AddRuntimeInstrumentation();
-                })
-                .WithTracing(tracing =>
-                {
-                    tracing.AddAspNetCoreInstrumentation()
-                        // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
-                        //.AddGrpcClientInstrumentation()
-                        .AddHttpClientInstrumentation();
-                });
-        });
-
-        //builder.AddOpenTelemetryExporters();
 
         return builder;
     }
@@ -138,29 +146,21 @@ public static class Extensions
         return builder;
     }
 
-    private static IHostBuilder AddOpenTelemetryExporters(this IHostBuilder builder)
+    private static void AddOpenTelemetryExporters(HostBuilderContext hostContext, IServiceCollection services)
     {
-        builder.ConfigureServices((hostContext, services) =>
-        {
-            var useOtlpExporter = !string.IsNullOrWhiteSpace(hostContext.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
+        var useOtlpExporter = !string.IsNullOrWhiteSpace(hostContext.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
 
-            if (useOtlpExporter)
-            {
-                services.AddOpenTelemetry().UseOtlpExporter();
-            }
-        });
+        if (useOtlpExporter)
+        {
+            services.AddOpenTelemetry().UseOtlpExporter();
+        }
 
         // Uncomment the following lines to enable the Azure Monitor exporter (requires the Azure.Monitor.OpenTelemetry.AspNetCore package)
-        //builder.ConfigureServices((hostContext, services) =>
+        //if (!string.IsNullOrEmpty(hostContext.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
         //{
-        //    if (!string.IsNullOrEmpty(hostContext.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
-        //    {
-        //        services.AddOpenTelemetry()
-        //            .UseAzureMonitor();
-        //    }
-        //});
-
-        return builder;
+        //  services.AddOpenTelemetry()
+        //      .UseAzureMonitor();
+        //}
     }
 
     public static IHostApplicationBuilder AddDefaultHealthChecks(this IHostApplicationBuilder builder)
@@ -172,16 +172,11 @@ public static class Extensions
         return builder;
     }
 
-    public static IHostBuilder AddDefaultHealthChecks(this IHostBuilder builder)
+    public static void AddDefaultHealthChecks(this IServiceCollection services)
     {
-        builder.ConfigureServices((hostContext, services) =>
-        {
-            services.AddHealthChecks()
+        services.AddHealthChecks()
             // Add a default liveness check to ensure app is responsive
             .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
-        });
-
-        return builder;
     }
 
     public static WebApplication MapDefaultEndpoints(this WebApplication app)

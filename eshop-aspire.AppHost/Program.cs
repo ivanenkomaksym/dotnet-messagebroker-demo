@@ -7,19 +7,23 @@ var messaging = builder.AddRabbitMQ("messaging");
 
 var customers = builder.AddProject<Projects.CustomerAPI>("customerapi")
     .WithReference(mongodb)
+    .WithReference(messaging)
     // Use Aspire's mongodb connection string in CustomerAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 var catalog = builder.AddProject<Projects.CatalogAPI>("catalogapi")
+    .WithReference(mongodb)
     // Use Aspire's mongodb connection string in CatalogAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
 
 var shoppingCart = builder.AddProject<Projects.ShoppingCartAPI>("shoppingcartapi")
+    .WithReference(mongodb)
     // Use Aspire's mongodb connection string in ShoppingCartAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
 
 var warehouseapi = builder.AddProject<Projects.WarehouseAPI>("warehouseapi")
+    .WithReference(mongodb)
     // Use Aspire's mongodb connection string in WarehouseAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
 
@@ -30,6 +34,7 @@ var webuiaggregator = builder.AddProject<Projects.WebUIAggregatorAPI>("webuiaggr
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 var order = builder.AddProject<Projects.OrderAPI>("orderapi")
+    .WithReference(mongodb)
     .WithReference(messaging)
     // Use Aspire's mongodb connection string in OrderAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
@@ -37,15 +42,20 @@ var order = builder.AddProject<Projects.OrderAPI>("orderapi")
 
 var payment = builder.AddProject<Projects.PaymentService>("paymentservice")
     // Use Aspire's mongodb connection string in PaymentService's appsettings
-    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
+    .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 var shipment = builder.AddProject<Projects.Shipment>("shipment")
+    .WithReference(mongodb)
     // Use Aspire's mongodb connection string in Shipment's appsettings
-    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
+    .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 var warehouse = builder.AddProject<Projects.Warehouse>("warehouse")
+    .WithReference(mongodb)
     // Use Aspire's mongodb connection string in Warehouse's appsettings
-    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
+    .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 builder.AddProject<Projects.WebUI>("webui")
     .WithExternalHttpEndpoints()

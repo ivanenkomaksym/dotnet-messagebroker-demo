@@ -8,12 +8,15 @@ using Shipment.Data;
 using Shipment.Repositories;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
-hostBuilder.AddServiceDefaults();
-hostBuilder.ConfigureOpenTelemetry();
 
 IHost host = hostBuilder
+    .ConfigureLogging((hostContext, logging) =>
+    {
+        logging.AddLogging(hostContext.Configuration);
+    })
     .ConfigureServices((hostContext, services) =>
     {
+        hostBuilder.AddServiceDefaults(hostContext, services);
         services.AddHostedService<Worker>();
 
         services.AddScoped<IShipmentContext, ShipmentContext>();
@@ -24,7 +27,11 @@ IHost host = hostBuilder
             x.AddConsumer<ShipOrderConsumer>();
             x.AddConsumer<ShipmentToBeReturnedConsumer>();
 
-            x.UsingRabbitMq((context, cfg) => { cfg.ConfigureEndpoints(context); });
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                AspireExtensions.ConfigureRabbitMq(context, cfg);
+                cfg.ConfigureEndpoints(context);
+            });
         });
 
         services.AddHealthChecks()

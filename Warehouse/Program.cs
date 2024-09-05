@@ -8,12 +8,15 @@ using WarehouseCommon.Data;
 using WarehouseCommon.Repositories;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
-hostBuilder.AddServiceDefaults();
-hostBuilder.ConfigureOpenTelemetry();
 
 IHost host = hostBuilder
+    .ConfigureLogging((hostContext, logging) =>
+    {
+        logging.AddLogging(hostContext.Configuration);
+    })
     .ConfigureServices((hostContext, services) =>
     {
+        hostBuilder.AddServiceDefaults(hostContext, services);
         services.AddHostedService<WarehouseWorker>();
 
         services.AddSingleton<IWarehouseContextSeed, WarehouseContextSeed>();
@@ -27,7 +30,11 @@ IHost host = hostBuilder
             x.AddConsumer<RemoveReserveConsumer>();
             x.AddConsumer<UpdateStockConsumer>();
 
-            x.UsingRabbitMq((context, cfg) => { cfg.ConfigureEndpoints(context); });
+            x.UsingRabbitMq((context, cfg) => 
+            {
+                AspireExtensions.ConfigureRabbitMq(context, cfg);
+                cfg.ConfigureEndpoints(context);
+            });
         });
 
         services.AddHealthChecks()

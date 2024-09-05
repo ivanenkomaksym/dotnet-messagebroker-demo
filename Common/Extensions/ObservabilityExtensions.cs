@@ -107,7 +107,7 @@ namespace Common.Extensions
                 });
         }
 
-        private static void ConfigureLogging(this ILoggingBuilder loggingBuilder, IConfiguration configuration)
+        public static void ConfigureLogging(this ILoggingBuilder loggingBuilder, IConfiguration configuration)
         {
             // Note: Switch between Console/OTLP by setting UseLogExporter in appsettings.json.
             var logExporter = configuration.GetValue("UseLogExporter", defaultValue: "console")!.ToLowerInvariant();
