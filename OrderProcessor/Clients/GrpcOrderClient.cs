@@ -2,18 +2,19 @@
 using Common.Models;
 using Common.Models.Payment;
 using Common.Protos;
+using Common.Routing;
 using Grpc.Net.Client;
 
 namespace OrderProcessor.Clients
 {
     internal class GrpcOrderClient : IGrpcOrderClient
     {
-        private readonly IConfiguration _configuration;
+        private readonly string _orderGrpcUrl;
         private readonly ILogger<GrpcOrderClient> _logger;
 
-        public GrpcOrderClient(IConfiguration configuration, ILogger<GrpcOrderClient> logger)
+        public GrpcOrderClient(IEnvironmentRouter environmentRouter, ILogger<GrpcOrderClient> logger)
         {
-            _configuration = configuration;
+            _orderGrpcUrl = environmentRouter.GetOrderGrpcRoute();
             _logger = logger;
         }
 
@@ -21,7 +22,7 @@ namespace OrderProcessor.Clients
         {
             _logger.LogInformation($"[GRPC] Sending `GetOrderRequest` event with content: {orderId}");
 
-            using var channel = GrpcChannel.ForAddress(_configuration.GetOrderGrpcUrl());
+            using var channel = GrpcChannel.ForAddress(_orderGrpcUrl);
             var client = new OrderService.OrderServiceClient(channel);
 
             var request = new GetOrderRequest();
@@ -84,7 +85,7 @@ namespace OrderProcessor.Clients
         {
             _logger.LogInformation($"[GRPC] Sending `UpdateOrderRequest` event with content: {orderId}");
 
-            using var channel = GrpcChannel.ForAddress(_configuration.GetOrderGrpcUrl());
+            using var channel = GrpcChannel.ForAddress(_orderGrpcUrl);
             var client = new OrderService.OrderServiceClient(channel);
 
             var request = new UpdateOrderRequest();

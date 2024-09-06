@@ -3,7 +3,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 var mongo = builder.AddMongoDB("mongo").PublishAsConnectionString();
 var mongodb = mongo.AddDatabase("mongodb");
 
-var messaging = builder.AddRabbitMQ("messaging");
+var messaging = builder.AddRabbitMQ("AMQPConnectionString");
 
 var customers = builder.AddProject<Projects.CustomerAPI>("customerapi")
     .WithReference(mongodb)
@@ -42,6 +42,13 @@ var order = builder.AddProject<Projects.OrderAPI>("orderapi")
 
 var ordergrpc = builder.AddProject<Projects.OrderGrpc>("ordergrpc")
     .WithReference(mongodb)
+    // Use Aspire's mongodb connection string in OrderAPI's appsettings
+    .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
+    .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
+
+var orderprocessor = builder.AddProject<Projects.OrderProcessor>("orderprocessor")
+    .WithReference(mongodb)
+    .WithReference(messaging)
     // Use Aspire's mongodb connection string in OrderAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");

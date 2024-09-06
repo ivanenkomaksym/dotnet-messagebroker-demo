@@ -20,6 +20,7 @@
     <ProjectReference Include="..\CustomerAPI\CustomerAPI.csproj" />
     <ProjectReference Include="..\OrderAPI\OrderAPI.csproj" />
     <ProjectReference Include="..\OrderGrpc\OrderGrpc.csproj" />
+    <ProjectReference Include="..\OrderProcessor\OrderProcessor.csproj" />
     <ProjectReference Include="..\Payment\PaymentService.csproj" />
     <ProjectReference Include="..\Shipment\Shipment.csproj" />
     <ProjectReference Include="..\ShoppingCartAPI\ShoppingCartAPI.csproj" />

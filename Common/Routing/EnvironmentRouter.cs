@@ -6,11 +6,13 @@ namespace Common.Routing
     public class EnvironmentRouter : IEnvironmentRouter
     {
         private readonly ApplicationOptions _applicationOptions;
+        private readonly GrpcSettings _grpcSettings;
 
-        public EnvironmentRouter(IOptions<ApplicationOptions> applicationOptions)
+        public EnvironmentRouter(IOptions<ApplicationOptions> applicationOptions, IOptions<GrpcSettings> grpcSettings)
         {
             ArgumentNullException.ThrowIfNull(applicationOptions);
             _applicationOptions = applicationOptions.Value;
+            _grpcSettings = grpcSettings.Value;
         }
 
         public string GetCustomerRoute()
@@ -27,6 +29,14 @@ namespace Common.Routing
                 return "http://orderapi/api/Order";
 
             return "/gateway/Order";
+        }
+
+        public string GetOrderGrpcRoute()
+        {
+            if (_applicationOptions.StartupEnvironment == StartupEnvironment.Aspire)
+                return "http://ordergrpc/";
+
+            return _grpcSettings.OrderGrpcUrl ?? string.Empty;
         }
 
         public string GetCatalogRoute()

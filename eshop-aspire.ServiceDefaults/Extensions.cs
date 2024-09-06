@@ -84,7 +84,7 @@ public static class Extensions
         if (applicationOptions != null && applicationOptions.Value.StartupEnvironment == StartupEnvironment.Aspire)
         {
             var configService = context.GetRequiredService<IConfiguration>();
-            var connectionString = configService.GetConnectionString("messaging"); // <--- same name as in the orchestration
+            var connectionString = configService.GetConnectionString("AMQPConnectionString"); // <--- same name as in the orchestration
             cfg.Host(connectionString);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Common.Configuration;
 using Common.Events;
 using Common.Extensions;
+using Common.Routing;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,63 +14,73 @@ using System.Net.Mime;
 var hostBuilder = Host.CreateDefaultBuilder(args);
 hostBuilder.ConfigureOpenTelemetry();
 
-var host = hostBuilder.ConfigureServices((hostContext, services) =>
-{
-    services.AddHostedService<OrderProcessorWorker>();
-
-    services.Configure<RabbitMQOptions>(hostContext.Configuration.GetSection(RabbitMQOptions.Name));
-
-    services.AddSingleton<IGrpcOrderClient, GrpcOrderClient>();
-
-    services.AddHostedService<GenericConsumerRabbitMQAdapter<OrderCreatedConsumer, OrderCreated>>();
-    services.AddHostedService<GenericConsumerRabbitMQAdapter<CancelOrderConsumer, CancelOrder>>();
-    services.AddHostedService<GenericConsumerRabbitMQAdapter<OrderCollectedConsumer, OrderCollected>>();
-    services.AddHostedService<GenericConsumerRabbitMQAdapter<OrderUpdatedConsumer, OrderUpdated>>();
-    services.AddHostedService<GenericConsumerRabbitMQAdapter<ReturnOrderConsumer, ReturnOrder>>();
-
-    services.AddMassTransit(x =>
+var host = hostBuilder
+    .ConfigureLogging((hostContext, logging) =>
     {
-        x.AddConsumer<OrderCreatedConsumer>();
-        x.AddConsumer<OrderUpdatedConsumer>();
-        x.AddConsumer<ReserveStockResultConsumer>();
-        x.AddConsumer<ReserveRemovedConsumer>();
-        x.AddConsumer<PaymentResultConsumer>();
-        x.AddConsumer<ShipmentResultConsumer>();
-        x.AddConsumer<OrderCollectedConsumer>();
-        x.AddConsumer<CancelOrderConsumer>();
-        x.AddConsumer<ReturnOrderConsumer>();
-        x.AddConsumer<ShipmentReturnedConsumer>();
-        x.AddConsumer<PaymentRefundedConsumer>();
-        x.AddConsumer<StockUpdatedConsumer>();
+        logging.AddLogging(hostContext.Configuration);
+    })
+    .ConfigureServices((hostContext, services) =>
+    {
+        hostBuilder.AddServiceDefaults(hostContext, services);
+        services.AddHostedService<OrderProcessorWorker>();
 
-        x.UsingRabbitMq((context, cfg) =>
+        services.Configure<ApplicationOptions>(hostContext.Configuration.GetSection(ApplicationOptions.Name));
+        services.Configure<ConnectionStrings>(hostContext.Configuration.GetSection(ConnectionStrings.Name));
+
+        services.AddSingleton<IEnvironmentRouter, EnvironmentRouter>();
+        services.AddSingleton<IGrpcOrderClient, GrpcOrderClient>();
+
+        services.AddHostedService<GenericConsumerRabbitMQAdapter<OrderCreatedConsumer, OrderCreated>>();
+        services.AddHostedService<GenericConsumerRabbitMQAdapter<CancelOrderConsumer, CancelOrder>>();
+        services.AddHostedService<GenericConsumerRabbitMQAdapter<OrderCollectedConsumer, OrderCollected>>();
+        services.AddHostedService<GenericConsumerRabbitMQAdapter<OrderUpdatedConsumer, OrderUpdated>>();
+        services.AddHostedService<GenericConsumerRabbitMQAdapter<ReturnOrderConsumer, ReturnOrder>>();
+
+        services.AddMassTransit(x =>
         {
-            // Explicitly configure endpoints so that these messages can be consumed by many consumers at the same time
-            // https://masstransit.io/documentation/configuration#receive-endpoints
-            cfg.ReceiveEndpoint(hostContext.HostingEnvironment.ApplicationName, e =>
+            x.AddConsumer<OrderCreatedConsumer>();
+            x.AddConsumer<OrderUpdatedConsumer>();
+            x.AddConsumer<ReserveStockResultConsumer>();
+            x.AddConsumer<ReserveRemovedConsumer>();
+            x.AddConsumer<PaymentResultConsumer>();
+            x.AddConsumer<ShipmentResultConsumer>();
+            x.AddConsumer<OrderCollectedConsumer>();
+            x.AddConsumer<CancelOrderConsumer>();
+            x.AddConsumer<ReturnOrderConsumer>();
+            x.AddConsumer<ShipmentReturnedConsumer>();
+            x.AddConsumer<PaymentRefundedConsumer>();
+            x.AddConsumer<StockUpdatedConsumer>();
+
+            x.UsingRabbitMq((context, cfg) =>
             {
-                // Consuming messages from other systems where messages may not be produced by MassTransit, raw JSON is commonly used.
-                e.DefaultContentType = new ContentType("application/json");
-                e.UseRawJsonDeserializer();
+                Extensions.ConfigureRabbitMq(context, cfg);
 
-                e.ConfigureConsumer<OrderCreatedConsumer>(context);
-                e.ConfigureConsumer<OrderUpdatedConsumer>(context);
-                e.ConfigureConsumer<ReserveStockResultConsumer>(context);
-                e.ConfigureConsumer<ReserveRemovedConsumer>(context);
-                e.ConfigureConsumer<PaymentResultConsumer>(context);
-                e.ConfigureConsumer<ShipmentResultConsumer>(context);
-                e.ConfigureConsumer<OrderCollectedConsumer>(context);
-                e.ConfigureConsumer<CancelOrderConsumer>(context);
-                e.ConfigureConsumer<ReturnOrderConsumer>(context);
-                e.ConfigureConsumer<ShipmentReturnedConsumer>(context);
-                e.ConfigureConsumer<PaymentRefundedConsumer>(context);
-                e.ConfigureConsumer<StockUpdatedConsumer>(context);
+                // Explicitly configure endpoints so that these messages can be consumed by many consumers at the same time
+                // https://masstransit.io/documentation/configuration#receive-endpoints
+                cfg.ReceiveEndpoint(hostContext.HostingEnvironment.ApplicationName, e =>
+                {
+                    // Consuming messages from other systems where messages may not be produced by MassTransit, raw JSON is commonly used.
+                    e.DefaultContentType = new ContentType("application/json");
+                    e.UseRawJsonDeserializer();
+
+                    e.ConfigureConsumer<OrderCreatedConsumer>(context);
+                    e.ConfigureConsumer<OrderUpdatedConsumer>(context);
+                    e.ConfigureConsumer<ReserveStockResultConsumer>(context);
+                    e.ConfigureConsumer<ReserveRemovedConsumer>(context);
+                    e.ConfigureConsumer<PaymentResultConsumer>(context);
+                    e.ConfigureConsumer<ShipmentResultConsumer>(context);
+                    e.ConfigureConsumer<OrderCollectedConsumer>(context);
+                    e.ConfigureConsumer<CancelOrderConsumer>(context);
+                    e.ConfigureConsumer<ReturnOrderConsumer>(context);
+                    e.ConfigureConsumer<ShipmentReturnedConsumer>(context);
+                    e.ConfigureConsumer<PaymentRefundedConsumer>(context);
+                    e.ConfigureConsumer<StockUpdatedConsumer>(context);
+                });
+
+                cfg.ConfigureEndpoints(context);
             });
-
-            cfg.ConfigureEndpoints(context);
         });
-    });
-})
+    })
     .Build();
 
 host.Run();

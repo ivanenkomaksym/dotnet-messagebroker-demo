@@ -13,5 +13,7 @@
         public string GetShoppingCartRoute();
 
         public string GetOrderRoute();
+
+        public string GetOrderGrpcRoute();
     }
 }

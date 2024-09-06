@@ -17,18 +17,18 @@ namespace OrderProcessor.Adapters
         where TConsumer : BaseConsumer<TMessage>
     {
         private readonly TConsumer _consumer;
-        private readonly RabbitMQOptions _rabbitMQOptions;
+        private readonly ConnectionStrings _connectionStrings;
         private readonly ILogger<GenericConsumerRabbitMQAdapter<TConsumer, TMessage>> _logger;
         private IConnection? _connection;
         private IModel? _channel;
         private string ExchangeName = $"{typeof(TMessage).Name}_RabbitMQAdapter";
 
         public GenericConsumerRabbitMQAdapter(TConsumer consumer,
-                                              IOptions<RabbitMQOptions> rabbitMQOptions,
+                                              IOptions<ConnectionStrings> rabbitMQOptions,
                                               ILogger<GenericConsumerRabbitMQAdapter<TConsumer, TMessage>> logger)
         {
             _consumer = consumer;
-            _rabbitMQOptions = rabbitMQOptions.Value;
+            _connectionStrings = rabbitMQOptions.Value;
             _logger = logger;
             InitRabbitMQ();
         }
@@ -36,7 +36,7 @@ namespace OrderProcessor.Adapters
         private void InitRabbitMQ()
         {
             var factory = new ConnectionFactory();
-            factory.Uri = new Uri($"{_rabbitMQOptions.AMQPConnectionString}");
+            factory.Uri = new Uri($"{_connectionStrings.AMQPConnectionString}");
 
             // create connection  
             _connection = factory.CreateConnection();

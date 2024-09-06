@@ -1,8 +1,8 @@
 ﻿namespace Common.Configuration
 {
-    public record RabbitMQOptions
+    public record ConnectionStrings
     {
-        public const string Name = "RabbitMQ";
+        public const string Name = nameof(ConnectionStrings);
 
         public required string AMQPConnectionString { get; set; }
     }
