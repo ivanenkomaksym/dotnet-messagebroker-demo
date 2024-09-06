@@ -1,6 +1,5 @@
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
-using Common.Configuration;
 using Common.Extensions;
 using Common.Routing;
 using GraphQL.Client.Abstractions;
@@ -22,7 +21,6 @@ builder.AddServiceDefaults();
 builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
-builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(ApplicationOptions.Name));
 builder.Services.AddSingleton<IEnvironmentRouter, EnvironmentRouter>();
 
 builder.Services.AddRazorPages().AddNToastNotifyToastr(new ToastrOptions

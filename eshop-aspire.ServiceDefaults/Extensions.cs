@@ -21,6 +21,8 @@ public static class Extensions
 {
     public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
     {
+        builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(ApplicationOptions.Name));
+
         builder.ConfigureAspireOpenTelemetry();
 
         builder.AddDefaultHealthChecks();
@@ -54,7 +56,10 @@ public static class Extensions
 
     public static void AddServiceDefaults(this IHostBuilder builder, HostBuilderContext hostContext, IServiceCollection services)
     {
-        var applicationOptions = hostContext.Configuration.GetSection(ApplicationOptions.Name).Get<ApplicationOptions>();
+        var applicationOptionsSection = hostContext.Configuration.GetSection(ApplicationOptions.Name);
+        services.Configure<ApplicationOptions>(applicationOptionsSection);
+
+        var applicationOptions = applicationOptionsSection.Get<ApplicationOptions>();
         if (applicationOptions != null && applicationOptions.StartupEnvironment == StartupEnvironment.Kubernetes)
         {
             builder.ConfigureOpenTelemetry();

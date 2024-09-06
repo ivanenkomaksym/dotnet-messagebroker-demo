@@ -1,4 +1,3 @@
-using Common.Configuration;
 using Common.Examples;
 using Common.Extensions;
 using MassTransit;
@@ -18,8 +17,6 @@ builder.AddServiceDefaults();
 builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
-builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(ApplicationOptions.Name));
-
 builder.Services.AddScoped<IOrderContextSeed, OrderContextSeed>();
 
 builder.Services.AddScoped<IOrderContext, OrderContext>();

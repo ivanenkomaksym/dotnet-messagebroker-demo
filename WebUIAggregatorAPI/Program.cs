@@ -1,4 +1,3 @@
-using Common.Configuration;
 using Common.Extensions;
 using Common.Routing;
 using WebUIAggregatorAPI.Services;
@@ -11,7 +10,6 @@ builder.Host.ConfigureOpenTelemetry();
 var gatewayAddress = builder.Configuration.GetGatewayAddress();
 
 // Add services to the container.
-builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(ApplicationOptions.Name));
 builder.Services.AddSingleton<IEnvironmentRouter, EnvironmentRouter>();
 
 builder.Services.AddHttpClient<ICatalogApiService, CatalogApiService>(options =>

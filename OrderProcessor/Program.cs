@@ -24,7 +24,6 @@ var host = hostBuilder
         hostBuilder.AddServiceDefaults(hostContext, services);
         services.AddHostedService<OrderProcessorWorker>();
 
-        services.Configure<ApplicationOptions>(hostContext.Configuration.GetSection(ApplicationOptions.Name));
         services.Configure<ConnectionStrings>(hostContext.Configuration.GetSection(ConnectionStrings.Name));
 
         services.AddSingleton<IEnvironmentRouter, EnvironmentRouter>();

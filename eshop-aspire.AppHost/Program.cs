@@ -54,18 +54,22 @@ var orderprocessor = builder.AddProject<Projects.OrderProcessor>("orderprocessor
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 var payment = builder.AddProject<Projects.PaymentService>("paymentservice")
+    .WithReference(mongodb)
+    .WithReference(messaging)
     // Use Aspire's mongodb connection string in PaymentService's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 var shipment = builder.AddProject<Projects.Shipment>("shipment")
     .WithReference(mongodb)
+    .WithReference(messaging)
     // Use Aspire's mongodb connection string in Shipment's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 var warehouse = builder.AddProject<Projects.Warehouse>("warehouse")
     .WithReference(mongodb)
+    .WithReference(messaging)
     // Use Aspire's mongodb connection string in Warehouse's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
@@ -78,9 +82,6 @@ builder.AddProject<Projects.WebUI>("webui")
     .WithReference(shoppingCart)
     .WithReference(webuiaggregator)
     .WithReference(order)
-    .WithReference(payment)
-    .WithReference(shipment)
-    .WithReference(warehouse)
     // Configure WebUI to use real CustomerAPI
     .WithEnvironment($"FeatureManagement:Customer", "true")
     // Configure WebUI to use real CatalogAPI
