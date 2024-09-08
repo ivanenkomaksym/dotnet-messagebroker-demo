@@ -1,4 +1,4 @@
-﻿namespace WebUI
+﻿namespace Common.FeatureManagement
 {
     public static class FeatureFlags
     {

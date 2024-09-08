@@ -12,13 +12,7 @@
     <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
     <PackageReference Include="GraphQL.Client" Version="6.0.5" />
     <PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="6.0.5" />
-    <PackageReference Include="MassTransit" Version="8.2.1" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.1" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.4" />
-    <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="3.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
     <PackageReference Include="NToastNotify" Version="8.0.0" />
   </ItemGroup>
 

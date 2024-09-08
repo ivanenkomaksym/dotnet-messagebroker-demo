@@ -1,6 +1,7 @@
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using Common.Extensions;
+using Common.FeatureManagement;
 using Common.Routing;
 using GraphQL.Client.Abstractions;
 using GraphQL.Client.Http;
@@ -9,7 +10,6 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.FeatureManagement;
 using NToastNotify;
-using WebUI;
 using WebUI.Consumers;
 using WebUI.Notifications;
 using WebUI.Services;

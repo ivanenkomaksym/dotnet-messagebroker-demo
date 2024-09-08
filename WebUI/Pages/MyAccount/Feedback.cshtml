@@ -40,7 +40,7 @@
                         </thead>
                         <tr>
                             <td>
-                                <a asp-page="ProductDetail" asp-route-productId="@orderItem.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@orderItem.ImageFile" alt="Order Item"></a>
+                                <a asp-page="/ProductDetail" asp-route-productId="@orderItem.ProductId"><img asp-append-version="true" class="order-item-image img-fluid" src="@orderItem.ImageFile" alt="Order Item"></a>
                             </td>
                             <td>@orderItem.ProductName</td>
                             <td class="text-right">@(orderItem.ProductPrice.ToString("C"))</td>
