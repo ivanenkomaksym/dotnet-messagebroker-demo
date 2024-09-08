@@ -1,10 +1,10 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
-using Common.Configuration;
+﻿using Common.Configuration;
 using Microsoft.Extensions.Options;
 using OrderProcessor.Consumers;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace OrderProcessor.Adapters
 {
@@ -22,6 +22,8 @@ namespace OrderProcessor.Adapters
         private IConnection? _connection;
         private IModel? _channel;
         private string ExchangeName = $"{typeof(TMessage).Name}_RabbitMQAdapter";
+        private readonly int MaxRetries = 10;
+        private readonly int DelayInMilliseconds = 1000;
 
         public GenericConsumerRabbitMQAdapter(TConsumer consumer,
                                               IOptions<ConnectionStrings> rabbitMQOptions,
@@ -32,18 +34,47 @@ namespace OrderProcessor.Adapters
             _logger = logger;
             InitRabbitMQ();
         }
-
+        
         private void InitRabbitMQ()
         {
             var factory = new ConnectionFactory();
             factory.Uri = new Uri($"{_connectionStrings.AMQPConnectionString}");
 
             // create connection  
-            _connection = factory.CreateConnection();
+            _connection = CreateConnectionWithRetry(factory);
 
             // create channel  
             _channel = _connection.CreateModel();
             _channel.ExchangeDeclare(ExchangeName, ExchangeType.Fanout);
+        }
+
+        private IConnection CreateConnectionWithRetry(ConnectionFactory factory)
+        {
+            IConnection connection = null;
+            int attempt = 0;
+            while (connection == null && attempt < MaxRetries)
+            {
+                try
+                {
+                    connection = factory.CreateConnection();
+                    _logger.LogInformation("Connection established");
+                }
+                catch (Exception ex)
+                {
+                    attempt++;
+                    _logger.LogInformation($"Attempt {attempt} failed: {ex.Message}");
+                    if (attempt > MaxRetries)
+                    {
+                        _logger.LogError("Max retry attempts reached. Throwing exception");
+                        throw;
+                    }
+
+                    _logger.LogInformation($"Waiting {DelayInMilliseconds}ms before retrying...");
+                    Thread.Sleep(DelayInMilliseconds);
+                }
+            }
+
+            return connection;
         }
 
         protected override Task ExecuteAsync(CancellationToken cancelToken)
