@@ -1,20 +1,17 @@
-﻿using Common.Extensions;
-using Common.Models;
+﻿using Common.Models;
 using Common.Models.Payment;
 using Common.Protos;
-using Common.Routing;
-using Grpc.Net.Client;
 
 namespace OrderProcessor.Clients
 {
     internal class GrpcOrderClient : IGrpcOrderClient
     {
-        private readonly string _orderGrpcUrl;
         private readonly ILogger<GrpcOrderClient> _logger;
+        private readonly OrderService.OrderServiceClient _client;
 
-        public GrpcOrderClient(IEnvironmentRouter environmentRouter, ILogger<GrpcOrderClient> logger)
+        public GrpcOrderClient(OrderService.OrderServiceClient client, ILogger<GrpcOrderClient> logger)
         {
-            _orderGrpcUrl = environmentRouter.GetOrderGrpcRoute();
+            _client = client;
             _logger = logger;
         }
 
@@ -22,13 +19,10 @@ namespace OrderProcessor.Clients
         {
             _logger.LogInformation($"[GRPC] Sending `GetOrderRequest` event with content: {orderId}");
 
-            using var channel = GrpcChannel.ForAddress(_orderGrpcUrl);
-            var client = new OrderService.OrderServiceClient(channel);
-
             var request = new GetOrderRequest();
             request.OrderId = orderId.ToString();
 
-            var reply = await client.GetOrderAsync(request);
+            var reply = await _client.GetOrderAsync(request);
 
             Guid.TryParse(reply.CustomerInfo.CustomerId, out var customerId);
 
@@ -85,14 +79,11 @@ namespace OrderProcessor.Clients
         {
             _logger.LogInformation($"[GRPC] Sending `UpdateOrderRequest` event with content: {orderId}");
 
-            using var channel = GrpcChannel.ForAddress(_orderGrpcUrl);
-            var client = new OrderService.OrderServiceClient(channel);
-
             var request = new UpdateOrderRequest();
             request.OrderId = orderId.ToString();
             request.OrderStatus = (int)orderStatus;
 
-            var reply = await client.UpdateOrderAsync(request);
+            var reply = await _client.UpdateOrderAsync(request);
 
             return reply.Success;
         }

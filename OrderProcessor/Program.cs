@@ -1,10 +1,11 @@
 ﻿using Common.Configuration;
 using Common.Events;
 using Common.Extensions;
-using Common.Routing;
+using Common.Protos;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using OrderProcessor;
 using OrderProcessor.Adapters;
 using OrderProcessor.Clients;
@@ -26,8 +27,11 @@ var host = hostBuilder
 
         services.Configure<ConnectionStrings>(hostContext.Configuration.GetSection(ConnectionStrings.Name));
 
-        services.AddSingleton<IEnvironmentRouter, EnvironmentRouter>();
-        services.AddSingleton<IGrpcOrderClient, GrpcOrderClient>();
+        var orderGrpcUrl = hostContext.Configuration.GetSection(GrpcSettings.Name).GetValue<string>(nameof(GrpcSettings.OrderGrpcUrl));
+        ArgumentNullException.ThrowIfNull(orderGrpcUrl);
+
+        services.AddSingleton<IGrpcOrderClient, GrpcOrderClient>()
+            .AddGrpcServiceReference<OrderService.OrderServiceClient>(orderGrpcUrl, failureStatus: HealthStatus.Degraded);
 
         services.AddHostedService<GenericConsumerRabbitMQAdapter<OrderCreatedConsumer, OrderCreated>>();
         services.AddHostedService<GenericConsumerRabbitMQAdapter<CancelOrderConsumer, CancelOrder>>();

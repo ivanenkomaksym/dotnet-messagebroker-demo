@@ -9,6 +9,7 @@ namespace OrderGrpc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+            services.AddGrpcHealthChecks();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -18,6 +19,7 @@ namespace OrderGrpc
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<GrpcOrderService>();
+                endpoints.MapGrpcHealthChecksService();
             });
         }
     }

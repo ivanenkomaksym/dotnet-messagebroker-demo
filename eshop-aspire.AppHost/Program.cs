@@ -65,8 +65,10 @@ var ordergrpc = builder.AddProject<Projects.OrderGrpc>("ordergrpc")
 var orderprocessor = builder.AddProject<Projects.OrderProcessor>("orderprocessor")
     .WithReference(mongodb)
     .WithReference(messaging)
+    .WithReference(ordergrpc)
     // Use Aspire's mongodb connection string in OrderAPI's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
+    .WithEnvironment($"GrpcSettings:OrderGrpcUrl", "http://ordergrpc/")
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
 var payment = builder.AddProject<Projects.PaymentService>("paymentservice")
