@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Grpc.Health.V1;
+using Common.HealthChecks;
 
 namespace Common.Extensions
 {
@@ -45,20 +46,6 @@ namespace Common.Extensions
             services.AddGrpcClient<Health.HealthClient>(o => o.Address = uri);
             services.AddHealthChecks()
                 .AddCheck<GrpcServiceHealthCheck>(healthCheckName, failureStatus);
-        }
-
-        private sealed class GrpcServiceHealthCheck(Health.HealthClient healthClient) : IHealthCheck
-        {
-            public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-            {
-                var response = await healthClient.CheckAsync(new(), cancellationToken: cancellationToken);
-
-                return response.Status switch
-                {
-                    HealthCheckResponse.Types.ServingStatus.Serving => HealthCheckResult.Healthy(),
-                    _ => HealthCheckResult.Unhealthy()
-                };
-            }
         }
     }
 }
