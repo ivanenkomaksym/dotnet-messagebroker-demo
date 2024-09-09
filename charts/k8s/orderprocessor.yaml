@@ -18,7 +18,7 @@ spec:
         - name: orderprocessor
           image: ivanenkomak/orderprocessor:latest
           env:
-            - name: GrpcSettings__OrderGrpcUrl
+            - name: ConnectionStrings__OrderGrpcUrl
               value: "http://ordergrpc"
             - name: ConnectionStrings__AMQPConnectionString
               value: "amqp://guest:guest@rabbitmq:5672"

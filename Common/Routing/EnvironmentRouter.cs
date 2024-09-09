@@ -6,13 +6,11 @@ namespace Common.Routing
     public class EnvironmentRouter : IEnvironmentRouter
     {
         private readonly ApplicationOptions _applicationOptions;
-        private readonly GrpcSettings _grpcSettings;
 
-        public EnvironmentRouter(IOptions<ApplicationOptions> applicationOptions, IOptions<GrpcSettings> grpcSettings)
+        public EnvironmentRouter(IOptions<ApplicationOptions> applicationOptions)
         {
             ArgumentNullException.ThrowIfNull(applicationOptions);
             _applicationOptions = applicationOptions.Value;
-            _grpcSettings = grpcSettings.Value;
         }
 
         public string GetCustomerRoute()

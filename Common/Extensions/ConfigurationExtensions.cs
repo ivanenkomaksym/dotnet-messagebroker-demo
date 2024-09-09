@@ -20,13 +20,5 @@ namespace Common.Extensions
             var gatewayAddress = apiSettings.GatewayAddress ?? string.Empty;
             return gatewayAddress;
         }
-
-        public static string GetOrderGrpcUrl(this IConfiguration configuration)
-        {
-            var grpcSettings = new GrpcSettings();
-            configuration.GetSection(GrpcSettings.Name).Bind(grpcSettings);
-            var orderGrpcUrl = grpcSettings.OrderGrpcUrl?? string.Empty;
-            return orderGrpcUrl;
-        }
     }
 }

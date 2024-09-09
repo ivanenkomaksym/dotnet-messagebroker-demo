@@ -27,7 +27,7 @@ var host = hostBuilder
 
         services.Configure<ConnectionStrings>(hostContext.Configuration.GetSection(ConnectionStrings.Name));
 
-        var orderGrpcUrl = hostContext.Configuration.GetSection(GrpcSettings.Name).GetValue<string>(nameof(GrpcSettings.OrderGrpcUrl));
+        var orderGrpcUrl = hostContext.Configuration.GetSection(ConnectionStrings.Name).GetValue<string>(nameof(ConnectionStrings.OrderGrpcUrl));
         ArgumentNullException.ThrowIfNull(orderGrpcUrl);
 
         services.AddSingleton<IGrpcOrderClient, GrpcOrderClient>()
