@@ -31,14 +31,6 @@ namespace Common.Routing
             return "/gateway/Order";
         }
 
-        public string GetOrderGrpcRoute()
-        {
-            if (_applicationOptions.StartupEnvironment == StartupEnvironment.Aspire)
-                return "http://ordergrpc/";
-
-            return _grpcSettings.OrderGrpcUrl ?? string.Empty;
-        }
-
         public string GetCatalogRoute()
         {
             if (_applicationOptions.StartupEnvironment == StartupEnvironment.Aspire)
