@@ -18,7 +18,6 @@ using WebUI.Users;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
 builder.Services.AddSingleton<IEnvironmentRouter, EnvironmentRouter>();

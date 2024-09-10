@@ -13,7 +13,6 @@ using OrderProcessor.Consumers;
 using System.Net.Mime;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
-hostBuilder.ConfigureOpenTelemetry();
 
 var host = hostBuilder
     .ConfigureLogging((hostContext, logging) =>

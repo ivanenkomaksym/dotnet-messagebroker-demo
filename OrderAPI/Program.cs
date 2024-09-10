@@ -14,7 +14,6 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.Host.ConfigureOpenTelemetry();
 
 // Add services to the container.
 builder.Services.AddScoped<IOrderContextSeed, OrderContextSeed>();

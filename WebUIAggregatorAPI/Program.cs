@@ -5,7 +5,6 @@ using WebUIAggregatorAPI.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.Host.ConfigureOpenTelemetry();
 
 var gatewayAddress = builder.Configuration.GetGatewayAddress();
 

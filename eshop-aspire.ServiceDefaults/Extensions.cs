@@ -1,4 +1,4 @@
-using Common.Configuration;
+Mkeusing Common.Configuration;
 using Common.Extensions;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -19,12 +19,22 @@ namespace Microsoft.Extensions.Hosting;
 // To learn more about using this project, see https://aka.ms/dotnet/aspire/service-defaults
 public static class Extensions
 {
-    public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddServiceDefaults(this WebApplicationBuilder builder)
     {
-        builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(ApplicationOptions.Name));
+        var applicationOptionsSection = builder.Configuration.GetSection(ApplicationOptions.Name);
+        builder.Services.Configure<ApplicationOptions>(applicationOptionsSection);
+
         builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection(DatabaseSettings.Name));
 
-        builder.ConfigureAspireOpenTelemetry();
+        var applicationOptions = applicationOptionsSection.Get<ApplicationOptions>();
+        if (applicationOptions != null && applicationOptions.StartupEnvironment == StartupEnvironment.Kubernetes)
+        {
+            builder.Host.ConfigureOpenTelemetry();
+        }
+        else
+        {
+            builder.ConfigureAspireOpenTelemetry();
+        }
 
         builder.AddDefaultHealthChecks();
 
@@ -69,7 +79,7 @@ public static class Extensions
         }
         else
         {
-            builder.ConfigureAspireOpenTelemetry(services);
+            builder.ConfigureAspireOpenTelemetry(hostContext, services);
         }
 
         services.AddDefaultHealthChecks();
@@ -123,12 +133,12 @@ public static class Extensions
                     .AddHttpClientInstrumentation();
             });
 
-        //builder.AddOpenTelemetryExporters();
+        builder.AddOpenTelemetryExporters();
 
         return builder;
     }
 
-    public static IHostBuilder ConfigureAspireOpenTelemetry(this IHostBuilder builder, IServiceCollection services)
+    public static IHostBuilder ConfigureAspireOpenTelemetry(this IHostBuilder builder, HostBuilderContext hostContext, IServiceCollection services)
     {
         services.AddOpenTelemetry()
             .WithMetrics(metrics =>
@@ -144,6 +154,8 @@ public static class Extensions
                     //.AddGrpcClientInstrumentation()
                     .AddHttpClientInstrumentation();
             });
+
+        AddOpenTelemetryExporters(hostContext, services);
 
         return builder;
     }
