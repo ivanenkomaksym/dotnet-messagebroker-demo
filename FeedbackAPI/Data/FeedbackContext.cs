@@ -1,16 +1,18 @@
-﻿using Common.Models.Review;
+﻿using Common.Configuration;
+using Common.Models.Review;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace FeedbackAPI.Data
 {
     public class FeedbackContext : IFeedbackContext
     {
-        public FeedbackContext(IConfiguration configuration)
+        public FeedbackContext(IOptions<DatabaseSettings> databaseSettings)
         {
-            var client = new MongoClient(configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
-            var database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
+            var client = new MongoClient(databaseSettings.Value.ConnectionString);
+            var database = client.GetDatabase(databaseSettings.Value.DatabaseName);
 
-            ReviewedProducts = database.GetCollection<ReviewedProduct>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
+            ReviewedProducts = database.GetCollection<ReviewedProduct>(databaseSettings.Value.CollectionName);
             FeedbackContextSeed.SeedData(ReviewedProducts);
         }
 

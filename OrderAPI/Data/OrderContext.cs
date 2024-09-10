@@ -1,4 +1,6 @@
-﻿using OrderCommon.Data;
+﻿using Common.Configuration;
+using Microsoft.Extensions.Options;
+using OrderCommon.Data;
 
 namespace OrderAPI.Data
 {
@@ -6,8 +8,8 @@ namespace OrderAPI.Data
     {
         private readonly IOrderContextSeed _orderContextSeed;
 
-        public OrderContext(IOrderContextSeed orderContextSeed, IConfiguration configuration)
-            : base(configuration)
+        public OrderContext(IOrderContextSeed orderContextSeed, IOptions<DatabaseSettings> databaseSettings)
+            : base(databaseSettings)
         {
             _orderContextSeed = orderContextSeed;
         }
