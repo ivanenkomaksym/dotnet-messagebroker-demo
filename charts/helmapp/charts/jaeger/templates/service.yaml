@@ -1,10 +1,9 @@
-{{- if .Values.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "feedbackapi.fullname" . }}
+  name: {{ include "jaeger.fullname" . }}
   labels:
-    {{- include "feedbackapi.labels" . | nindent 4 }}
+    {{- include "jaeger.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -13,5 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "feedbackapi.selectorLabels" . | nindent 4 }}
-{{- end }}
+    {{- include "jaeger.selectorLabels" . | nindent 4 }}

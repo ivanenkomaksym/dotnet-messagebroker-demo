@@ -35,8 +35,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           # Get environment from values.yaml
           env:
-            - name: DatabaseSettings__ConnectionString
-              value: {{ .Values.env.connectionString }}
+            {{- range .Values.env }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
           envFrom:
             - secretRef:
                   name: mongo-secrets

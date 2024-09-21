@@ -219,7 +219,10 @@ catalogapi:
       containerPort: 80
     
     env:
-      connectionString: "mongodb://shopdb:27017"
+      - name: DatabaseSettings__ConnectionString
+        value: "mongodb://shopdb:27017"
+      - name: Otlp__Endpoint
+        value: "http://jaeger:4317"
 
     ingress:
       enabled: true
@@ -311,7 +314,10 @@ customerapi:
       containerPort: 80
     
     env:
-      connectionString: "mongodb://shopdb:27017"
+      - name: DatabaseSettings__ConnectionString
+        value: "mongodb://shopdb:27017"
+      - name: Otlp__Endpoint
+        value: "http://jaeger:4317"
 
     ingress:
       enabled: true
@@ -486,7 +492,12 @@ ocelotapigateway:
       containerPort: 80
     
     env:
-      ASPNETCORE_ENVIRONMENT: "k8s"
+      - name: ASPNETCORE_ENVIRONMENT
+        value: k8s
+      - name: Urls
+        value: "http://0.0.0.0:80"
+      - name: Otlp__Endpoint
+        value: "http://jaeger:4317"
 
     ingress:
       enabled: true
@@ -573,7 +584,10 @@ orderapi:
       containerPort: 80
     
     env:
-      connectionString: "mongodb://shopdb:27017"
+      - name: DatabaseSettings__ConnectionString
+        value: "mongodb://shopdb:27017"
+      - name: ApiSettings__GatewayAddress
+        value: "http://ocelotapigateway"
 
     ingress:
       enabled: true
@@ -665,7 +679,12 @@ ordergrpc:
       containerPort: 80
     
     env:
-      connectionString: "mongodb://shopdb:27017"
+      - name: DatabaseSettings__ConnectionString
+        value: "mongodb://shopdb:27017"
+      - name: Urls
+        value: "http://0.0.0.0:80"
+      - name: Otlp__Endpoint
+        value: "http://jaeger:4317"
 
     ingress:
       enabled: true
@@ -757,7 +776,14 @@ orderprocessor:
       containerPort: 80
     
     env:
-      orderGrpcUrl: "http://ordergrpc"
+      - name: ConnectionStrings__OrderGrpcUrl
+        value: "http://ordergrpc"
+      - name: ConnectionStrings__AMQPConnectionString
+        value: "amqp://guest:guest@rabbitmq:5672"
+      - name: Urls
+        value: "http://0.0.0.0:80"
+      - name: Otlp__Endpoint
+        value: "http://jaeger:4317"
 
     ingress:
       enabled: false
@@ -843,7 +869,10 @@ payment:
       containerPort: 80
     
     env:
-      connectionString: "mongodb://shopdb:27017"
+      - name: DatabaseSettings__ConnectionString
+        value: "mongodb://shopdb:27017"
+      - name: Otlp__Endpoint
+        value: "http://jaeger:4317"
 
     ingress:
       enabled: false
@@ -929,7 +958,10 @@ shipment:
       containerPort: 80
     
     env:
-      connectionString: "mongodb://shopdb:27017"
+      - name: DatabaseSettings__ConnectionString
+        value: "mongodb://shopdb:27017"
+      - name: Otlp__Endpoint
+        value: "http://jaeger:4317"
 
     ingress:
       enabled: false
@@ -1015,7 +1047,10 @@ shoppingcartapi:
       containerPort: 80
     
     env:
-      connectionString: "mongodb://shopdb:27017"
+      - name: DatabaseSettings__ConnectionString
+        value: "mongodb://shopdb:27017"
+      - name: Otlp__Endpoint
+        value: "http://jaeger:4317"
 
     ingress:
       enabled: false
@@ -1101,7 +1136,10 @@ warehouse:
       containerPort: 80
     
     env:
-      connectionString: "mongodb://shopdb:27017"
+      - name: DatabaseSettings__ConnectionString
+        value: "mongodb://shopdb:27017"
+      - name: Otlp__Endpoint
+        value: "http://jaeger:4317"
 
     ingress:
       enabled: false
@@ -1187,8 +1225,12 @@ warehouseapi:
       containerPort: 80
     
     env:
-      gatewayAddress: "http://ocelotapigateway"
-      connectionString: "mongodb://shopdb:27017"
+      - name: ApiSettings__GatewayAddress
+        value: "http://ocelotapigateway"
+      - name: DatabaseSettings__ConnectionString
+        value: "mongodb://shopdb:27017"
+      - name: Otlp__Endpoint
+        value: "http://jaeger:4317"
 
     ingress:
       enabled: false
@@ -1274,7 +1316,10 @@ webui:
       containerPort: 80
     
     env:
-      gatewayAddress: "http://ocelotapigateway"
+      - name: ApiSettings__GatewayAddress
+        value: "http://ocelotapigateway"
+      - name: Otlp__Endpoint
+        value: "http://simplest-collector:4317"
 
     ingress:
       enabled: false
@@ -1360,7 +1405,10 @@ webuiaggregatorapi:
       containerPort: 80
     
     env:
-      gatewayAddress: "http://ocelotapigateway"
+      - name: ApiSettings__GatewayAddress
+        value: "http://ocelotapigateway"
+      - name: Otlp__Endpoint
+        value: "http://simplest-collector:4317"
 
     ingress:
       enabled: false
