@@ -3,7 +3,43 @@
 # Declare variables to be passed into your templates.
 
 # Disable unused charts
+catalogapi:
+    enabled: false
+    
+    ingress:
+        enabled: false
+        
+customerapi:
+    enabled: false
+    
+    ingress:
+        enabled: false
+        
 feedbackapi:
+    enabled: false
+    
+    ingress:
+        enabled: false
+        
+notifications:
+    enabled: false
+    
+    ingress:
+        enabled: false
+        
+shoppingcartapi:
+    enabled: false
+    
+    ingress:
+        enabled: false
+        
+warehouseapi:
+    enabled: false
+    
+    ingress:
+        enabled: false
+        
+webuiaggregatorapi:
     enabled: false
     
     ingress:
@@ -14,10 +50,10 @@ rabbitmq:
     replicaCount: 1
 
     image:
-      repository: ivanenkomak/rabbitmq
-      pullPolicy: Always
+      repository: rabbitmq
+      pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "management"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -103,10 +139,10 @@ shopdb:
     replicaCount: 1
 
     image:
-      repository: mongo:latest
+      repository: mongo
       pullPolicy: Always
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "latest"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -188,10 +224,10 @@ jaeger:
     replicaCount: 1
 
     image:
-      repository: jaegertracing/all-in-one:latest
+      repository: jaegertracing/all-in-one
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "latest"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -221,9 +257,7 @@ jaeger:
 
     service:
       type: NodePort
-      port: 80
-      targetPort: 80
-      containerPort: 80
+      port: 16686
 
     spec:
       ports:
@@ -284,7 +318,7 @@ ocelotapigateway:
       repository: ivanenkomak/ocelotapigateway
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "latest"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -376,7 +410,7 @@ orderapi:
       repository: ivanenkomak/orderapi
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "latest"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -471,7 +505,7 @@ ordergrpc:
       repository: ivanenkomak/ordergrpc
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "latest"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -568,7 +602,7 @@ orderprocessor:
       repository: ivanenkomak/orderprocessor
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "latest"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -661,7 +695,7 @@ payment:
       repository: ivanenkomak/payment
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "latest"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -750,7 +784,7 @@ shipment:
       repository: ivanenkomak/shipment
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "latest"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -839,7 +873,7 @@ warehouse:
       repository: ivanenkomak/warehouse
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "latest"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -928,7 +962,7 @@ webui:
       repository: ivanenkomak/webui
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "latest"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -957,16 +991,28 @@ webui:
       # runAsUser: 1000
 
     service:
-      type: NodePort
+      type: LoadBalancer
       port: 80
       targetPort: 80
       containerPort: 80
     
     env:
-      - name: ApiSettings__GatewayAddress
-        valuee: "http://ocelotapigateway"
-      - name: Otlp__Endpoint
-        value: "http://simplest-collector:4317"
+        - name: ApiSettings__GatewayAddress
+          value: "http://ocelotapigateway"
+        - name: FeatureManagement_Feedback
+          value: "false"
+        - name: FeatureManagement_Discount
+          value: "false"
+        - name: FeatureManagement_Customer
+          value: "false"
+        - name: FeatureManagement_Product
+          value: "false"
+        - name: FeatureManagement_ShoppingCart
+          value: "false"
+        - name: Urls
+          value: "http://0.0.0.0:80"
+        - name: Otlp__Endpoint
+          value: "http://jaeger:4317"
 
     ingress:
       enabled: false
