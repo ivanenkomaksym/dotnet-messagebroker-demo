@@ -44,13 +44,13 @@ namespace OrderProcessor.Adapters
             _connection = CreateConnectionWithRetry(factory);
 
             // create channel  
-            _channel = _connection.CreateModel();
+            _channel = _connection?.CreateModel();
             _channel.ExchangeDeclare(ExchangeName, ExchangeType.Fanout);
         }
 
-        private IConnection CreateConnectionWithRetry(ConnectionFactory factory)
+        private IConnection? CreateConnectionWithRetry(ConnectionFactory factory)
         {
-            IConnection connection = null;
+            IConnection? connection = null;
             int attempt = 0;
             while (connection == null && attempt < MaxRetries)
             {

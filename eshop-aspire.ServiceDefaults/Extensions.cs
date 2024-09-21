@@ -1,4 +1,4 @@
-Mkeusing Common.Configuration;
+using Common.Configuration;
 using Common.Extensions;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
