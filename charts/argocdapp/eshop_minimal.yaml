@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: eshop-minimal
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/ivanenkomaksym/dotnet-messagebroker-demo'
+    targetRevision: HEAD
+    path: charts/helmapp
+    helm:
+      valueFiles:
+        - values_minimal.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd-eshop-minimal
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
