@@ -15,17 +15,22 @@ This repository showcases a sample implementation of a message broker using .NET
 * Demonstrates how to scale and manage the message broker infrastructure using Kubernetes and Helm.
 * Seamless integration of Rust implementation for Order functionality with the existing infrastructure without requiring any modifications to the database schema or the message broker configuration.
 * Configure OpenTelemetry to export traces directly to Jaeger.
+* Supports ArgoCD using Helm charts.
 
 ![Alt text](docs/architecture.png?raw=true "Application architecture")
 
 ## Dependencies
-[.NET 7](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+[.NET 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+
+[.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview)
 
 [Docker](https://docs.docker.com/engine/install/)
 
 [Minikube](https://minikube.sigs.k8s.io/docs/start/)
 
 [Helm](https://helm.sh/docs/intro/install/)
+
+[ArgoCD](https://argo-cd.readthedocs.io/en/stable/)
 
 ## Application structure
 
@@ -56,10 +61,12 @@ You can check the data model and other sagas in ![solution diagrams](docs/DotNet
 
 ## How to run this sample
 
-You can run this sample in 3 different ways:
+You can run this sample in 5 different ways:
 1. Run .NET apps locally with RabbitMQ and Mongo running in docker.
 2. Multi-Container .NET apps, RabbitMQ and Mongo running in Kubernetes.
-3. Using [a Helm chart](https://github.com/helm/helm).
+3. Using [.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview).
+4. Using [a Helm chart](https://github.com/helm/helm).
+5. Using [ArgoCD](https://argo-cd.readthedocs.io/en/stable/).
 
 ### Run local
 
@@ -113,23 +120,38 @@ dotnet run
 ### Using Helm chart
 
 1. **Run with Powershell** script **03_start_minikube.ps1** to start **minikube**. Wait for the script to complete.
-2. **Run with Powershell** script **05_run_helm.ps1** to install helm chart and start **helmapp-orderapi** with **helmapp-rabbitmq**.
+2. **Run with Powershell** script **05_run_minimal_helm.ps1** to install helm chart.
 3. Observe the deployment in opened Kubernetes dashboard. Wait for all the pods change the status to **Running**.
-8. Navigate to second URL (e.g. http://127.0.0.1:58024) to access **RabbitMQ Management** UI (login: **guest**, password: **guest**).
+4. Main **WebUI** service is going to be exposed by the minikube.
+5. Stop it by running **05_stop_helm.ps1**.
 
 ```
-* Starting tunnel for service helmapp-rabbitmq.
-|-----------|------------------|-------------|------------------------|
-| NAMESPACE |       NAME       | TARGET PORT |          URL           |
-|-----------|------------------|-------------|------------------------|
-| default   | helmapp-rabbitmq |             | http://127.0.0.1:58023 |
-|           |                  |             | http://127.0.0.1:58024 |
-|-----------|------------------|-------------|------------------------|
+|-----------|-------|-------------|---------------------------|
+| NAMESPACE | NAME  | TARGET PORT |            URL            |
+|-----------|-------|-------------|---------------------------|
+| default   | webui | http/80     | http://192.168.49.2:32289 |
+|-----------|-------|-------------|---------------------------|
+* Starting tunnel for service webui.
+|-----------|-------|-------------|------------------------|
+| NAMESPACE | NAME  | TARGET PORT |          URL           |
+|-----------|-------|-------------|------------------------|
+| default   | webui |             | http://127.0.0.1:62184 |
+|-----------|-------|-------------|------------------------|
 ```
 
 11. **Run with Powershell** script **05_stop_helm.ps1** to uninstall the helm chart.
 
 ![Alt text](docs/helmchart_structure.png?raw=true "Helm chart structure")
+
+### Using ArgoCD
+
+1. **Run with Powershell** script **03_start_minikube.ps1** to start **minikube**. Wait for the script to complete.
+2. **Run with Powershell** script **06_run_argocd.ps1** to start ArgoCD deployment.
+
+ArgoCD dashboard is going to be opened in https://localhost:8080/. Main **WebUI** service is going to be exposed by the minikube. You can as well observe deployment in minikube dashboard inside 
+**argocd-eshop-minimal** namespace. You can stop the deployment and delete pods with **07_stop_argocd.ps1** Powershell script.
+
+![Alt text](docs/argocd.png?raw=true "ArgoCD dashboard")
 
 ## References
 [RabbitMQ .NET Tutorial](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html)
