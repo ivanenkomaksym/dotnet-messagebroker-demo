@@ -60,7 +60,7 @@ kubectl apply -f webui-service.yaml
 # DiscountAPI Empty
 
 minikube dashboard
-Start-Process -FilePath "cmd" -ArgumentList "/c minikube service shopdb" -WorkingDirectory ".\"
+Start-Sleep -Seconds 5
 Start-Process -FilePath "cmd" -ArgumentList "/c minikube service webui" -WorkingDirectory ".\"
 Start-Process -FilePath "cmd" -ArgumentList "/c minikube service jaeger" -WorkingDirectory ".\"
 cd ..\..\

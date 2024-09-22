@@ -18,10 +18,13 @@ spec:
         - name: webui
           image: ivanenkomak/webui:latest
           env:
+          env:
             - name: ApiSettings__GatewayAddress
               value: "http://ocelotapigateway"
+            - name: Urls
+              value: "http://0.0.0.0:80"
             - name: Otlp__Endpoint
-              value: "http://simplest-collector:4317"
+              value: "http://jaeger:4317"
           imagePullPolicy: Always
           ports:
             - containerPort: 80

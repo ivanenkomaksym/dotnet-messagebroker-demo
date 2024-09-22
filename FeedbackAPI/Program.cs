@@ -7,7 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.ConfigureOpenTelemetry();
+builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddScoped<IFeedbackContext, FeedbackContext>();

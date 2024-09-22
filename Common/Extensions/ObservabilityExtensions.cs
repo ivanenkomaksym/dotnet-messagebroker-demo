@@ -13,17 +13,9 @@ namespace Common.Extensions
 {
     public static class ObservabilityExtensions
     {
-        public static void ConfigureOpenTelemetry(this IHostBuilder hostBuilder)
+        public static void ConfigureOpenTelemetry(this IHostBuilder hostBuilder, HostBuilderContext hostContext, IServiceCollection services)
         {
-            hostBuilder
-                .ConfigureServices((hostContext, services) =>
-            {
-                services.ConfigureOpenTelemetry(hostContext.Configuration);
-            })
-                .ConfigureLogging((hostContext, configureLogging) =>
-            {
-                configureLogging.ConfigureLogging(hostContext.Configuration);
-            });
+            services.ConfigureOpenTelemetry(hostContext.Configuration);
         }
 
         private static void ConfigureOpenTelemetry(this IServiceCollection services, IConfiguration configuration)

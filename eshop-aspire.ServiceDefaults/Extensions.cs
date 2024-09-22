@@ -27,9 +27,13 @@ public static class Extensions
         builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection(DatabaseSettings.Name));
 
         var applicationOptions = applicationOptionsSection.Get<ApplicationOptions>();
-        if (applicationOptions != null && applicationOptions.StartupEnvironment == StartupEnvironment.Kubernetes)
+        if (applicationOptions == null || applicationOptions.StartupEnvironment == StartupEnvironment.Kubernetes)
         {
-            builder.Host.ConfigureOpenTelemetry();
+            builder.Host
+                .ConfigureServices((hostContext, services) =>
+                {
+                    builder.Host.ConfigureOpenTelemetry(hostContext, services);
+                });
         }
         else
         {
@@ -55,7 +59,7 @@ public static class Extensions
     public static void AddLogging(this ILoggingBuilder loggingBuilder, IConfiguration configuration)
     {
         var applicationOptions = configuration.GetSection(ApplicationOptions.Name).Get<ApplicationOptions>();
-        if (applicationOptions != null && applicationOptions.StartupEnvironment == StartupEnvironment.Kubernetes)
+        if (applicationOptions == null || applicationOptions.StartupEnvironment == StartupEnvironment.Kubernetes)
         {
             loggingBuilder.ConfigureLogging(configuration);
         }
@@ -73,9 +77,9 @@ public static class Extensions
         services.Configure<DatabaseSettings>(hostContext.Configuration.GetSection(DatabaseSettings.Name));
 
         var applicationOptions = applicationOptionsSection.Get<ApplicationOptions>();
-        if (applicationOptions != null && applicationOptions.StartupEnvironment == StartupEnvironment.Kubernetes)
+        if (applicationOptions == null || applicationOptions.StartupEnvironment == StartupEnvironment.Kubernetes)
         {
-            builder.ConfigureOpenTelemetry();
+            builder.ConfigureOpenTelemetry(hostContext, services);
         }
         else
         {

@@ -82,27 +82,12 @@ You can run this sample in 5 different ways:
 
 ### Run in Kubernetes
 
-1. **Run with Powershell** script **02_docker_build.ps1** to build docker images of all microservices. Wait for the script to complete.
-2. **Run with Powershell** script **03_start_minikube.ps1** to start **minikube**. Wait for the script to complete.
-3. **Run with Powershell** script **04_run_k8s.ps1** to deploy docker images to Kubernetes.
-4. Observe the deployment in opened Kubernetes dashboard. Wait for all the pods change the status to **Running**.
-5. 
-8. Navigate to second URL (e.g. http://127.0.0.1:57613) to access **RabbitMQ Management** UI (login: **guest**, password: **guest**).
-
-```
-* Starting tunnel for service rabbitmq-service.
-|-----------|------------------|-------------|------------------------|
-| NAMESPACE |       NAME       | TARGET PORT |          URL           |
-|-----------|------------------|-------------|------------------------|
-| default   | rabbitmq-service |             | http://127.0.0.1:57612 |
-|           |                  |             | http://127.0.0.1:57613 |
-|-----------|------------------|-------------|------------------------|
-```
-
-10. Observe logs in pods in Kubernetes dashboard from step 4.
-11. Observe traces in Jaeger UI
+1. **Run with Powershell** script **03_start_minikube.ps1** to start **minikube**. Wait for the script to complete.
+2. **Run with Powershell** script **04_run_minimal_k8s.ps1** to deploy docker images to Kubernetes.
+3. Observe the deployment in opened Kubernetes dashboard. Wait for all the pods change the status to **Running**.
+4. Main **WebUI** service and Jaeger UI are going to be exposed by the minikube.
 ![Alt text](docs/traces_jaeger.png?raw=true "Traces in Jaeger")
-12. **Run with Powershell** script **04_stop_k8s.ps1** to delete the deployment.
+5. **Run with Powershell** script **04_stop_k8s.ps1** to delete the deployment.
 
 ![Alt text](docs/run_k8s.png?raw=true "Run in Kubernetes")
 
