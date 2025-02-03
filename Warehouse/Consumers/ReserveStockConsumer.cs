@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 using Common.Events;
 using Common.Models.Warehouse;
-using WarehouseCommon.Repositories;
 using MassTransit;
+using WarehouseCommon.Repositories;
 
 namespace Warehouse.Consumers
 {

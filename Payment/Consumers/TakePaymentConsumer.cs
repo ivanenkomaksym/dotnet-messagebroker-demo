@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 using Common.Events;
 using Common.Models.Payment;
-using PaymentService.Repositories;
 using MassTransit;
+using PaymentService.Repositories;
 
 namespace PaymentService.Consumers
 {

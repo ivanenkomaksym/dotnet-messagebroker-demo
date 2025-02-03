@@ -1,8 +1,8 @@
-﻿using Catalog.API.Repositories.Interfaces;
+﻿using System.Net;
+using Catalog.API.Repositories.Interfaces;
 using Common.Models;
 using DnsClient.Internal;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace Catalog.API.Controllers
 {
@@ -83,7 +83,7 @@ namespace Catalog.API.Controllers
             return Ok(await _repository.UpdateProduct(product));
         }
 
-        [HttpDelete("{id}", Name = "DeleteProduct")]        
+        [HttpDelete("{id}", Name = "DeleteProduct")]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteProductById(Guid id)
         {

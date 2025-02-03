@@ -27,10 +27,10 @@ IHost host = hostBuilder
             x.AddConsumer<TakePaymentConsumer>();
             x.AddConsumer<RefundPaymentConsumer>();
 
-            x.UsingRabbitMq((context, cfg) => 
+            x.UsingRabbitMq((context, cfg) =>
             {
                 Extensions.ConfigureRabbitMq(context, cfg);
-                cfg.ConfigureEndpoints(context); 
+                cfg.ConfigureEndpoints(context);
             });
         });
 

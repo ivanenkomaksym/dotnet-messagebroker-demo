@@ -1,6 +1,6 @@
-﻿using GraphQL;
+﻿using Common.Models.Review;
+using GraphQL;
 using GraphQL.Client.Abstractions;
-using Common.Models.Review;
 using WebUI.Models.Reviews;
 
 namespace WebUI.Services

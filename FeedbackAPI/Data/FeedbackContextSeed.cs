@@ -1,5 +1,5 @@
-﻿using MongoDB.Driver;
-using Common.Models.Review;
+﻿using Common.Models.Review;
+using MongoDB.Driver;
 
 namespace FeedbackAPI.Data
 {

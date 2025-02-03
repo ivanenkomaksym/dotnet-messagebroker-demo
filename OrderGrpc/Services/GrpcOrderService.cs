@@ -1,7 +1,7 @@
 ﻿using Common.Models;
 using Common.Protos;
-using OrderCommon.Repositories;
 using Grpc.Core;
+using OrderCommon.Repositories;
 
 namespace OrderAPI.Services
 {

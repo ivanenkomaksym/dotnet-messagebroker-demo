@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Common.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Common.Models;
+using WebUI.Data;
 using WebUI.Services;
 using WebUI.Users;
-using WebUI.Data;
 
 namespace WebUI.Pages
 {

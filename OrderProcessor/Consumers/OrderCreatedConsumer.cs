@@ -24,7 +24,7 @@ namespace OrderProcessor.Consumers
         }
 
         public override async Task HandleMessage(OrderCreated orderCreated)
-        { 
+        {
             var message = JsonSerializer.Serialize(orderCreated);
             _logger.LogInformation($"Received `OrderCreated` event with content: {message}");
 

@@ -1,4 +1,5 @@
-﻿using Common.Configuration;
+﻿using System.Net.Mime;
+using Common.Configuration;
 using Common.Events;
 using Common.Extensions;
 using Common.Protos;
@@ -10,7 +11,6 @@ using OrderProcessor;
 using OrderProcessor.Adapters;
 using OrderProcessor.Clients;
 using OrderProcessor.Consumers;
-using System.Net.Mime;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
 

@@ -20,7 +20,7 @@ namespace WebUI.Pages.Account
         {
             return Page();
         }
-        
+
         public class InputModel
         {
             [Required]

@@ -30,7 +30,7 @@ IHost host = hostBuilder
             x.AddConsumer<RemoveReserveConsumer>();
             x.AddConsumer<UpdateStockConsumer>();
 
-            x.UsingRabbitMq((context, cfg) => 
+            x.UsingRabbitMq((context, cfg) =>
             {
                 Extensions.ConfigureRabbitMq(context, cfg);
                 cfg.ConfigureEndpoints(context);

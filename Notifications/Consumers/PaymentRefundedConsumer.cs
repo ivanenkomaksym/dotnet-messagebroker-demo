@@ -1,7 +1,7 @@
-﻿using Common.Events;
+﻿using System.Text.Json;
+using Common.Events;
 using Common.Events.UserNotifications;
 using MassTransit;
-using System.Text.Json;
 
 namespace Notifications.Consumers
 {

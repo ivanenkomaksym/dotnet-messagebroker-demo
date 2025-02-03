@@ -1,7 +1,7 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCartAPI.Entities;
 using ShoppingCartAPI.Repositories;
-using System.Net;
 
 namespace ShoppingCartAPI.Controllers
 {

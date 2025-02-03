@@ -1,9 +1,9 @@
 ﻿using System.Net;
+using Common.Models;
 using Common.Models.Warehouse;
-using WarehouseCommon.Repositories;
 using DnsClient.Internal;
 using Microsoft.AspNetCore.Mvc;
-using Common.Models;
+using WarehouseCommon.Repositories;
 
 namespace WarehouseAPI.Controllers
 {

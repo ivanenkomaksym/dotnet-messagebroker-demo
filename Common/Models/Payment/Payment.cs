@@ -1,6 +1,6 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
-using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Common.Models.Payment
 {
@@ -23,7 +23,7 @@ namespace Common.Models.Payment
         public decimal PaidAmount;
 
         [Required]
-        public DateTime CreatedOn { get;set; }
+        public DateTime CreatedOn { get; set; }
 
         public DateTime PaidDateTime;
 

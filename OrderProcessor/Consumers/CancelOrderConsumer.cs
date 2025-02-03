@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Common.Events;
-using OrderProcessor.Clients;
 using MassTransit;
+using OrderProcessor.Clients;
 
 namespace OrderProcessor.Consumers
 {

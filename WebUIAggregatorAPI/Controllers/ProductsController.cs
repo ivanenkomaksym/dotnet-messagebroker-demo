@@ -1,7 +1,7 @@
-﻿using Common.Models;
+﻿using System.Net;
+using Common.Models;
 using Common.Models.Warehouse;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using WebUIAggregatorAPI.Services;
 
 namespace WebUIAggregatorAPI.Controllers

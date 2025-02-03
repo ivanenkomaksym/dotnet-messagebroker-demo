@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
 using Common.Models.Payment;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Common.Models
 {

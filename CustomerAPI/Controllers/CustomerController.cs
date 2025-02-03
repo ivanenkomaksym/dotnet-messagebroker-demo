@@ -1,8 +1,8 @@
 ﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
 using Common.Models;
-using CustomerAPI.Repositories;
 using CustomerAPI.Messaging;
+using CustomerAPI.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CustomerAPI.Controllers
 {

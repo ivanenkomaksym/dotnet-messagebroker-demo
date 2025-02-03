@@ -1,10 +1,10 @@
-﻿using Common.Configuration;
+﻿using System.Diagnostics;
+using System.Text.Json;
+using Common.Configuration;
 using Microsoft.Extensions.Options;
 using OrderProcessor.Consumers;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System.Diagnostics;
-using System.Text.Json;
 
 namespace OrderProcessor.Adapters
 {
@@ -34,7 +34,7 @@ namespace OrderProcessor.Adapters
             _logger = logger;
             InitRabbitMQ();
         }
-        
+
         private void InitRabbitMQ()
         {
             var factory = new ConnectionFactory();

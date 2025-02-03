@@ -36,7 +36,7 @@ namespace WebUI.Pages.MyAccount
 
             try
             {
-                var orders  = await _orderService.GetOrders(customerId);
+                var orders = await _orderService.GetOrders(customerId);
                 ArgumentNullException.ThrowIfNull(orders);
                 Orders = orders;
             }

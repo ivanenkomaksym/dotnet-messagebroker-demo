@@ -1,6 +1,6 @@
-﻿using Common.Events;
+﻿using System.Text.Json;
+using Common.Events;
 using MassTransit;
-using System.Text.Json;
 using WarehouseCommon.Repositories;
 
 namespace Warehouse.Consumers

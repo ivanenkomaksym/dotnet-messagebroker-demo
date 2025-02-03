@@ -1,5 +1,5 @@
-﻿using Common.Models.Payment;
-using Common.Models;
+﻿using Common.Models;
+using Common.Models.Payment;
 
 namespace Common.Events
 {

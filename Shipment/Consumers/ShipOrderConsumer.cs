@@ -1,8 +1,8 @@
-﻿using Common.Events;
+﻿using System.Text.Json;
+using Common.Events;
 using Common.Models.Shipment;
 using MassTransit;
 using Shipment.Repositories;
-using System.Text.Json;
 
 namespace Shipment.Consumers
 {

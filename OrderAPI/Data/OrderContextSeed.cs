@@ -44,7 +44,7 @@ namespace OrderAPI.Data
                     var product = products.ElementAt(productIndex);
 
                     orderItems.Add(new OrderItem
-                    { 
+                    {
                         Id = Guid.NewGuid(),
                         ProductId = product.Id,
                         ProductName = product.Name,

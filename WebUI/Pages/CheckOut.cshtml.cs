@@ -1,8 +1,8 @@
+using System.ComponentModel.DataAnnotations;
 using Common.Models;
 using Common.Models.Payment;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
 using WebUI.Data;
 using WebUI.Models;
 using WebUI.Services;
@@ -27,10 +27,10 @@ namespace WebUI.Pages
 
         [BindProperty]
         public required Order Order { get; set; } = new Order
-        { 
+        {
             CustomerInfo = new CustomerInfo { FirstName = string.Empty, LastName = string.Empty, Email = string.Empty },
             PaymentInfo = new PaymentInfo { CardName = string.Empty, CardNumber = string.Empty, Expiration = string.Empty, CVV = string.Empty },
-            ShippingAddress = new Address { FirstName = string.Empty, LastName = string.Empty, Email = string.Empty, AddressLine  = string.Empty, Country = string.Empty, ZipCode = string.Empty }
+            ShippingAddress = new Address { FirstName = string.Empty, LastName = string.Empty, Email = string.Empty, AddressLine = string.Empty, Country = string.Empty, ZipCode = string.Empty }
         };
 
         public required ShoppingCartModel ShoppingCart { get; set; }

@@ -1,3 +1,4 @@
+using System.Reflection;
 using Common.Examples;
 using Common.Extensions;
 using CustomerAPI.Data;
@@ -10,7 +11,6 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using MongoDB.Bson;
 using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 

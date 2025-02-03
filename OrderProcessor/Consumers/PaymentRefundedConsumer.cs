@@ -1,8 +1,8 @@
-﻿using Common.Events;
+﻿using System.Text.Json;
+using Common.Events;
 using MassTransit;
 using OrderProcessor.Clients;
 using OrderProcessor.Discount;
-using System.Text.Json;
 
 namespace OrderProcessor.Consumers
 {

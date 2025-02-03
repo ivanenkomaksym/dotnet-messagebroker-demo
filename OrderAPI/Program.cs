@@ -1,3 +1,4 @@
+using System.Reflection;
 using Common.Examples;
 using Common.Extensions;
 using MassTransit;
@@ -9,7 +10,6 @@ using OrderAPI.Messaging;
 using OrderCommon.Data;
 using OrderCommon.Repositories;
 using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 

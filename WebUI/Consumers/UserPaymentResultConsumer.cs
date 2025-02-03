@@ -1,7 +1,7 @@
-﻿using Common.Events.UserNotifications;
+﻿using System.Text.Json;
+using Common.Events.UserNotifications;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
-using System.Text.Json;
 using WebUI.Notifications;
 
 namespace WebUI.Consumers

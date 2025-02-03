@@ -94,7 +94,7 @@ namespace OrderAPI.Controllers
             }
 
             await OrderPublisher.CreateOrder(order);
-            return CreatedAtRoute("GetOrdersByCustomerId", new { customerId = order?.CustomerInfo?.CustomerId}, order);
+            return CreatedAtRoute("GetOrdersByCustomerId", new { customerId = order?.CustomerInfo?.CustomerId }, order);
         }
 
         /// <summary>

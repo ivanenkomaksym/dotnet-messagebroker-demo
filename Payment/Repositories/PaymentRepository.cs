@@ -1,6 +1,6 @@
 ﻿using Common.Models.Payment;
-using PaymentService.Data;
 using MongoDB.Driver;
+using PaymentService.Data;
 
 namespace PaymentService.Repositories
 {

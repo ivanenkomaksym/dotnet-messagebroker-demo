@@ -80,7 +80,8 @@ builder.Services.AddHttpClient<IOrderService, OrderService>(options =>
 
 builder.Services.AddSingleton<IUserProvider, DefaultUserProvider>();
 builder.Services.AddSingleton<IMassTransitConsumersRegistry, MassTransitConsumersRegistry>();
-builder.Services.AddSession(options => {
+builder.Services.AddSession(options =>
+{
     options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
 

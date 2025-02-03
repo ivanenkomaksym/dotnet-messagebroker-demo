@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 using Common.Events;
-using PaymentService.Repositories;
-using MassTransit;
 using Common.Models.Payment;
+using MassTransit;
+using PaymentService.Repositories;
 
 namespace PaymentService.Consumers
 {
@@ -31,7 +31,7 @@ namespace PaymentService.Consumers
             var payment = await _paymentRepository.GetPaymentByOrderId(refundPayment.OrderId);
             payment.PaymentStatus = PaymentStatus.Refunding;
             await _paymentRepository.UpdatePayment(payment);
-            
+
             await SchedulePaymentRefund(refundPayment);
         }
 

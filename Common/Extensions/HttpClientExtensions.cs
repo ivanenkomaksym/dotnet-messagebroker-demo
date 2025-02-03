@@ -13,8 +13,8 @@ namespace Common.Extensions
 
             var dataAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            return JsonSerializer.Deserialize<T>(dataAsString, new JsonSerializerOptions 
-            { 
+            return JsonSerializer.Deserialize<T>(dataAsString, new JsonSerializerOptions
+            {
                 PropertyNameCaseInsensitive = true,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString
             });

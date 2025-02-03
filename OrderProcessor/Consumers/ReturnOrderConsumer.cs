@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Common.Events;
-using OrderProcessor.Clients;
 using MassTransit;
+using OrderProcessor.Clients;
 
 namespace OrderProcessor.Consumers
 {
@@ -11,7 +11,7 @@ namespace OrderProcessor.Consumers
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<ReturnOrderConsumer> _logger;
 
-        public ReturnOrderConsumer(IGrpcOrderClient grpcOrderClient,  ILogger<ReturnOrderConsumer> logger, IPublishEndpoint publishEndpoint)
+        public ReturnOrderConsumer(IGrpcOrderClient grpcOrderClient, ILogger<ReturnOrderConsumer> logger, IPublishEndpoint publishEndpoint)
         {
             _grpcOrderClient = grpcOrderClient;
             _logger = logger;

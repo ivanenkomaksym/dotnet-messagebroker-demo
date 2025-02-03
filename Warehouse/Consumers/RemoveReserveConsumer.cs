@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using Common.Events;
-using WarehouseCommon.Repositories;
 using MassTransit;
-using System.Diagnostics;
+using WarehouseCommon.Repositories;
 
 namespace Warehouse.Consumers
 {
