@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace CatalogAPI.Data
 {
-    public class CatalogContext : ICatalogContext
+    public class CatalogContext: ICatalogContext
     {
         public CatalogContext(IOptions<DatabaseSettings> databaseSettings)
         {
@@ -16,6 +16,6 @@ namespace CatalogAPI.Data
             CatalogContextSeed.SeedData(Products);
         }
 
-        public IMongoCollection<Product> Products { get; }
+        public IMongoCollection<Product> Products { get}
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Net.Mime;
-using Common.Configuration;
+﻿using Common.Configuration;
 using Common.Events;
 using Common.Extensions;
 using Common.Protos;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using OrderProcessor;
+using System.Net.Mime;
 using OrderProcessor.Adapters;
 using OrderProcessor.Clients;
 using OrderProcessor.Consumers;
@@ -15,11 +15,11 @@ using OrderProcessor.Consumers;
 var hostBuilder = Host.CreateDefaultBuilder(args);
 
 var host = hostBuilder
-    .ConfigureLogging((hostContext, logging) =>
+    .ConfigureLogging((hostContext,logging) =>
     {
         logging.AddLogging(hostContext.Configuration);
     })
-    .ConfigureServices((hostContext, services) =>
+    .ConfigureServices((hostContext, services)=>
     {
         hostBuilder.AddServiceDefaults(hostContext, services);
         services.AddHostedService<OrderProcessorWorker>();
