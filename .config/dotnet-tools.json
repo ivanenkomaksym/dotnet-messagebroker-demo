@@ -8,6 +8,13 @@
         "husky"
       ],
       "rollForward": false
+    },
+    "dotnet-format": {
+      "version": "5.1.250801",
+      "commands": [
+        "dotnet-format"
+      ],
+      "rollForward": false
     }
   }
 }
