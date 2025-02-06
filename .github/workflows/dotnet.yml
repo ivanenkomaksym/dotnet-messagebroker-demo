@@ -32,6 +32,8 @@ jobs:
     - name: Format
       shell: pwsh
       run: |
+        git fetch origin main --depth=1
+        
         $files = git diff --name-only --diff-filter=ACMRT origin/main | Where-Object { $_ -match '\.cs$' }
         
         if ($files.Count -gt 0) {

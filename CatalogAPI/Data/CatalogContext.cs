@@ -2,12 +2,13 @@
 using Common.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System;
 
 namespace CatalogAPI.Data
 {
     public class CatalogContext: ICatalogContext
     {
-        public CatalogContext(IOptions<DatabaseSettings> databaseSettings)
+        public CatalogContext(IOptions<DatabaseSettings>  databaseSettings)
         {
             var client = new MongoClient(databaseSettings.Value.ConnectionString);
             var database = client.GetDatabase(databaseSettings.Value.DatabaseName);
@@ -16,6 +17,6 @@ namespace CatalogAPI.Data
             CatalogContextSeed.SeedData(Products);
         }
 
-        public IMongoCollection<Product> Products { get}
+        public IMongoCollection<Product> Products { get;}
     }
 }
