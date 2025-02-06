@@ -28,6 +28,18 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
+      
+    - name: Format
+      shell: pwsh
+      run: |
+        $files = git diff --name-only --diff-filter=ACMRT origin/main | Where-Object { $_ -match '\.cs$' }
+        
+        if ($files.Count -gt 0) {
+            Write-Host "Running dotnet format on changed files..."
+            dotnet format --include $files -v diagnostic --verify-no-changes
+        } else {
+            Write-Host "No C# files to format."
+        }
 
     - name: Build
       run: dotnet build --no-restore
