@@ -3,6 +3,8 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
 using ShoppingCartAPI.Data;
 using ShoppingCartAPI.Repositories;
 
@@ -20,9 +22,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHealthChecks()
-                .AddMongoDb(builder.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
-
-BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+                .AddMongoDb(
+                    sp => new MongoDB.Driver.MongoClient(builder.Configuration.GetConnectionString()),
+                    sp => builder.Configuration.GetConnectionString(),
+                    "MongoDb Health",
+                    HealthStatus.Degraded);
+BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
 var app = builder.Build();
 

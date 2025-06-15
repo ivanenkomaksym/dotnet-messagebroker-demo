@@ -20,7 +20,7 @@ This repository showcases a sample implementation of a message broker using .NET
 ![Alt text](docs/architecture.png?raw=true "Application architecture")
 
 ## Dependencies
-[.NET 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+[.NET 9](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 
 [.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview)
 

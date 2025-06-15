@@ -20,8 +20,8 @@ namespace OrderProcessor.Adapters
         private readonly ConnectionStrings _connectionStrings;
         private readonly ILogger<GenericConsumerRabbitMQAdapter<TConsumer, TMessage>> _logger;
         private IConnection? _connection;
-        private IModel? _channel;
-        private string ExchangeName = $"{typeof(TMessage).Name}_RabbitMQAdapter";
+        private IChannel? _channel;
+        private readonly string ExchangeName = $"{typeof(TMessage).Name}_RabbitMQAdapter";
         private readonly int MaxRetries = 10;
         private readonly int DelayInMilliseconds = 1000;
 
@@ -32,23 +32,22 @@ namespace OrderProcessor.Adapters
             _consumer = consumer;
             _connectionStrings = rabbitMQOptions.Value;
             _logger = logger;
-            InitRabbitMQ();
         }
 
-        private void InitRabbitMQ()
+        private async Task InitRabbitMQ()
         {
             var factory = new ConnectionFactory();
             factory.Uri = new Uri($"{_connectionStrings.AMQPConnectionString}");
 
             // create connection  
-            _connection = CreateConnectionWithRetry(factory);
+            _connection = await CreateConnectionWithRetry(factory);
 
             // create channel  
-            _channel = _connection?.CreateModel();
-            _channel.ExchangeDeclare(ExchangeName, ExchangeType.Fanout);
+            _channel = await _connection?.CreateChannelAsync();
+            await _channel.ExchangeDeclareAsync(ExchangeName, ExchangeType.Fanout);
         }
 
-        private IConnection? CreateConnectionWithRetry(ConnectionFactory factory)
+        private async Task<IConnection?> CreateConnectionWithRetry(ConnectionFactory factory)
         {
             IConnection? connection = null;
             int attempt = 0;
@@ -56,7 +55,7 @@ namespace OrderProcessor.Adapters
             {
                 try
                 {
-                    connection = factory.CreateConnection();
+                    connection = await factory.CreateConnectionAsync();
                     _logger.LogInformation("Connection established");
                 }
                 catch (Exception ex)
@@ -77,17 +76,20 @@ namespace OrderProcessor.Adapters
             return connection;
         }
 
-        protected override Task ExecuteAsync(CancellationToken cancelToken)
+        protected async override Task ExecuteAsync(CancellationToken cancelToken)
         {
+            await InitRabbitMQ();
+
             cancelToken.ThrowIfCancellationRequested();
 
-            var queueName = _channel.QueueDeclare().QueueName;
-            _channel.QueueBind(queue: queueName,
-                               exchange: ExchangeName,
-                               routingKey: string.Empty);
+            var queue = await _channel.QueueDeclareAsync();
+            var queueName = queue.QueueName;
+            await _channel.QueueBindAsync(queue: queueName,
+                                          exchange: ExchangeName,
+                                          routingKey: string.Empty);
 
-            var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += async (ch, ea) =>
+            var consumer = new AsyncEventingBasicConsumer(_channel);
+            consumer.ReceivedAsync += async (ch, ea) =>
             {
                 // received message  
                 var content = System.Text.Encoding.UTF8.GetString(ea.Body.ToArray());
@@ -96,8 +98,7 @@ namespace OrderProcessor.Adapters
                 await HandleMessage(content);
             };
 
-            _channel.BasicConsume(queueName, true, consumer);
-            return Task.CompletedTask;
+            await _channel.BasicConsumeAsync(queueName, true, consumer);
         }
 
         private async Task HandleMessage(string content)
@@ -108,10 +109,10 @@ namespace OrderProcessor.Adapters
             await _consumer.HandleMessage(message);
         }
 
-        public override void Dispose()
+        public async override void Dispose()
         {
-            _channel?.Close();
-            _connection?.Close();
+            await _channel?.CloseAsync();
+            await _connection?.CloseAsync();
             base.Dispose();
         }
     }

@@ -2,6 +2,8 @@ using Common.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
 using OrderCommon.Data;
 using OrderCommon.Repositories;
 using OrderGrpc;
@@ -27,11 +29,13 @@ IHost host = hostBuilder
 
         services.AddGrpc();
 
-
         services.AddHealthChecks()
-                .AddMongoDb(hostContext.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
-
-        BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+                        .AddMongoDb(
+                            sp => new MongoDB.Driver.MongoClient(hostContext.Configuration.GetConnectionString()),
+                            sp => hostContext.Configuration.GetConnectionString(),
+                            "MongoDb Health",
+                            HealthStatus.Degraded);
+        BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
     })
     .Build();
 

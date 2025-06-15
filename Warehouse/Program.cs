@@ -2,6 +2,8 @@
 using MassTransit;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
 using Warehouse;
 using Warehouse.Consumers;
 using WarehouseCommon.Data;
@@ -38,9 +40,12 @@ IHost host = hostBuilder
         });
 
         services.AddHealthChecks()
-                .AddMongoDb(hostContext.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
-
-        BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+                        .AddMongoDb(
+                            sp => new MongoDB.Driver.MongoClient(hostContext.Configuration.GetConnectionString()),
+                            sp => hostContext.Configuration.GetConnectionString(),
+                            "MongoDb Health",
+                            HealthStatus.Degraded);
+        BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
     }).Build();
 
 host.Run();

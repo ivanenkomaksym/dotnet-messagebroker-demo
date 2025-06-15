@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,9 +52,12 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddSwaggerExamplesFromAssemblyOf<CustomerExample>();
 
 builder.Services.AddHealthChecks()
-                .AddMongoDb(builder.Configuration.GetConnectionString(), "MongoDb Health", HealthStatus.Degraded);
-
-BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+                .AddMongoDb(
+                    sp => new MongoDB.Driver.MongoClient(builder.Configuration.GetConnectionString()),
+                    sp => builder.Configuration.GetConnectionString(),
+                    "MongoDb Health",
+                    HealthStatus.Degraded);
+BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
 var app = builder.Build();
 
