@@ -1,10 +1,13 @@
-﻿using Catalog.API.Repositories.Interfaces;
+﻿using System.ComponentModel;
+using Catalog.API.Repositories.Interfaces;
 using CatalogAPI.Data;
 using Common.Models;
+using ModelContextProtocol.Server;
 using MongoDB.Driver;
 
 namespace Catalog.API.Repositories
 {
+    [McpServerToolType]
     public class ProductRepository : IProductRepository
     {
         private readonly ICatalogContext _context;
@@ -14,6 +17,7 @@ namespace Catalog.API.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        [McpServerTool, Description("Get products")]
         public async Task<IEnumerable<Product>> GetProducts()
         {
             return await _context
@@ -22,6 +26,7 @@ namespace Catalog.API.Repositories
                             .ToListAsync();
         }
 
+        [McpServerTool, Description("Get product by id")]
         public async Task<Product> GetProduct(Guid id)
         {
             return await _context
@@ -30,6 +35,7 @@ namespace Catalog.API.Repositories
                            .FirstOrDefaultAsync();
         }
 
+        [McpServerTool, Description("Get product by name")]
         public async Task<IEnumerable<Product>> GetProductByName(string name)
         {
             FilterDefinition<Product> filter = Builders<Product>.Filter.ElemMatch(p => p.Name, name);

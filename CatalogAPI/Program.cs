@@ -13,6 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
+// Register MCP server and discover tools from the current assembly
+builder.Services.AddMcpServer().WithHttpTransport().WithToolsFromAssembly();
+
 // Add services to the container.
 builder.Services.AddScoped<ICatalogContext, CatalogContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -47,5 +50,8 @@ app.MapHealthChecks("/hc", new HealthCheckOptions()
     Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
+// Add MCP middleware
+app.MapMcp();
 
 app.Run();
