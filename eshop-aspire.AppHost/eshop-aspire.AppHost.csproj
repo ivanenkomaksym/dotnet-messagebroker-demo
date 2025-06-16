@@ -15,6 +15,7 @@
     <PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.1" />
     <PackageReference Include="Aspire.Hosting.MongoDB" Version="9.3.1" />
     <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.3.1" />
+    <PackageReference Include="Nall.ModelContextProtocol.Inspector.Aspire.Hosting" Version="0.7.0" />
   </ItemGroup>
 
   <ItemGroup>

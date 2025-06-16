@@ -25,6 +25,10 @@ if (useCustomer)
 if (useProduct)
 {
     var catalog = builder.AddProject<Projects.CatalogAPI>("catalogapi")
+        .WithEndpoint("http", endpoint =>
+        {
+            endpoint.Port = 8001;
+        })
         .WithReference(mongodb)
         // Use Aspire's mongodb connection string in CatalogAPI's appsettings
         .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb);
@@ -39,6 +43,8 @@ if (useProduct)
         .WithReference(catalog)
         .WithReference(warehouseapi)
         .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
+
+    builder.AddMCPInspector().WithMcp(catalog);
 }
 
 if (useShoppingCart)
