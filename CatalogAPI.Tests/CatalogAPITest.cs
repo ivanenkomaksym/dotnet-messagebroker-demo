@@ -1,42 +1,34 @@
-﻿using CatalogAPI.Data;
-using Common.Configuration;
-using Microsoft.Extensions.Options;
-using Testcontainers.MongoDb;
+﻿namespace CatalogAPI.Tests; using Xunit;
 
-namespace CatalogAPI.Tests;
+[CollectionDefinition("MongoDb collection")]
+public class MongoDbCollection : ICollectionFixture<CatalogFixture> { }
 
-public class CatalogAPITest : IAsyncLifetime
+
+[Collection("MongoDb collection")]
+public class CatalogAPITest
 {
-    private readonly MongoDbContainer _mongoDbContainer = new MongoDbBuilder()
-        .WithImage("mongo:latest")
-        .Build();
+    private readonly CatalogFixture _fixture;
 
-    public Task InitializeAsync()
+    public CatalogAPITest(CatalogFixture fixture)
     {
-        return _mongoDbContainer.StartAsync();
-    }
-
-    public Task DisposeAsync()
-    {
-        return _mongoDbContainer.DisposeAsync().AsTask();
+        _fixture = fixture;
     }
 
     [Fact]
-    public void ShouldReturnProducts()
+    public async Task ShouldReturnProducts()
     {
-        // Arrange
-        var settings = Options.Create(new DatabaseSettings
-        {
-            ConnectionString = _mongoDbContainer.GetConnectionString(),
-            DatabaseName = "CatalogDb",
-            CollectionName = "Products"
-        });
-        var catalogContext = new CatalogContext(settings);
-
-        // Act
-        var products = catalogContext.Products;
-
-        // Assert
+        var products = await _fixture.ProductRepository.GetProducts();
         Assert.NotNull(products);
+        Assert.NotEmpty(products);
+    }
+
+    [Fact]
+    public async Task ShouldReturnProductById()
+    {
+        var products = await _fixture.ProductRepository.GetProducts();
+        var productId = products.First().Id;
+        var product = await _fixture.ProductRepository.GetProduct(productId);
+        Assert.NotNull(product);
+        Assert.Equal(productId, product.Id);
     }
 }
