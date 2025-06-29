@@ -35,6 +35,12 @@ BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{    
+    var catalogContext = scope.ServiceProvider.GetRequiredService<ICatalogContext>();
+    await CatalogContextSeed.SeedDataAsync(catalogContext.Products);
+}
+
 app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.

@@ -6,12 +6,12 @@ namespace CatalogAPI.Data
 {
     public class CatalogContextSeed
     {
-        public static void SeedData(IMongoCollection<Product> productCollection)
+        public static async Task SeedDataAsync(IMongoCollection<Product> productCollection)
         {
             bool existProduct = productCollection.Find(p => true).Any();
             if (!existProduct)
             {
-                productCollection.InsertManyAsync(CatalogSeed.GetPreconfiguredProducts());
+                await productCollection.InsertManyAsync(CatalogSeed.GetPreconfiguredProducts());
             }
         }
     }

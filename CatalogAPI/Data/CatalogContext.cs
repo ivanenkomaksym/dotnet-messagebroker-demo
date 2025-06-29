@@ -13,7 +13,6 @@ namespace CatalogAPI.Data
             var database = client.GetDatabase(databaseSettings.Value.DatabaseName);
 
             Products = database.GetCollection<Product>(databaseSettings.Value.CollectionName);
-            CatalogContextSeed.SeedData(Products);
         }
 
         public IMongoCollection<Product> Products { get; }
