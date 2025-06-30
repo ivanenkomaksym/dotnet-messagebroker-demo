@@ -1,7 +1,9 @@
 ﻿using Catalog.API.Repositories;
 using CatalogAPI.Data;
+using CatalogAPI.Services;
 using Common.Configuration;
 using Microsoft.Extensions.Options;
+using NSubstitute;
 using Testcontainers.MongoDb;
 
 namespace CatalogAPI.Tests;
@@ -30,7 +32,9 @@ public class CatalogFixture : IAsyncLifetime
         });
 
         var context = new CatalogContext(settings);
-        await CatalogContextSeed.SeedDataAsync(context.Products);
+        var catalogAI = Substitute.For<ICatalogAI>();
+        catalogAI.IsEnabled.Returns(false);
+        await CatalogContextSeed.SeedDataAsync(catalogAI, context.Products);
 
         ProductRepository = new ProductRepository(context);
     }

@@ -1,5 +1,7 @@
-﻿using MongoDB.Bson;
+﻿using System.Text.Json.Serialization;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Pgvector;
 
 namespace Common.Models
 {
@@ -16,5 +18,9 @@ namespace Common.Models
         public required string Summary { get; set; }
         public required string ImageFile { get; set; }
         public decimal Price { get; set; }
+
+        /// <summary>Optional embedding for the catalog item's description.</summary>
+        [JsonIgnore]
+        public Vector Embedding { get; set; }
     }
 }

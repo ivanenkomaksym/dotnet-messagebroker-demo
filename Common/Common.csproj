@@ -16,6 +16,7 @@
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
+    <PackageReference Include="Pgvector" Version="0.3.2" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.3" />
     <PackageReference Include="Grpc.HealthCheck" Version="2.71.0" />
     <PackageReference Include="Grpc.Net.ClientFactory" Version="2.71.0" />

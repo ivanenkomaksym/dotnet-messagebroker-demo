@@ -1,6 +1,7 @@
 using Catalog.API.Repositories;
 using Catalog.API.Repositories.Interfaces;
 using CatalogAPI.Data;
+using CatalogAPI.Services;
 using Common.Extensions;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -17,6 +18,7 @@ builder.AddServiceDefaults();
 builder.Services.AddMcpServer().WithHttpTransport().WithToolsFromAssembly();
 
 // Add services to the container.
+builder.Services.AddScoped<ICatalogAI, CatalogAI>();
 builder.Services.AddScoped<ICatalogContext, CatalogContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
@@ -38,7 +40,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {    
     var catalogContext = scope.ServiceProvider.GetRequiredService<ICatalogContext>();
-    await CatalogContextSeed.SeedDataAsync(catalogContext.Products);
+    var catalogAI = scope.ServiceProvider.GetRequiredService<ICatalogAI>();
+    await CatalogContextSeed.SeedDataAsync(catalogAI, catalogContext.Products);
 }
 
 app.MapDefaultEndpoints();
