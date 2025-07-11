@@ -1,6 +1,7 @@
 using Catalog.API.Repositories;
 using Catalog.API.Repositories.Interfaces;
 using CatalogAPI.Data;
+using CatalogAPI.Extensions;
 using CatalogAPI.Services;
 using Common.Extensions;
 using HealthChecks.UI.Client;
@@ -13,6 +14,7 @@ using MongoDB.Bson.Serialization.Serializers;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+builder.AddApplicationServices();
 
 // Register MCP server and discover tools from the current assembly
 builder.Services.AddMcpServer().WithHttpTransport().WithToolsFromAssembly();

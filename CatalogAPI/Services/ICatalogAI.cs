@@ -1,5 +1,4 @@
 ﻿using Common.Models;
-using Pgvector;
 
 namespace CatalogAPI.Services;
 
@@ -9,11 +8,11 @@ public interface ICatalogAI
     bool IsEnabled { get; }
 
     /// <summary>Gets an embedding vector for the specified text.</summary>
-    ValueTask<Vector> GetEmbeddingAsync(string text);
+    ValueTask<float[]> GetEmbeddingAsync(string text);
 
     /// <summary>Gets an embedding vector for the specified catalog item.</summary>
-    ValueTask<Vector> GetEmbeddingAsync(Product item);
+    ValueTask<float[]> GetEmbeddingAsync(Product item);
 
     /// <summary>Gets embedding vectors for the specified catalog items.</summary>
-    ValueTask<IReadOnlyList<Vector>> GetEmbeddingsAsync(IEnumerable<Product> item);
+    ValueTask<IReadOnlyList<float[]>> GetEmbeddingsAsync(IEnumerable<Product> item);
 }

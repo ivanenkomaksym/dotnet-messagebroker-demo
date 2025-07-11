@@ -1,7 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Pgvector;
 
 namespace Common.Models
 {
@@ -21,6 +20,9 @@ namespace Common.Models
 
         /// <summary>Optional embedding for the catalog item's description.</summary>
         [JsonIgnore]
-        public Vector Embedding { get; set; }
+        public float[] Embedding { get; set; }
+
+        [JsonIgnore]
+        public double Score { get; set; }
     }
 }
