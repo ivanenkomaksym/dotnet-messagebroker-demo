@@ -1,8 +1,11 @@
 ﻿using System.Net;
 using Catalog.API.Repositories.Interfaces;
+using CatalogAPI.Data;
+using CatalogAPI.Services;
 using Common.Models;
 using DnsClient.Internal;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 
 namespace Catalog.API.Controllers
 {
@@ -11,11 +14,15 @@ namespace Catalog.API.Controllers
     public class CatalogController : ControllerBase
     {
         private readonly IProductRepository _repository;
+        private readonly ICatalogContext _catalogContext;
+        private readonly ICatalogAI _catalogAI;
         private readonly ILogger<CatalogController> _logger;
 
-        public CatalogController(IProductRepository repository, ILogger<CatalogController> logger)
+        public CatalogController(IProductRepository repository, ICatalogContext catalogContext, ICatalogAI catalogAI, ILogger<CatalogController> logger)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _catalogContext = catalogContext ?? throw new ArgumentNullException(nameof(catalogContext));
+            _catalogAI = catalogAI ?? throw new ArgumentNullException(nameof(catalogAI));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -41,6 +48,79 @@ namespace Catalog.API.Controllers
             }
 
             return Ok(product);
+        }
+
+        /// <summary>
+        /// Finds products semantically relevant to the input text using vector search.
+        /// </summary>
+        /// <param name="text">The input text for semantic search.</param>
+        /// <returns>A list of semantically relevant products.</returns>
+        [HttpGet("withsemanticrelevance/{text}", Name = "WithSemanticRelevance")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)] // Potentially from fallback
+        [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)] // For embedding generation failure
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)] // For unexpected errors
+        public async Task<ActionResult<IEnumerable<Product>>> WithSemanticRelevance(string text)
+        {
+            if (!_catalogAI.IsEnabled)
+            {
+                _logger.LogInformation("Catalog AI is not enabled, falling back to GetProductByName for '{text}'.", text);
+                return await GetProductByName(text);
+            }
+
+            // Now, GetEmbeddingAsync directly returns float[], simplifying the code
+            float[] queryVector = await _catalogAI.GetEmbeddingAsync(text);
+
+            if (queryVector == null || !queryVector.Any()) // Check if the array is null or empty
+            {
+                _logger.LogWarning("Failed to generate embedding for text: '{text}' or generated an empty embedding.", text);
+                return BadRequest("Could not generate a valid embedding for the provided text.");
+            }
+
+            // Define your VectorSearchOptions
+            var vectorSearchOptions = new VectorSearchOptions<Product>()
+            {
+                // THIS IS CRUCIAL: Match the name of the index you created in mongosh
+                IndexName = "vector_index",
+
+                // This controls how many potential candidates the search engine considers
+                // Increasing this can improve recall (finding more relevant results)
+                // Common values are 100, 150, 200, or higher depending on dataset size
+                NumberOfCandidates = 100 // Start with 100-200, adjust as needed
+            };
+
+            // Ensure Product has a 'double Score { get; set; }' property for mapping
+            // And adjust ProductDocument if it also needs 'float[] Embedding'
+            var pipeline = _catalogContext.Products.Aggregate()
+                .VectorSearch(
+                    document => document.Embedding, // The field in MongoDB holding the embeddings
+                    queryVector,                    // The query vector (now directly float[])
+                    limit: 10,                      // Limit the number of results from VectorSearch
+                    vectorSearchOptions
+                )
+                .Project<Product>(Builders<Product>.Projection
+                    .Include(p => p.Id)
+                    .Include(p => p.Name)
+                    .Include(p => p.Author)
+                    .Include(p => p.Embedding)
+                    .Meta("Score", "vectorSearchScore")
+                );
+
+            var results = await pipeline.ToListAsync();
+
+            if (results == null || !results.Any())
+            {
+                // Return an empty list if no semantically relevant products are found
+                // This is generally better than NotFound() for search results
+                return Ok(Enumerable.Empty<Product>());
+            }
+
+            // Optional: Log the top results and their scores for debugging/analysis
+            _logger.LogInformation("Found {Count} semantically relevant products. Top 3: {TopProducts}",
+                results.Count,
+                string.Join(", ", results.Take(3).Select(p => $"{p.Name} (Score: p.Score:F4)")));
+
+            return Ok(results);
         }
 
         [Route("[action]/{category}", Name = "GetProductByCategory")]
