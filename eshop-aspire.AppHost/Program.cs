@@ -3,12 +3,21 @@ using Microsoft.Extensions.Configuration;
 var builder = DistributedApplication.CreateBuilder(args);
 
 var featureFlagsOptions = builder.Configuration.GetSection("FeatureManagement");
+var useMongoAtlas = featureFlagsOptions.GetValue<bool>("MongoAtlas");
 var useCustomer = featureFlagsOptions.GetValue<bool>("Customer");
 var useProduct = featureFlagsOptions.GetValue<bool>("Product");
 var useShoppingCart = featureFlagsOptions.GetValue<bool>("ShoppingCart");
 
-var mongo = builder.AddMongoDB("mongo").PublishAsConnectionString();
-var mongodb = mongo.AddDatabase("mongodb");
+IResourceBuilder<IResourceWithConnectionString> mongodb;
+if (useMongoAtlas)
+{
+    mongodb = builder.AddConnectionString("mongoatlas");
+}
+else
+{
+    var mongo = builder.AddMongoDB("mongo").PublishAsConnectionString();
+    mongodb = mongo.AddDatabase("mongodb");
+}
 
 var messaging = builder.AddRabbitMQ("AMQPConnectionString");
 
