@@ -5,6 +5,7 @@ using CatalogAPI.Services;
 using Common.Models;
 using DnsClient.Internal;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Catalog.API.Controllers
@@ -48,6 +49,48 @@ namespace Catalog.API.Controllers
             }
 
             return Ok(product);
+        }
+
+        /// <summary>
+        /// Basic filtering and exact matches
+        /// </summary>
+        /// <param name="searchTerm">Term to search</param>
+        /// <param name="page">Page numebr</param>
+        /// <param name="pageSize">Page size</param>
+        /// <returns></returns>
+        [HttpGet("search/{searchTerm}", Name = "search")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<List<Product>> SearchProducts(string searchTerm, int page = 1, int pageSize = 10)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                // Handle case with no search term (e.g., return all products or recent products)
+                return await _catalogContext.Products.Find(_ => true).Skip((page - 1) * pageSize).Limit(pageSize).ToListAsync();
+            }
+
+            var searchStage = BsonDocument.Parse($@"
+            {{
+                $search: {{
+                    index: ""default"",
+                    text: {{
+                        query: ""{searchTerm}"",
+                        path: [""Name"", ""Summary""],
+                        fuzzy: {{
+                            maxEdits: 1
+                        }}
+                    }}
+                }}
+            }}");
+
+            var results = await _catalogContext.Products.Aggregate()
+                                                .AppendStage<Product>(searchStage)
+                                                .Skip((page - 1) * pageSize)
+                                                .Limit(pageSize)
+                                                .ToListAsync();
+            return results;
         }
 
         /// <summary>
