@@ -1,6 +1,7 @@
 ﻿using CatalogAPI.Services;
 using Common.Models;
 using Common.SeedData;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace CatalogAPI.Data
@@ -25,6 +26,56 @@ namespace CatalogAPI.Data
 
                 await productCollection.InsertManyAsync(products);
             }
+
+            var cursor = await productCollection.SearchIndexes.ListAsync("vector_index");
+            if (await cursor.MoveNextAsync() && cursor.Current.Any())
+            {
+                return; // Index already exists, no need to create it again
+            }
+
+            // Equivalent to the MongoDB shell command:
+            //db.Products.createSearchIndex({
+            //  "name": "vector_index",
+            //  "definition": {
+            //    "mappings": {
+            //      "dynamic": false,
+            //      "fields": {
+            //        "Embedding": {
+            //          "type": "knnVector",
+            //          "dimensions": 384,
+            //          "similarity": "cosine" // Or "euclidean", "dotProduct"
+            //        }
+            //      }
+            //    }
+            //  }
+            //});
+            var indexDefinitionBson = new BsonDocument
+            {
+                 { "mappings", new BsonDocument
+                     {
+                         { "dynamic", false },
+                         { "fields", new BsonDocument
+                                {
+                                    { "Embedding", new BsonDocument
+                                        {
+                                            { "type", "knnVector" },
+                                            { "dimensions", 384 },
+                                            { "similarity", "cosine" }
+                                        }
+                                    }
+                                }
+                         }
+                     }
+                 }
+            };
+
+            var indexModel = new CreateSearchIndexModel(
+                "vector_index",
+                SearchIndexType.Search,
+                indexDefinitionBson
+            );
+
+            await productCollection.SearchIndexes.CreateOneAsync(indexModel);
         }
     }
 }
