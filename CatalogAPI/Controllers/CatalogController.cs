@@ -94,6 +94,42 @@ namespace Catalog.API.Controllers
         }
 
         /// <summary>
+        /// Authocomplete
+        /// </summary>
+        /// <param name="query">Query to search</param>
+        /// <returns></returns>
+        [HttpGet("autocomplete/{query}", Name = "atocomplete")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<List<Product>> AutocompleteProducts(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return new List<Product>();
+            }
+
+            var autocompleteStage = BsonDocument.Parse($@"
+            {{
+                $search: {{
+                    index: ""autocomplete"",
+                    autocomplete: {{
+                        query: ""{query}"",
+                        path:""Name""
+                    }}
+                }}
+            }}");
+
+            var results = await _catalogContext.Products.Aggregate()
+                                                        .AppendStage<Product>(autocompleteStage)
+                                                        .Limit(3) // Limit the number of suggestions
+                                                        .ToListAsync();
+
+            return results;
+        }
+
+        /// <summary>
         /// Finds products semantically relevant to the input text using vector search.
         /// </summary>
         /// <param name="text">The input text for semantic search.</param>
