@@ -121,9 +121,27 @@ namespace Catalog.API.Controllers
                 }}
             }}");
 
+            // 1. Add Score field
+            var addScoreFieldStage = BsonDocument.Parse(@"
+            {
+                $addFields: {
+                    Score: { $meta: ""searchScore"" }
+                }
+            }");
+
+            // 2. Filter by the projected score
+            var filterByScoreStage = BsonDocument.Parse(@"
+            {
+                $match: {
+                    Score: { $gt: 0.5 }
+                }
+            }");
+
             var results = await _catalogContext.Products.Aggregate()
                                                         .AppendStage<Product>(autocompleteStage)
-                                                        .Limit(3) // Limit the number of suggestions
+                                                        .AppendStage<Product>(addScoreFieldStage)
+                                                        .AppendStage<Product>(filterByScoreStage)
+                                                        .Limit(10) // Limit the number of suggestions
                                                         .ToListAsync();
 
             return results;
