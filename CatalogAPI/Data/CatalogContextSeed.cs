@@ -8,7 +8,9 @@ namespace CatalogAPI.Data
 {
     public class CatalogContextSeed
     {
-        public static async Task SeedDataAsync(ICatalogAI catalogAI, IMongoCollection<Product> productCollection)
+        public static async Task SeedDataAsync(ICatalogAI catalogAI,
+                                               IMongoCollection<Product> productCollection,
+                                               bool seedIndexes = false)
         {
             bool existProduct = productCollection.Find(p => true).Any();
             if (!existProduct)
@@ -26,6 +28,9 @@ namespace CatalogAPI.Data
 
                 await productCollection.InsertManyAsync(products);
             }
+
+            if (!seedIndexes)
+                return;
 
             var cursor = await productCollection.SearchIndexes.ListAsync("vector_index");
             if (await cursor.MoveNextAsync() && cursor.Current.Any())

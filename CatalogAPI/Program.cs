@@ -43,7 +43,7 @@ using (var scope = app.Services.CreateScope())
 {    
     var catalogContext = scope.ServiceProvider.GetRequiredService<ICatalogContext>();
     var catalogAI = scope.ServiceProvider.GetRequiredService<ICatalogAI>();
-    await CatalogContextSeed.SeedDataAsync(catalogAI, catalogContext.Products);
+    await CatalogContextSeed.SeedDataAsync(catalogAI, catalogContext.Products, true);
 }
 
 app.MapDefaultEndpoints();
