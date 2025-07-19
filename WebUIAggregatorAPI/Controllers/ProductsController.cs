@@ -142,6 +142,42 @@ namespace WebUIAggregatorAPI.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Authocomplete
+        /// </summary>
+        /// <param name="query">Query to search</param>
+        /// <returns></returns>
+        [HttpGet("autocomplete/{query}", Name = "autocomplete")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IEnumerable<Product>> AutocompleteProductsAsync(string query)
+        {
+            var products = await _catalogApiService.Autocomplete(query);
+            ArgumentNullException.ThrowIfNull(products);
+
+            return products;
+        }
+
+        /// <summary>
+        /// Finds products semantically relevant to the input text using vector search.
+        /// </summary>
+        /// <param name="text">The input text for semantic search.</param>
+        /// <returns>A list of semantically relevant products.</returns>
+        [HttpGet("findwithsemanticrelevance/{text}", Name = "findwithsemanticrelevance")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)] // Potentially from fallback
+        [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)] // For embedding generation failure
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)] // For unexpected errors
+        public async Task<IEnumerable<Product>> FindWithSemanticRelevanceAsync(string text)
+        {
+            var products = await _catalogApiService.FindWithSemanticRelevance(text);
+            ArgumentNullException.ThrowIfNull(products);
+
+            return products;
+        }
+
         private async Task<IEnumerable<ProductWithStock>> AddStockInformation(IEnumerable<Product> products)
         {
             var productsWithStock = new List<ProductWithStock>();

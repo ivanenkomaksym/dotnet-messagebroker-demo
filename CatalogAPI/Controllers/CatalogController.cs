@@ -98,7 +98,7 @@ namespace Catalog.API.Controllers
         /// </summary>
         /// <param name="query">Query to search</param>
         /// <returns></returns>
-        [HttpGet("autocomplete/{query}", Name = "atocomplete")]
+        [HttpGet("autocomplete/{query}", Name = "autocomplete")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -152,7 +152,7 @@ namespace Catalog.API.Controllers
         /// </summary>
         /// <param name="text">The input text for semantic search.</param>
         /// <returns>A list of semantically relevant products.</returns>
-        [HttpGet("withsemanticrelevance/{text}", Name = "WithSemanticRelevance")]
+        [HttpGet("findwithsemanticrelevance/{text}", Name = "WithSemanticRelevance")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)] // Potentially from fallback
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)] // For embedding generation failure

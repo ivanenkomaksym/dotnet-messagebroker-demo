@@ -37,6 +37,30 @@
                 }
             ]
         },
+        {
+            "UpstreamPathTemplate": "/gateway/Catalog/autocomplete/{query}",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/Catalog/autocomplete/{query}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8001
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/gateway/Catalog/findwithsemanticrelevance/{text}",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/Catalog/findwithsemanticrelevance/{text}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8001
+                }
+            ]
+        },
         // Customer API
         {
             "UpstreamPathTemplate": "/gateway/Customer",

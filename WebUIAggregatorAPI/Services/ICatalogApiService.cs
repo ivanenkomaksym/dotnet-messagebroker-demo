@@ -15,5 +15,9 @@ namespace WebUIAggregatorAPI.Services
         public Task<Product?> UpdateProduct(Product product);
 
         public Task DeleteProduct(Guid productId);
+
+        public Task<IEnumerable<Product>?> Autocomplete(string query);
+
+        public Task<IEnumerable<Product>?> FindWithSemanticRelevance(string text);
     }
 }

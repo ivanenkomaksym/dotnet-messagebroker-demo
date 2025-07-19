@@ -10,5 +10,7 @@ namespace WebUI.Services
         Task<ProductWithStock?> CreateProductWithStock(ProductWithStock productWithStock);
         Task<ProductWithStock?> UpdateProductWithStock(ProductWithStock productWithStock);
         Task DeleteProduct(Guid productId);
+        Task<IEnumerable<Product>?> Autocomplete(string query);
+        Task<IEnumerable<Product>?> FindWithSemanticRelevance(string text);
     }
 }

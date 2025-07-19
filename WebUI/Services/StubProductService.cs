@@ -80,5 +80,15 @@ namespace WebUI.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<IEnumerable<Product>?> Autocomplete(string query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Product>?> FindWithSemanticRelevance(string text)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

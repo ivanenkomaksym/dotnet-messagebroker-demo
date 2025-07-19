@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using Common.Extensions;
 using Common.Models;
@@ -59,6 +60,24 @@ namespace WebUI.Services
         {
             var response = await _client.DeleteAsync($"{_environmentRoutePrefix}/{productId}");
             response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<IEnumerable<Product>?> Autocomplete(string query)
+        {
+            var response = await _client.GetAsync($"{_environmentRoutePrefix}/autocomplete/{query}");
+            response.EnsureSuccessStatusCode();
+
+            var products = await response.Content.ReadFromJsonAsync<IEnumerable<Product>>();
+            return products;
+        }
+
+        public async Task<IEnumerable<Product>?> FindWithSemanticRelevance(string text)
+        {
+            var response = await _client.GetAsync($"{_environmentRoutePrefix}/findwithsemanticrelevance/{text}");
+            response.EnsureSuccessStatusCode();
+
+            var products = await response.Content.ReadFromJsonAsync<IEnumerable<Product>>();
+            return products;
         }
     }
 }
