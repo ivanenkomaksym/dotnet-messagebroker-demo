@@ -7,6 +7,7 @@ var useMongoAtlas = featureFlagsOptions.GetValue<bool>("MongoAtlas");
 var useCustomer = featureFlagsOptions.GetValue<bool>("Customer");
 var useProduct = featureFlagsOptions.GetValue<bool>("Product");
 var useShoppingCart = featureFlagsOptions.GetValue<bool>("ShoppingCart");
+var useGateway = featureFlagsOptions.GetValue<bool>("Gateway");
 var useMCP = featureFlagsOptions.GetValue<bool>("MCP");
 var webUI = featureFlagsOptions.GetValue<bool>("WebUI");
 
@@ -111,6 +112,11 @@ var warehouse = builder.AddProject<Projects.Warehouse>("warehouse")
     // Use Aspire's mongodb connection string in Warehouse's appsettings
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
+
+if (useGateway)
+{
+    var gateway = builder.AddProject<Projects.OcelotAPIGateway>("gateway");
+}
 
 if (webUI)
 {
