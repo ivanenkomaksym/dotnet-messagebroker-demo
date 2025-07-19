@@ -103,10 +103,12 @@ public static class Extensions
     public static void ConfigureRabbitMq(IBusRegistrationContext context, IRabbitMqBusFactoryConfigurator cfg)
     {
         var applicationOptions = context.GetRequiredService<IOptions<ApplicationOptions>>();
-        if (applicationOptions != null && applicationOptions.Value.StartupEnvironment == StartupEnvironment.Aspire)
+        var configService = context.GetRequiredService<IConfiguration>();
+        var connectionString = configService.GetConnectionString("AMQPConnectionString");
+        var hasConnectionString = !string.IsNullOrWhiteSpace(connectionString);
+
+        if (applicationOptions != null && hasConnectionString)
         {
-            var configService = context.GetRequiredService<IConfiguration>();
-            var connectionString = configService.GetConnectionString("AMQPConnectionString"); // <--- same name as in the orchestration
             cfg.Host(connectionString);
         }
     }

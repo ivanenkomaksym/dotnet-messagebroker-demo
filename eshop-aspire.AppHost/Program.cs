@@ -22,7 +22,11 @@ else
     mongodb = mongo.AddDatabase("mongodb");
 }
 
-var messaging = builder.AddRabbitMQ("AMQPConnectionString");
+var username = builder.AddParameter("username", secret: true);
+var password = builder.AddParameter("password", secret: true);
+
+var messaging = builder.AddRabbitMQ("messaging", username, password, 5672)
+                       .WithManagementPlugin();
 
 if (useCustomer)
 {
