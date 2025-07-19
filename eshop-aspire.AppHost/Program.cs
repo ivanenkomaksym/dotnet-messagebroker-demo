@@ -7,6 +7,8 @@ var useMongoAtlas = featureFlagsOptions.GetValue<bool>("MongoAtlas");
 var useCustomer = featureFlagsOptions.GetValue<bool>("Customer");
 var useProduct = featureFlagsOptions.GetValue<bool>("Product");
 var useShoppingCart = featureFlagsOptions.GetValue<bool>("ShoppingCart");
+var useMCP = featureFlagsOptions.GetValue<bool>("MCP");
+var webUI = featureFlagsOptions.GetValue<bool>("WebUI");
 
 IResourceBuilder<IResourceWithConnectionString> mongodb;
 if (useMongoAtlas)
@@ -53,7 +55,10 @@ if (useProduct)
         .WithReference(warehouseapi)
         .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
-    builder.AddMCPInspector().WithMcp(catalog);
+    if (useMCP)
+    {
+        builder.AddMCPInspector().WithMcp(catalog);
+    }
 }
 
 if (useShoppingCart)
@@ -107,16 +112,19 @@ var warehouse = builder.AddProject<Projects.Warehouse>("warehouse")
     .WithEnvironment($"DatabaseSettings:ConnectionString", mongodb)
     .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
 
-builder.AddProject<Projects.WebUI>("webui")
-    .WithExternalHttpEndpoints()
-    .WithReference(messaging)
-    .WithReference(order)
-    // Configure WebUI to use real CustomerAPI
-    .WithEnvironment($"FeatureManagement:Customer", useCustomer.ToString())
-    // Configure WebUI to use real CatalogAPI
-    .WithEnvironment($"FeatureManagement:Product", useProduct.ToString())
-    // Configure WebUI to use real ShoppingCartAPI
-    .WithEnvironment($"FeatureManagement:ShoppingCart", useShoppingCart.ToString())
-    .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
+if (webUI)
+{
+    builder.AddProject<Projects.WebUI>("webui")
+        .WithExternalHttpEndpoints()
+        .WithReference(messaging)
+        .WithReference(order)
+        // Configure WebUI to use real CustomerAPI
+        .WithEnvironment($"FeatureManagement:Customer", useCustomer.ToString())
+        // Configure WebUI to use real CatalogAPI
+        .WithEnvironment($"FeatureManagement:Product", useProduct.ToString())
+        // Configure WebUI to use real ShoppingCartAPI
+        .WithEnvironment($"FeatureManagement:ShoppingCart", useShoppingCart.ToString())
+        .WithEnvironment($"ApplicationOptions:StartupEnvironment", "Aspire");
+}
 
 builder.Build().Run();
