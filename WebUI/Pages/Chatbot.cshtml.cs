@@ -4,7 +4,6 @@ using WebUI.Services;
 
 namespace WebUI.Pages
 {
-    [Route("components/chatbot")] // Route for the chatbot API
     public class ChatbotModel : PageModel
     {
         private readonly IProductService _productService;
@@ -35,6 +34,7 @@ namespace WebUI.Pages
                 p.Id,
                 p.Name,
                 p.Category,
+                p.Author,
                 p.Summary,
                 p.ImageFile,
                 p.Price

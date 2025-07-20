@@ -199,6 +199,7 @@ namespace Catalog.API.Controllers
                     .Include(p => p.Id)
                     .Include(p => p.Name)
                     .Include(p => p.Author)
+                    .Include(p => p.Category)
                     .Include(p => p.Embedding)
                     .Meta("Score", "vectorSearchScore")
                 );

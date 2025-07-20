@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebUI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -156,7 +157,6 @@
         }
     </script>
 
-    </div>
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - YourAppName - <a asp-area="" asp-page="/Privacy">Privacy</a>
@@ -184,81 +184,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            const chatbotToggleButton = $('#chatbot-toggle-button');
-            const chatbotPane = $('#chatbot-pane');
-            const chatbotCloseBtn = $('#chatbot-close-btn');
-            const chatbotMessages = $('#chatbot-messages');
-            const chatbotInput = $('#chatbot-input');
-            const chatbotSendBtn = $('#chatbot-send-btn');
-
-            // --- Chatbot UI Toggle Logic ---
-            chatbotToggleButton.on('click', function () {
-                chatbotPane.toggle();
-            });
-
-            chatbotCloseBtn.on('click', function () {
-                chatbotPane.hide();
-            });
-
-            // --- Chatbot Messaging Logic ---
-            function appendMessage(sender, message) {
-                // Sanitize message to prevent XSS if displaying user input without proper encoding
-                const sanitizedMessage = $('<div/>').text(message).html();
-                const messageDiv = `<div class="chatbot-message ${sender}">${sanitizedMessage}</div>`;
-                chatbotMessages.append(messageDiv);
-                chatbotMessages.scrollTop(chatbotMessages[0].scrollHeight); // Scroll to bottom
-            }
-
-            // Initial bot message
-            appendMessage('bot', 'Hello! How can I help you find products today?');
-
-            chatbotSendBtn.on('click', sendMessage);
-            chatbotInput.on('keypress', function (e) {
-                if (e.which === 13) { // Enter key
-                    sendMessage();
-                }
-            });
-
-            async function sendMessage() {
-                const userMessage = chatbotInput.val().trim();
-                if (userMessage === '') return;
-
-                appendMessage('user', userMessage);
-                chatbotInput.val('');
-                chatbotSendBtn.prop('disabled', true).text('Thinking...');
-
-                try {
-                    const response = await $.ajax({
-                        url: '/components/chatbot?handler=SemanticSearch', // Matches the handler in Chatbot.cshtml.cs
-                        method: 'GET', // Or POST if your handler is OnPostSemanticSearchAsync
-                        data: { text: userMessage }
-                    });
-
-                    if (response && response.length > 0) {
-                        let botResponse = 'Here are some products that might be relevant:<br>';
-                        response.forEach(product => {
-                            // Ensure product properties exist, add basic links or details
-                            const productLink = `/ProductDetails?id=${product.id}`; // Adjust this URL to your actual product details page
-                            botResponse += `- <strong><a href="${productLink}" target="_blank">${product.name}</a></strong> (Category: ${product.category || 'N/A'})<br>`;
-                            botResponse += `  Summary: ${product.summary ? product.summary.substring(0, 100) + '...' : 'No summary'}<br>`;
-                        });
-                        appendMessage('bot', botResponse);
-                    } else {
-                        appendMessage('bot', 'I could not find any relevant products for your query. Please try rephrasing.');
-                    }
-                } catch (error) {
-                    console.error("Chatbot API error:", error);
-                    appendMessage('bot', 'Oops! Something went wrong. Please try again later.');
-                } finally {
-                    chatbotSendBtn.prop('disabled', false).text('Send');
-                    chatbotInput.focus(); // Keep focus on input after sending
-                }
-            }
-        });
-    </script>
+    <script src="~/js/chatbot.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
