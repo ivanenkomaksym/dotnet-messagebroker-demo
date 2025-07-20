@@ -564,3 +564,117 @@ body {
     margin-top: 3px;
     color: #555;
 }
+
+/* Styles for the floating chatbot button */
+.chatbot-toggle-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff; /* Primary blue color */
+    color: white;
+    border: none;
+    border-radius: 50%; /* Makes it circular */
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Subtle shadow */
+    z-index: 1001; /* Ensure it's on top */
+}
+
+/* Styles for the chatbot pane */
+.chatbot-pane {
+    position: fixed;
+    bottom: 90px; /* Positioned above the button */
+    right: 20px;
+    width: 350px; /* Fixed width */
+    height: 450px; /* Fixed height */
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem; /* Rounded corners */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.25); /* Stronger shadow */
+    display: none; /* Hidden by default, toggled by JS */
+    flex-direction: column; /* For vertical layout of header, messages, input */
+    z-index: 1002; /* Above the button and other content */
+    overflow: hidden; /* Hide any overflow */
+}
+
+.chatbot-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.chatbot-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1; /* Adjust for better alignment of 'x' */
+}
+
+.chatbot-messages {
+    flex-grow: 1; /* Takes available space */
+    padding: 10px;
+    overflow-y: auto; /* Scroll for messages */
+    background-color: #f8f9fa; /* Light background for message area */
+    display: flex; /* Use flex for messages to align nicely */
+    flex-direction: column; /* Stack messages vertically */
+}
+
+.chatbot-input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #eee;
+    background-color: #fff;
+}
+
+    .chatbot-input-area input {
+        flex-grow: 1; /* Input takes most of the space */
+        border: 1px solid #ddd;
+        border-radius: 0.25rem;
+        padding: 8px;
+        margin-right: 5px;
+    }
+
+    .chatbot-input-area button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 8px 15px;
+        cursor: pointer;
+        white-space: nowrap; /* Prevent button text from wrapping */
+    }
+
+/* Individual message styling */
+.chatbot-message {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 0.75rem; /* Rounded corners for message bubbles */
+    max-width: 80%; /* Limit message width */
+    word-wrap: break-word; /* Ensure long words break */
+}
+
+    .chatbot-message.user {
+        background-color: #e2f0ff; /* Light blue for user messages */
+        align-self: flex-end; /* Align user messages to the right */
+        margin-left: auto; /* Push user messages to the right */
+    }
+
+    .chatbot-message.bot {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0; /* Border for bot messages */
+        align-self: flex-start; /* Align bot messages to the left */
+        margin-right: auto; /* Push bot messages to the left */
+    }
