@@ -30,6 +30,7 @@ builder.Services.AddRazorPages().AddNToastNotifyToastr(new ToastrOptions
 {
     ops.Conventions.AuthorizeFolder("/Admin", "RequireAdmins");
 });
+builder.Services.AddControllers();
 
 builder.Services.AddFeatureManagement();
 
@@ -111,13 +112,18 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapRazorPages();
+    endpoints.MapControllers();
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseNToastNotify();
 app.UseNotyf();
 
-app.MapRazorPages();
 app.MapHub<NotificationHub>("/notificationHub");
 
 app.MapDefaultControllerRoute();

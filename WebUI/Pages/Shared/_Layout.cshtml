@@ -56,6 +56,19 @@
                         </li>
                     </ul>
 
+                    <div class="position-relative" style="width: 300px;">
+                        <form method="get" autocomplete="off" class="d-flex">
+                            <input type="text"
+                                   id="searchBox"
+                                   class="form-control me-2"
+                                   name="searchQuery"
+                                   placeholder="Search products..."
+                                   oninput="fetchSuggestions(this.value)" />
+                        </form>
+                        <ul id="suggestions" class="list-group position-absolute mt-1"
+                            style="z-index: 1000; width: 100%; display: none;"></ul>
+                    </div>
+
                     <form class="form-inline my-2 my-lg-0">
                         @{
                             var nofItemsInCartToDisplay = 0;
@@ -107,5 +120,40 @@
             &copy; 2023 - WebUI - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
+
+    <script>
+        console.log("Layout script loaded");
+        async function fetchSuggestions(query) {
+            console.log(fetchSuggestions);
+
+            const suggestionsList = document.getElementById('suggestions');
+            suggestionsList.innerHTML = '';
+            if (!query || query.length < 2) return;
+
+            // Call your backend endpoint (adjust the URL as needed)
+            const response = await fetch(`/products/autocomplete?query=${encodeURIComponent(query)}`);
+            if (response.ok) {
+                console.log(response);
+                const products = await response.json();
+
+                suggestionsList.innerHTML = '';
+                if (products.length > 0) {
+                    products.forEach(product => {
+                        const item = document.createElement('li');
+                        item.classList.add('list-group-item', 'd-flex', 'align-items-center');
+                        item.innerHTML = `
+                            <img src="${product.imageFile}" alt="icon" width="32" height="32" class="me-2 rounded" />
+                            <span>${product.name}</span>
+                        `;
+                        item.onclick = () => window.location.href = `/Product/${product.id}`;
+                        suggestionsList.appendChild(item);
+                    });
+                    suggestionsList.style.display = 'block';
+                } else {
+                    suggestionsList.style.display = 'none';
+                }
+            }
+        }
+    </script>
 </body>
 </html>
