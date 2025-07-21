@@ -2,9 +2,11 @@
 using Catalog.API.Repositories.Interfaces;
 using CatalogAPI.Data;
 using CatalogAPI.Services;
+using Common.Configuration;
 using Common.Models;
 using DnsClient.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -17,13 +19,24 @@ namespace Catalog.API.Controllers
         private readonly IProductRepository _repository;
         private readonly ICatalogContext _catalogContext;
         private readonly ICatalogAI _catalogAI;
+        private readonly IOptions<DatabaseSettings> _databaseSettings;
         private readonly ILogger<CatalogController> _logger;
 
-        public CatalogController(IProductRepository repository, ICatalogContext catalogContext, ICatalogAI catalogAI, ILogger<CatalogController> logger)
+        private readonly object NotImplementedDetailMessage = new
+        {
+            Message = "Search functionality is not available in this environment. Please use MongoDB Atlas for search capabilities.",
+        };
+
+        public CatalogController(IProductRepository repository,
+                                 ICatalogContext catalogContext,
+                                 ICatalogAI catalogAI,
+                                 IOptions<DatabaseSettings> databaseSettings,
+                                 ILogger<CatalogController> logger)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _catalogContext = catalogContext ?? throw new ArgumentNullException(nameof(catalogContext));
             _catalogAI = catalogAI ?? throw new ArgumentNullException(nameof(catalogAI));
+            _databaseSettings = databaseSettings ?? throw new ArgumentNullException(nameof(databaseSettings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -63,8 +76,11 @@ namespace Catalog.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<List<Product>> SearchProducts(string searchTerm, int page = 1, int pageSize = 10)
+        public async Task<ActionResult<List<Product>>> SearchProducts(string searchTerm, int page = 1, int pageSize = 10)
         {
+            if (!_databaseSettings.Value.UseAtlas)
+                return StatusCode(501, NotImplementedDetailMessage);
+
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 // Handle case with no search term (e.g., return all products or recent products)
@@ -103,8 +119,11 @@ namespace Catalog.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<List<Product>> AutocompleteProducts(string query)
+        public async Task<ActionResult<List<Product>>> AutocompleteProducts(string query)
         {
+            if (!_databaseSettings.Value.UseAtlas)
+                return StatusCode(501, NotImplementedDetailMessage);
+
             if (string.IsNullOrWhiteSpace(query))
             {
                 return new List<Product>();
@@ -159,6 +178,9 @@ namespace Catalog.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)] // For unexpected errors
         public async Task<ActionResult<IEnumerable<Product>>> WithSemanticRelevance(string text)
         {
+            if (!_databaseSettings.Value.UseAtlas)
+                return StatusCode(501, NotImplementedDetailMessage);
+
             if (!_catalogAI.IsEnabled)
             {
                 _logger.LogInformation("Catalog AI is not enabled, falling back to GetProductByName for '{text}'.", text);

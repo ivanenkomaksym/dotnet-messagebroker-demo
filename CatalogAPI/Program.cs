@@ -3,10 +3,12 @@ using Catalog.API.Repositories.Interfaces;
 using CatalogAPI.Data;
 using CatalogAPI.Extensions;
 using CatalogAPI.Services;
+using Common.Configuration;
 using Common.Extensions;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -43,7 +45,8 @@ using (var scope = app.Services.CreateScope())
 {    
     var catalogContext = scope.ServiceProvider.GetRequiredService<ICatalogContext>();
     var catalogAI = scope.ServiceProvider.GetRequiredService<ICatalogAI>();
-    await CatalogContextSeed.SeedDataAsync(catalogAI, catalogContext.Products, true);
+    var databaseSettings = scope.ServiceProvider.GetRequiredService<IOptions<DatabaseSettings>>();
+    await CatalogContextSeed.SeedDataAsync(catalogAI, catalogContext.Products, databaseSettings);
 }
 
 app.MapDefaultEndpoints();

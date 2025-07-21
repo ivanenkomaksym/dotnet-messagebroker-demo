@@ -1,6 +1,8 @@
 ﻿using CatalogAPI.Services;
+using Common.Configuration;
 using Common.Models;
 using Common.SeedData;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -10,7 +12,7 @@ namespace CatalogAPI.Data
     {
         public static async Task SeedDataAsync(ICatalogAI catalogAI,
                                                IMongoCollection<Product> productCollection,
-                                               bool seedIndexes = false)
+                                               IOptions<DatabaseSettings> databaseSettings)
         {
             bool existProduct = productCollection.Find(p => true).Any();
             if (!existProduct)
@@ -29,7 +31,7 @@ namespace CatalogAPI.Data
                 await productCollection.InsertManyAsync(products);
             }
 
-            if (!seedIndexes)
+            if (!databaseSettings.Value.UseAtlas)
                 return;
 
             var cursor = await productCollection.SearchIndexes.ListAsync("vector_index");

@@ -34,7 +34,9 @@ public class CatalogFixture : IAsyncLifetime
         var context = new CatalogContext(settings);
         var catalogAI = Substitute.For<ICatalogAI>();
         catalogAI.IsEnabled.Returns(false);
-        await CatalogContextSeed.SeedDataAsync(catalogAI, context.Products);
+        var databaseSettings = Substitute.For<IOptions<DatabaseSettings>>();
+        databaseSettings.Value.Returns(new DatabaseSettings());
+        await CatalogContextSeed.SeedDataAsync(catalogAI, context.Products, databaseSettings);
 
         ProductRepository = new ProductRepository(context);
     }
