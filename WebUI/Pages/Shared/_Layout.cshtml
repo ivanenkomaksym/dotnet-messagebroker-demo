@@ -153,6 +153,23 @@
                 } else {
                     suggestionsList.style.display = 'none';
                 }
+            } else if (response.status === 501) {
+                // If the status is 501 Not Implemented
+                suggestionsList.innerHTML = ''; // Clear existing content
+                const messageItem = document.createElement('li');
+                messageItem.classList.add('list-group-item'); // Add Bootstrap list item styling
+                messageItem.innerHTML = '<i>Autocomplete is not supported</i>'; // Set italic text
+                suggestionsList.appendChild(messageItem);
+                suggestionsList.style.display = 'block'; // Ensure the list is visible to show the message
+            } else {
+                // Handle other potential errors (e.g., 4xx, 5xx other than 501)
+                console.error('Error fetching autocomplete suggestions:', response.status, response.statusText);
+                suggestionsList.innerHTML = ''; // Clear existing content
+                const errorItem = document.createElement('li');
+                errorItem.classList.add('list-group-item', 'text-danger'); // Add some error styling
+                errorItem.innerHTML = '<i>An error occurred while fetching suggestions.</i>';
+                suggestionsList.appendChild(errorItem);
+                suggestionsList.style.display = 'block'; // Ensure the list is visible
             }
         }
     </script>
@@ -185,7 +202,5 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script src="~/js/chatbot.js" asp-append-version="true"></script>
-
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
