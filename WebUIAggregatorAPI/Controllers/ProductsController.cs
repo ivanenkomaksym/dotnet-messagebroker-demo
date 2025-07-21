@@ -14,6 +14,11 @@ namespace WebUIAggregatorAPI.Controllers
         private readonly IWarehouseApiService _warehouseApiService;
         private readonly ILogger<ProductsController> _logger;
 
+        private readonly object NotImplementedDetailMessage = new
+        {
+            Message = "Search functionality is not available in this environment. Please use MongoDB Atlas for search capabilities.",
+        };
+
         public ProductsController(ICatalogApiService catalogApiService, IWarehouseApiService warehouseApiService, ILogger<ProductsController> logger)
         {
             _catalogApiService = catalogApiService;
@@ -152,12 +157,19 @@ namespace WebUIAggregatorAPI.Controllers
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IEnumerable<Product>> AutocompleteProductsAsync(string query)
+        [ProducesResponseType((int)HttpStatusCode.NotImplemented)]
+        public async Task<ActionResult<IEnumerable<Product>>> AutocompleteProductsAsync(string query)
         {
-            var products = await _catalogApiService.Autocomplete(query);
-            ArgumentNullException.ThrowIfNull(products);
-
-            return products;
+            try
+            {
+                var products = await _catalogApiService.Autocomplete(query);
+                ArgumentNullException.ThrowIfNull(products);
+                return products.ToList();
+            }
+            catch (NotImplementedException)
+            {
+                return StatusCode(501, NotImplementedDetailMessage);
+            }
         }
 
         /// <summary>
@@ -170,12 +182,19 @@ namespace WebUIAggregatorAPI.Controllers
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)] // For embedding generation failure
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)] // For unexpected errors
-        public async Task<IEnumerable<Product>> FindWithSemanticRelevanceAsync(string text)
+        [ProducesResponseType((int)HttpStatusCode.NotImplemented)]
+        public async Task<ActionResult<IEnumerable<Product>>> FindWithSemanticRelevanceAsync(string text)
         {
-            var products = await _catalogApiService.FindWithSemanticRelevance(text);
-            ArgumentNullException.ThrowIfNull(products);
-
-            return products;
+            try
+            {
+                var products = await _catalogApiService.FindWithSemanticRelevance(text);
+                ArgumentNullException.ThrowIfNull(products);
+                return products.ToList();
+            }
+            catch (NotImplementedException)
+            {
+                return StatusCode(501, NotImplementedDetailMessage);
+            }
         }
 
         private async Task<IEnumerable<ProductWithStock>> AddStockInformation(IEnumerable<Product> products)

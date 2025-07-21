@@ -77,7 +77,8 @@ namespace WebUIAggregatorAPI.Services
         public async Task<IEnumerable<Product>?> Autocomplete(string query)
         {
             var response = await _httpClient.GetAsync($"{_environmentRoutePrefix}/autocomplete/{query}");
-            response.EnsureSuccessStatusCode();
+            if (response.StatusCode == HttpStatusCode.NotImplemented)
+                throw new NotImplementedException("Autocomplete feature is not implemented in the Catalog API.");
 
             var products = await response.Content.ReadFromJsonAsync<IEnumerable<Product>>();
             return products;
@@ -86,7 +87,8 @@ namespace WebUIAggregatorAPI.Services
         public async Task<IEnumerable<Product>?> FindWithSemanticRelevance(string text)
         {
             var response = await _httpClient.GetAsync($"{_environmentRoutePrefix}/findwithsemanticrelevance/{text}");
-            response.EnsureSuccessStatusCode();
+            if (response.StatusCode == HttpStatusCode.NotImplemented)
+                throw new NotImplementedException("Autocomplete feature is not implemented in the Catalog API.");
 
             var products = await response.Content.ReadFromJsonAsync<IEnumerable<Product>>();
             return products;

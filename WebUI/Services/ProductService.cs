@@ -65,8 +65,10 @@ namespace WebUI.Services
         public async Task<IEnumerable<Product>?> Autocomplete(string query)
         {
             var response = await _client.GetAsync($"{_environmentRoutePrefix}/autocomplete/{query}");
-            response.EnsureSuccessStatusCode();
+            if (response.StatusCode == System.Net.HttpStatusCode.NotImplemented)
+                throw new NotImplementedException("Search functionality is not available in this environment. Please use MongoDB Atlas for search capabilities.");
 
+            response.EnsureSuccessStatusCode();
             var products = await response.Content.ReadFromJsonAsync<IEnumerable<Product>>();
             return products;
         }
@@ -75,7 +77,6 @@ namespace WebUI.Services
         {
             var response = await _client.GetAsync($"{_environmentRoutePrefix}/findwithsemanticrelevance/{text}");
             response.EnsureSuccessStatusCode();
-
             var products = await response.Content.ReadFromJsonAsync<IEnumerable<Product>>();
             return products;
         }
