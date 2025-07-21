@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenTelemetry;
@@ -47,7 +48,19 @@ public static class Extensions
         builder.Services.ConfigureHttpClientDefaults(http =>
         {
             // Turn on resilience by default
-            http.AddStandardResilienceHandler();
+            http.AddStandardResilienceHandler(options =>
+            {
+                options.Retry = new HttpRetryStrategyOptions
+                {
+                    ShouldHandle = args =>
+                    {
+                        // Only retry if it's NOT a 501, AND it's a server error (5xx) or a transient network failure.
+                        return ValueTask.FromResult(args.Outcome.Result?.StatusCode != System.Net.HttpStatusCode.NotImplemented);
+                    },
+                    MaxRetryAttempts = 1,
+                    Delay = TimeSpan.FromSeconds(0), // Initial delay
+                };
+            });
 
             // Turn on service discovery by default
             http.AddServiceDiscovery();
