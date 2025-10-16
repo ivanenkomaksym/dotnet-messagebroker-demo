@@ -1,12 +1,14 @@
 # dotnet-messagebroker-demo
 
-🚀 **Build Your Own AliExpress**: A Production-Ready Event-Driven Microservices E-Commerce Platform
+🚀 **Build Your Own AI-Powered AliExpress**: A Production-Ready Event-Driven Microservices E-Commerce Platform
 
-This repository demonstrates how to build a complete, scalable e-commerce platform (like AliExpress) using modern event-driven microservices architecture with .NET. It's a comprehensive blueprint for building real-world, distributed e-commerce systems that can handle millions of transactions.
+This repository demonstrates how to build a complete, scalable **AI-enhanced e-commerce platform** (like AliExpress) using modern event-driven microservices architecture with .NET. It's a comprehensive blueprint for building real-world, distributed e-commerce systems that can handle millions of transactions with **intelligent product discovery** and **semantic search capabilities**.
 
 ## 💡 Why This Project Matters
 
-**Transform Your E-Commerce Vision into Reality**
+**Transform Your E-Commerce Vision into Reality with AI**
+- 🤖 **AI-Powered Product Discovery**: Advanced semantic search using OpenAI embeddings and vector databases for intelligent product matching
+- 💬 **Intelligent Chatbot Integration**: Smart customer support with semantic product search and contextual recommendations  
 - 📦 **Complete E-Commerce Stack**: From product catalogs to order processing, payments, and shipping—everything you need
 - 🔄 **Event-Driven Architecture**: Build resilient systems that scale automatically and handle failures gracefully
 - 🌐 **Multi-Language Support**: Seamlessly integrates .NET, Rust, and Go services in one cohesive platform
@@ -14,8 +16,14 @@ This repository demonstrates how to build a complete, scalable e-commerce platfo
 
 ## ✨ Key Features & Business Value
 
+**🤖 AI-Enhanced E-Commerce Experience**
+* **Semantic Product Search**: Vector-based search using OpenAI text embeddings for contextually relevant product discovery
+* **Intelligent Chatbot**: AI-powered customer support with natural language product recommendations
+* **Vector Database Integration**: MongoDB Atlas vector search for high-performance similarity matching
+* **Smart Product Matching**: Find products using natural language descriptions, not just keywords
+
 **🏪 Complete E-Commerce Platform**
-* **Product Management**: Full catalog API with search and inventory tracking
+* **Product Management**: Full catalog API with AI-enhanced search and inventory tracking
 * **User Management**: Customer registration, authentication, and profile management  
 * **Shopping Experience**: Shopping cart, order processing, and real-time notifications
 * **Payment Processing**: Secure payment workflows with saga pattern for consistency
@@ -23,6 +31,7 @@ This repository demonstrates how to build a complete, scalable e-commerce platfo
 * **Admin Dashboard**: Comprehensive web UI for managing the entire platform
 
 **⚡ Enterprise-Grade Architecture**
+* **AI-First Design**: Built-in support for OpenAI integration, embedding generation, and vector search capabilities
 * **Event-Driven Design**: Loose coupling enables independent service scaling and deployment
 * **Saga Patterns**: Ensures data consistency across distributed transactions (like order processing)
 * **Message Broker Integration**: RabbitMQ-powered communication for reliability and performance
@@ -42,6 +51,10 @@ This repository demonstrates how to build a complete, scalable e-commerce platfo
 
 [.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview)
 
+[OpenAI API](https://platform.openai.com/docs/api-reference) - For AI-powered semantic search and embeddings
+
+[MongoDB Atlas](https://www.mongodb.com/cloud/atlas) - Required for vector search capabilities (optional for basic functionality)
+
 [Docker](https://docs.docker.com/engine/install/)
 
 [Minikube](https://minikube.sigs.k8s.io/docs/start/)
@@ -53,7 +66,7 @@ This repository demonstrates how to build a complete, scalable e-commerce platfo
 ## Application structure
 
 Application consists of several .NET microservices all communicating with RabbitMQ:
-1. **CatalogAPI** provides basic API for querying products. Data persisted in mongo **CatalogDb**.
+1. **CatalogAPI** provides advanced AI-powered product API with semantic search, OpenAI embeddings integration, and vector-based product discovery. Features traditional REST endpoints plus intelligent `/findwithsemanticrelevance/{text}` for natural language product search. Data persisted in mongo **CatalogDb** with vector search capabilities.
 2. **CustomerAPI** basic authentication microservice that allows to register, log in and delete users. Data persisted in mongo **CustomerDb**.
 3. **Notifications** observes events on the message broker and sends user specific events to clients.
 4. **OcelotAPIGateway** basic Gateway microservice that stands in front of all microservices.
@@ -65,7 +78,7 @@ Application consists of several .NET microservices all communicating with Rabbit
 10. **ShoppingCartAPI** manages user shopping carts via REST API. Data persisted in mongo **ShoppingCartDb**.
 11. **Warehouse** basic warehouse microservice, consumes and produces message from the message broker.
 12. **WarehouseAPI** provides REST API to get products stock levels. Used by **WebUI**. Data persisted in mongo **WarehouseDb**.
-13. **WebUI** main UI application built with .NET Razor pages. Uses **WebUIAggregator** and **OcelotAPIGateway**. Supports SignalR notifications to browser clients.
+13. **WebUI** main UI application built with .NET Razor pages featuring an integrated AI chatbot for intelligent product search and customer support. Uses **WebUIAggregator** and **OcelotAPIGateway**. Supports SignalR notifications to browser clients and semantic product discovery.
 14. **WebUIAggregator** aggregates requests to multiple microservices. Used by **WebUI**.
 15. **roderapi** Rust implementation of **OrderAPI** seamlessly integrated with the existing infrastructure without requiring any modifications to the database schema or the message broker configuration. This demonstrates the interoperability and flexibility of the system architecture, allowing developers to leverage different programming languages while maintaining compatibility with the existing ecosystem.
 
